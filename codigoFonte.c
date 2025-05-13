@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
+#include <stdlib.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -7,6 +9,11 @@
 #include <unistd.h> // usleep
 #endif
 
+int numAle(int range){
+    int n = (rand()%range)+1;
+    
+    return n;
+}
 void limparTerminal(){
     printf("\033[H\033[J");
 }
@@ -34,7 +41,7 @@ void textoTela(const char *texto, int seg) {
 }
 
 void cabecaTela(char* x) {
-    int largura = 30;
+    int largura = 40;
     int textoLen = strlen(x);
     int espacos = largura - textoLen - 2;
     int antes = espacos / 2;
@@ -148,25 +155,21 @@ void telaInicial(){
             printf("\n\033[34mAlexandre Gabriel Angelo de Souza Blandino\033[0m\n");
             printf("\n\033[32mSamuel Pereira da Silva\n\033[0m\n");
             printf("[1] - Voltar para a tela inicial.\n");
-            while (1) {
-                scanf("%d", &n);
-                if (n == 1) {
-                    break;
-                }
             }
             telaInicial();
             break;
         case 5:
             break;
         default:
-            printf("Resposta invalida. Digite novamente.\n");
-            printf("----------------------\n");
+            cabecaTela("Resposta invalida. Digite novamente.");
+            cross_platform_sleep(1500);
             telaInicial();
             break;
     }
 }
 
 int main(){
+    srand(time(NULL));
     telaInicial();
     return 0;
 }
