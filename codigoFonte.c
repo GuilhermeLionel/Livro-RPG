@@ -1,9 +1,22 @@
 #include <stdio.h>
 #include <string.h>
+
+#ifdef _WIN32
 #include <windows.h>
+#else
+#include <unistd.h> // usleep
+#endif
 
 void limparTerminal(){
     printf("\033[H\033[J");
+}
+
+void cross_platform_sleep(int ms) {
+#ifdef _WIN32
+    Sleep(ms);
+#else
+    usleep(ms * 1000); // ms -> microsegundos
+#endif
 }
 
 void textoTela(const char *texto, int seg) {
@@ -14,30 +27,27 @@ void textoTela(const char *texto, int seg) {
     while (palavra != NULL) {
         printf("%s ", palavra);
         fflush(stdout);
-        Sleep(seg);
+        cross_platform_sleep(seg); // Usando função multiplataforma
         palavra = strtok(NULL, " ");
     }
     printf("\n");
 }
 
 void cabecaTela(char* x) {
-    int largura = 30; // Largura total da moldura
+    int largura = 30;
     int textoLen = strlen(x);
-    int espacos = largura - textoLen - 2; // -2 por causa dos espaços antes e depois do texto
+    int espacos = largura - textoLen - 2;
     int antes = espacos / 2;
     int depois = espacos - antes;
 
-    // Linha superior
     for (int i = 0; i < largura; i++) printf("-");
     printf("\n");
 
-    // Linha do texto centralizado
     for (int i = 0; i < antes; i++) printf("-");
     printf(" %s ", x);
     for (int i = 0; i < depois; i++) printf("-");
     printf("\n");
 
-    // Linha inferior
     for (int i = 0; i < largura; i++) printf("-");
     printf("\n");
 }
@@ -48,14 +58,14 @@ void gerarPers(){
     textoTela("Quer dizer", 300);
     textoTela(". . .\n", 1000);
     textoTela("No limite, do possivel!", 200);
-    Sleep(2000);
+    cross_platform_sleep(2000);
     fgets(nome, 100, stdin);
 
     limparTerminal();
     textoTela("Mas tudo mudou com a ascensao de um unico nome...\n", 200);
-    Sleep(1000);
+    cross_platform_sleep(1000);
     textoTela("\033[31mVALDORAN!\033[0m\n", 400);
-    Sleep(1000);
+    cross_platform_sleep(1000);
     textoTela("Um reino forjado em fogo, sangue e gloria.\n", 300);
     textoTela("Erguido entre os Montes Eternos e os Rios dourados\n", 300);
     textoTela("Valdoran cresceu ate se tornar o coracao pulsante do continente.\n", 300);
@@ -68,7 +78,7 @@ void gerarPers(){
     textoTela("Reis se ajoelharam. Imperios cairam.\n", 300);
     textoTela("Valdoran nao pedia permissao...\n", 400);
     textoTela("Eles queriam...", 400);
-    Sleep(1500);
+    cross_platform_sleep(1500);
     textoTela("\033[1;31mEles Tomavam...\033[0m", 400);
     fgets(nome, 100, stdin);
 
@@ -84,9 +94,9 @@ void gerarPers(){
     textoTela("Lugar incrivel, ne?\n", 300);
     textoTela("Mas . . .\n", 500);
     textoTela("Nossa aventura comeca aqui:\n", 300);
-    Sleep(1500);
+    cross_platform_sleep(1500);
     textoTela("\033[1;32mTAMARELANDIA DO NORTE.\033[0m\n", 300);
-    Sleep(2000);
+    cross_platform_sleep(2000);
     textoTela("Uma aldeia esquecida por todos os mapas decentes.\n", 200);
     fgets(nome, 100, stdin);
 
@@ -105,9 +115,7 @@ void gerarPers(){
     limparTerminal();
     textoTela("Realmente . . .", 200);
     printf("%s", nome);
-    textoTela("Um verdadeiro nome de guerreiro . . .\n\nQuer comprar aglo na minha loja?", 400);
-
-
+    textoTela("Um verdadeiro nome de guerreiro . . .\n\nQuer comprar algo na minha loja?", 400);
 }
 
 void telaInicial(){
@@ -119,61 +127,46 @@ void telaInicial(){
     printf("4 - Listar integrantes do grupo.\n");
     printf("5 - Fechar jogo.\n\n");
 
-    //exibição da tela inicial.
-
     int n;
-   scanf("%d", &n);
+    scanf("%d", &n);
 
-    switch (n)
-    {
-    case 1:
-        limparTerminal();
-        gerarPers();
-        break;
-    
-    case 2:
-        break;
-
-    case 3:
-        limparTerminal();
-        cabecaTela("Ranking");
-        break;
-
-    case 4:
-        limparTerminal();
-        cabecaTela("Interantes");
-        printf("\n\033[31mGuilherme Lionel de Souza\033[0m\n");
-        printf("\n\033[34mAlexandre Gabriel Angelo de Souza Blandino\033[0m\n");
-        printf("\n\033[32mSamuel Pereira da Silva\n\033[0m\n");
-
-        printf("[1] - Voltar para a tela inicial.\n");
-
-        while (1)
-        {
-            scanf("%d", &n);
-            if (n==1)
-            {
-                break;
+    switch (n) {
+        case 1:
+            limparTerminal();
+            gerarPers();
+            break;
+        case 2:
+            break;
+        case 3:
+            limparTerminal();
+            cabecaTela("Ranking");
+            break;
+        case 4:
+            limparTerminal();
+            cabecaTela("Interantes");
+            printf("\n\033[31mGuilherme Lionel de Souza\033[0m\n");
+            printf("\n\033[34mAlexandre Gabriel Angelo de Souza Blandino\033[0m\n");
+            printf("\n\033[32mSamuel Pereira da Silva\n\033[0m\n");
+            printf("[1] - Voltar para a tela inicial.\n");
+            while (1) {
+                scanf("%d", &n);
+                if (n == 1) {
+                    break;
+                }
             }
-        }
-        telaInicial();
-        
-        
-    case 5:
-        
-        break;
-
-    default:
-        printf("Resposta invalida. Digite novamente.\n");
-        printf("----------------------\n");
-        telaInicial();
-
-        break;
+            telaInicial();
+            break;
+        case 5:
+            break;
+        default:
+            printf("Resposta invalida. Digite novamente.\n");
+            printf("----------------------\n");
+            telaInicial();
+            break;
     }
 }
 
 int main(){
     telaInicial();
-    
     return 0;
 }
