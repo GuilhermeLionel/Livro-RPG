@@ -155,7 +155,6 @@ void telaInicial(){
             printf("\n\033[34mAlexandre Gabriel Angelo de Souza Blandino\033[0m\n");
             printf("\n\033[32mSamuel Pereira da Silva\n\033[0m\n");
             printf("[1] - Voltar para a tela inicial.\n");
-            }
             telaInicial();
             break;
         case 5:
