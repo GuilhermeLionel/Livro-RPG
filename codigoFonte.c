@@ -5,14 +5,12 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#include <direct.h>   // mkdir for Windows
 #else
 #include <unistd.h> // usleep
 #include <sys/stat.h> // mkdir
 #endif
 
-#ifdef _WIN32
-#include <direct.h>   // mkdir for Windows
-#endif
 
 struct dados{
     char nome[50];
@@ -41,7 +39,6 @@ void gerarPasta() {
     FILE *arq = fopen("Dados do Jogo/save.txt", "w");
     if (arq == NULL) {
         printf("Erro ao criar o arquivo.\n");
-        return;
     }
     fclose(arq);
 }
@@ -49,7 +46,7 @@ void gerarPasta() {
 void save(dados player)
 {
     FILE *arq = fopen("Dados do Jogo/save.txt", "w");
-    fprintf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n", player.nome, player.vida_max, player.hp, player.mana, player.protecao, player.stamina, player.forca, player.agilidade, player.inteligencia, player.carisma);
+    fprintf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, player.vida_max, player.hp, player.mana, player.protecao, player.stamina, player.forca, player.agilidade, player.inteligencia, player.carisma);
     fclose(arq);
 }
 
@@ -60,13 +57,14 @@ int numAle(int range){
 }
 
 void aleatJogador(char *txt){
+    gerarPasta();
     strcpy(player.nome, txt);
-    player.protecao = numAle(17) + 3;
-    player.stamina = numAle(17) + 3;
-    player.inteligencia = numAle(17) + 3;
-    player.forca = numAle(17) + 3;
-    player.agilidade = numAle(17) + 3;
-    player.carisma = numAle(17) + 3;
+    player.protecao = 11;
+    player.stamina = 12;
+    player.inteligencia = 13;
+    player.forca = 14;
+    player.agilidade = 15;
+    player.carisma = 20;
     player.vida_max = player.protecao * 5;
     player.hp = player.vida_max;
     player.mana = player.inteligencia * 5;
@@ -75,7 +73,11 @@ void aleatJogador(char *txt){
 }
 
 void limparTerminal(){
-    printf("\033[H\033[J");
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 }
 
 void cross_platform_sleep(int ms) {
@@ -123,10 +125,11 @@ void cabecaTela(char* x) {
 void histInic(){
     char nome[100] = {0};
     textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
-    textoTela("Quer dizer", 300);
+    textoTela("Quer dizer\n", 300);
     textoTela(". . .\n", 1000);
     textoTela("No limite, do possivel!", 200);
     cross_platform_sleep(2000);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
 
@@ -142,11 +145,15 @@ void histInic(){
     fgets(nome, 100, stdin);
 
     limparTerminal();
-    textoTela("Seus exercitos marcharam por desertos escaldantes,\n", 300);
+    textoTela("Seus exercitos marcharam por desertos escaldantes,", 300);
     textoTela("atravessaram selvas malditas e conquistaram fortalezas tidas como impenetraveis.\n", 300);
+    cross_platform_sleep(100);
     textoTela("Reis se ajoelharam. Imperios cairam.\n", 300);
     textoTela("Valdoran nao pedia permissao...\n", 400);
-    textoTela("Eles queriam...", 400);
+    textoTela("Eles queriam...\n", 400);
+    textoTela("Eles \033[31mtomavam...\033[0m\n", 600);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
+    fgets(nome, 100, stdin);
 
 
     limparTerminal();
@@ -155,6 +162,7 @@ void histInic(){
     textoTela("Seus forjadores moldam armas que sussurram lendas a cada golpe.\n", 200);
     textoTela("E no trono de obsidiana, repousa o soberano mais temido do mundo...\n", 300);
     textoTela("...e talvez o mais odiado tambem.\n", 200);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
     limparTerminal();
@@ -162,32 +170,46 @@ void histInic(){
     textoTela("Mas . . .\n", 500);
     textoTela("Nossa aventura comeca aqui:\n", 300);
     cross_platform_sleep(1500);
-    textoTela("\033[1;32mTAMARELANDIA DO NORTE.\033[0m\n", 300);
-    cross_platform_sleep(2000);
-    textoTela("Uma aldeia esquecida por todos os mapas decentes.\n", 200);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
     limparTerminal();
+    textoTela("\033[1;32mTAMARELANDIA DO NORTE.\033[0m\n", 300);
+    cross_platform_sleep(2000);
+    textoTela("Uma aldeia esquecida por todos os mapas decentes.\n", 200);
+    textoTela("Talvez por ser considerado gasto de tinta . . .  talvez. . . \n", 200);
     textoTela("Localizada entre o Pantano Cheiroso e a Colina dos Bodes Falantes.\n", 200);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
+    fgets(nome, 100, stdin);
+
+    limparTerminal();
     textoTela("Longe de toda a gloria, da riqueza e da magia de Valdoran,\n", 200);
     textoTela("Aqui a aventura mais comum e desentupir o poco da praca.\n", 200);
     textoTela("E o maior guerreiro da vila? . . . . .\n", 500);
     textoTela("Um velho que jura ter lutado com uma galinha possuida.\n", 300);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
+    fgets(nome, 100, stdin);
+
+    limparTerminal();
     textoTela("Mas todo destino grandioso comeca com passos pequenos.\n", 200);
     textoTela("E hoje . . .\n", 500);
     textoTela("Errrn . . . Hoje! . . .\n", 500);
-    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 500);
+    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);
     fgets(nome, 50, stdin);
     aleatJogador(nome);
 
     limparTerminal();
     textoTela("Realmente . . .\n", 200);
-    for (int i = 0; i < strlen(nome); i++){
+    int tamanho = strlen(nome);
+    if (tamanho > 1 && nome[tamanho - 1] == '\n') {
+        nome[tamanho - 1] = '\0'; // Remove o caractere de nova linha
+    }
+    for (int i = 0; i < tamanho; i++){
         printf("%c", nome[i]);
         fflush(stdout);
-        cross_platform_sleep(100);
+        cross_platform_sleep(200);
     }
-    textoTela(".  .  .  \n", 100);
+    textoTela(" .  .  .  \n", 200);
     textoTela("Um verdadeiro nome de guerreiro . . .\n\nQuer comprar algo na minha loja?", 400);
 }
 
