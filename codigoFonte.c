@@ -7,13 +7,70 @@
 #include <windows.h>
 #else
 #include <unistd.h> // usleep
+#include <sys/stat.h> // mkdir
 #endif
+
+#ifdef _WIN32
+#include <direct.h>   // mkdir for Windows
+#endif
+
+struct dados{
+    char nome[50];
+    int vida_atual;
+    int vida_max;
+    int stamina;
+    int forca;
+    int agilidade;
+    int inteligencia;
+};
+
+typedef struct dados dados;
+
+void gerarPasta() {
+    #ifdef _WIN32
+        _mkdir("Dados do Jogo");
+    #else
+        mkdir("Dados do Jogo", 0777);
+    #endif
+    FILE *arq = fopen("Dados do Jogo/save.txt", "w");
+    if (arq == NULL) {
+        printf("Erro ao criar o arquivo.\n");
+        return;
+    }
+    fclose(arq);
+}
+
+void save(dados *player)
+{
+    FILE *arq = fopen("Dados do Jogo/save.txt", "w");
+    fprintf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n", player->nome, player->vida_atual, player->vida_max, player->stamina, player->forca, player->agilidade, player->inteligencia);
+    fclose(arq);
+}
 
 int numAle(int range){
     int n = (rand()%range)+1;
     
     return n;
 }
+
+void gerarPlayer(dados *player){
+    int j = 0, i;
+    fgets(player->nome, 50, stdin);
+    for(i = 0; player->nome[j] != '\0'; i++){
+        if (player->nome[i] == '\n'){
+            player->nome[i] = '\0';
+        }
+        if (i != 0) j++;
+    }
+    player->vida_max = numAle(17) + 3;
+    player->vida_atual = player->vida_max;
+    player->stamina = numAle(17) + 3;
+    player->inteligencia = numAle(17) + 3;
+    player->forca = numAle(17) + 3;
+    player->agilidade = numAle(17) + 3;
+    save(player);
+}
+
 void limparTerminal(){
     printf("\033[H\033[J");
 }
@@ -60,12 +117,14 @@ void cabecaTela(char* x) {
 }
 
 void gerarPers(){
-    char nome[50] = {0};
+    char nome[100];
+    dados player;
     textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
     textoTela("Quer dizer", 300);
     textoTela(". . .\n", 1000);
     textoTela("No limite, do possivel!", 200);
     cross_platform_sleep(2000);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
     limparTerminal();
@@ -84,9 +143,10 @@ void gerarPers(){
     textoTela("atravessaram selvas malditas e conquistaram fortalezas tidas como impenetraveis.\n", 300);
     textoTela("Reis se ajoelharam. Imperios cairam.\n", 300);
     textoTela("Valdoran nao pedia permissao...\n", 400);
-    textoTela("Eles queriam...", 400);
+    textoTela("Eles queriam...\n", 400);
     cross_platform_sleep(1500);
-    textoTela("\033[1;31mEles Tomavam...\033[0m", 400);
+    textoTela("\033[1;31mEles Tomavam...\033[0m\n", 400);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
     limparTerminal();
@@ -95,6 +155,7 @@ void gerarPers(){
     textoTela("Seus forjadores moldam armas que sussurram lendas a cada golpe.\n", 200);
     textoTela("E no trono de obsidiana, repousa o soberano mais temido do mundo...\n", 300);
     textoTela("...e talvez o mais odiado tambem.\n", 200);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
     limparTerminal();
@@ -105,6 +166,7 @@ void gerarPers(){
     textoTela("\033[1;32mTAMARELANDIA DO NORTE.\033[0m\n", 300);
     cross_platform_sleep(2000);
     textoTela("Uma aldeia esquecida por todos os mapas decentes.\n", 200);
+    printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
     limparTerminal();
@@ -117,11 +179,15 @@ void gerarPers(){
     textoTela("E hoje . . .\n", 500);
     textoTela("Errrn . . . Hoje! . . .\n", 500);
     textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 500);
-    fgets(nome, 50, stdin);
+    gerarPlayer(&player);
 
     limparTerminal();
-    textoTela("Realmente . . .", 200);
-    printf("%s", nome);
+    textoTela("Realmente . . .\n", 200);
+    strcpy(nome, player.nome);
+    strcat(nome, " . . .\n");
+    textoTela(nome, 200);
+    cross_platform_sleep(500);
+    textoTela("\n. . .\n", 1000);
     textoTela("Um verdadeiro nome de guerreiro . . .\n\nQuer comprar algo na minha loja?", 400);
 }
 
@@ -155,7 +221,7 @@ void telaInicial(){
             printf("\n\033[34mAlexandre Gabriel Angelo de Souza Blandino\033[0m\n");
             printf("\n\033[32mSamuel Pereira da Silva\n\033[0m\n");
             printf("[1] - Voltar para a tela inicial.\n");
-            }
+            
             telaInicial();
             break;
         case 5:
