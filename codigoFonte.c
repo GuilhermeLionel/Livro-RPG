@@ -26,7 +26,7 @@ typedef struct itemHandler itemHandler;
 
 void setItens(int q){
     itemHandler item[q*6];
-    FILE *arq = fopen("itens.txt", "r");
+    FILE *arq = fopen("Dados do Jogo/itens.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
@@ -39,7 +39,7 @@ void setItens(int q){
 
 void readItems(){
     int count = 0;
-    FILE *arq = fopen("itens.txt", "r");
+    FILE *arq = fopen("Dados do Jogo/itens.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
