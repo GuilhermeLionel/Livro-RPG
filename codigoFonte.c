@@ -12,23 +12,65 @@
 #endif
 
 
+struct itemHandler{
+    char nome[50];
+    int tipo;
+    int preco;
+    int raridade;
+    int bonus;
+    int quantBonus
+};
+
+typedef struct itemHandler itemHandler;
+
+
+void setItens(int q){
+    itemHandler item[q*6];
+    FILE *arq = fopen("itens.txt", "r");
+    if (arq == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+    for (int i = 0; i < q; i++) {
+        fscanf(arq, "%s\n%d\n%d\n%d\n%d\n%d", item[i*6].nome, &item[i*6+1].tipo, &item[i*6+2].preco, &item[i*6+3].raridade, &item[i*6+4].bonus, &item[i*6+5].quantBonus);
+    }
+    fclose(arq);
+}
+
+void readItems(){
+    int count = 0;
+    FILE *arq = fopen("itens.txt", "r");
+    if (arq == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+    char linha[256];
+    while (fgets(linha, sizeof(linha), arq) != NULL) {
+        count++;
+    }
+    fclose(arq);
+    count = count / 6;
+    setItens(count);
+}
+
 struct dados{
     char nome[50];
     int protecao;
     int vida_max;
     int hp;
-    int mana;
+    int mp;
+    int mana_max;
     int stamina;
     int forca;
     int agilidade;
     int inteligencia;
     int carisma;
+    int inventario[20];
 };
 
 typedef struct dados dados;
 
 dados player;
-
 
 void gerarPasta() {
     #ifdef _WIN32
@@ -46,7 +88,24 @@ void gerarPasta() {
 void save(dados player)
 {
     FILE *arq = fopen("Dados do Jogo/save.txt", "w");
-    fprintf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, player.vida_max, player.hp, player.mana, player.protecao, player.stamina, player.forca, player.agilidade, player.inteligencia, player.carisma);
+    fprintf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, player.vida_max, player.hp, player.mana_max, player.mp, player.protecao, player.stamina, player.forca, player.agilidade, player.inteligencia, player.carisma);
+    for(int i = 0; i < 20; i++){
+        fprintf(arq, "%d\n", player.inventario[i]);
+    }
+    fclose(arq);
+}
+
+void load(dados player){
+    FILE *arq = fopen("Dados do Jogo/save.txt", "r");
+    if (arq == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+    fgets(player.nome, sizeof(player.nome), arq);
+    fscanf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, &player.vida_max, &player.hp, &player.mana_max, &player.mp, &player.protecao, &player.stamina, &player.forca, &player.agilidade, &player.inteligencia, &player.carisma);
+    for(int i = 0; i < 20; i++){
+        fgets(arq, "%d", &player.inventario[i]);
+    }
     fclose(arq);
 }
 
@@ -67,7 +126,8 @@ void aleatJogador(char *txt){
     player.carisma = 20;
     player.vida_max = player.protecao * 5;
     player.hp = player.vida_max;
-    player.mana = player.inteligencia * 5;
+    player.mana_max = player.inteligencia * 5;
+    player.mp = player.mana_max;
     save(player);
     return;
 }
@@ -216,6 +276,7 @@ void histInic(){
 
 void gerarPers(){
     histInic();
+    readItems();
 }
 
 void telaInicial(){
