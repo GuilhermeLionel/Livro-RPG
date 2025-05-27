@@ -12,20 +12,34 @@
 #endif
 
 
-struct itemHandler{
+typedef struct itemHandler2{
     char nome[50];
     int tipo;
     int preco;
     int raridade;
     int bonus;
-    int quantBonus
-};
+    int quantBonus;
+} ITEMHANDLER;
 
-typedef struct itemHandler itemHandler;
+typedef struct dados{
+    char nome[50];
+    int protecao;
+    int vida_max;
+    int hp;
+    int mp;
+    int mana_max;
+    int stamina;
+    int forca;
+    int agilidade;
+    int inteligencia;
+    int carisma;
+    int inventario[20];
+} DADOS;
 
+DADOS player;
 
 void setItens(int q){
-    itemHandler item[q*6];
+    ITEMHANDLER item[q*6];
     FILE *arq = fopen("Dados do Jogo/itens.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
@@ -53,24 +67,6 @@ void readItems(){
     setItens(count);
 }
 
-struct dados{
-    char nome[50];
-    int protecao;
-    int vida_max;
-    int hp;
-    int mp;
-    int mana_max;
-    int stamina;
-    int forca;
-    int agilidade;
-    int inteligencia;
-    int carisma;
-    int inventario[20];
-};
-
-typedef struct dados dados;
-
-dados player;
 
 void gerarPasta() {
     #ifdef _WIN32
@@ -85,7 +81,7 @@ void gerarPasta() {
     fclose(arq);
 }
 
-void save(dados player)
+void save(DADOS player)
 {
     FILE *arq = fopen("Dados do Jogo/save.txt", "w");
     fprintf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, player.vida_max, player.hp, player.mana_max, player.mp, player.protecao, player.stamina, player.forca, player.agilidade, player.inteligencia, player.carisma);
@@ -95,7 +91,7 @@ void save(dados player)
     fclose(arq);
 }
 
-void load(dados player){
+void load(DADOS player){
     FILE *arq = fopen("Dados do Jogo/save.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
@@ -118,12 +114,12 @@ int numAle(int range){
 void aleatJogador(char *txt){
     gerarPasta();
     strcpy(player.nome, txt);
-    player.protecao = 11;
-    player.stamina = 12;
-    player.inteligencia = 13;
-    player.forca = 14;
-    player.agilidade = 15;
-    player.carisma = 20;
+    player.protecao = numAle(20);
+    player.stamina = numAle(20);
+    player.inteligencia = numAle(20);
+    player.forca = numAle(20);
+    player.agilidade = numAle(20);
+    player.carisma = numAle(20);
     player.vida_max = player.protecao * 5;
     player.hp = player.vida_max;
     player.mana_max = player.inteligencia * 5;
