@@ -28,7 +28,6 @@ typedef struct dados{
     int hp;
     int mp;
     int mana_max;
-    int stamina;
     int forca;
     int agilidade;
     int inteligencia;
@@ -84,7 +83,7 @@ void gerarPasta() {
 void save(DADOS player)
 {
     FILE *arq = fopen("Dados do Jogo/save.txt", "w");
-    fprintf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, player.vida_max, player.hp, player.mana_max, player.mp, player.protecao, player.stamina, player.forca, player.agilidade, player.inteligencia, player.carisma);
+    fprintf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, player.vida_max, player.hp, player.mana_max, player.mp, player.protecao, player.forca, player.agilidade, player.inteligencia, player.carisma);
     for(int i = 0; i < 20; i++){
         fprintf(arq, "%d\n", player.inventario[i]);
     }
@@ -98,7 +97,7 @@ void load(DADOS player){
         return;
     }
     fgets(player.nome, sizeof(player.nome), arq);
-    fscanf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, &player.vida_max, &player.hp, &player.mana_max, &player.mp, &player.protecao, &player.stamina, &player.forca, &player.agilidade, &player.inteligencia, &player.carisma);
+    fscanf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, &player.vida_max, &player.hp, &player.mana_max, &player.mp, &player.protecao, &player.forca, &player.agilidade, &player.inteligencia, &player.carisma);
     for(int i = 0; i < 20; i++){
         fgets(arq, "%d", &player.inventario[i]);
     }
@@ -106,6 +105,7 @@ void load(DADOS player){
 }
 
 int numAle(int range){
+    //Gera um numero de 1 a range.
     int n = (rand()%range)+1;
     
     return n;
@@ -113,13 +113,24 @@ int numAle(int range){
 
 void aleatJogador(char *txt){
     gerarPasta();
+
+    //no total são 30 pontos de status, 20 RNG e 10 fixo
+    int status[5] = {2, 2, 2, 2, 2};
+    for (int i = 0 ; i < 20 ; i++)
+    {
+        status[numAle(5)-1]++;
+    }
+
+    for (int i = 0; i < 5; i++) {
+       printf("Status[%d] = %d\n", i, status[i]);
+    }
+
     strcpy(player.nome, txt);
-    player.protecao = numAle(20);
-    player.stamina = numAle(20);
-    player.inteligencia = numAle(20);
-    player.forca = numAle(20);
-    player.agilidade = numAle(20);
-    player.carisma = numAle(20);
+    player.protecao = status[0];
+    player.forca = status[1];
+    player.agilidade = status[2];
+    player.inteligencia = status[3];
+    player.carisma = status[4];
     player.vida_max = player.protecao * 5;
     player.hp = player.vida_max;
     player.mana_max = player.inteligencia * 5;
@@ -180,7 +191,7 @@ void cabecaTela(char* x) {
 
 void histInic(){
     char nome[100] = {0};
-    textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
+    /*textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
     textoTela("Quer dizer\n", 300);
     textoTela(". . .\n", 1000);
     textoTela("No limite, do possivel!", 200);
@@ -244,14 +255,17 @@ void histInic(){
     textoTela("E o maior guerreiro da vila? . . . . .\n", 500);
     textoTela("Um velho que jura ter lutado com uma galinha possuida.\n", 300);
     printf("\n\n(Pressione ENTER para continuar...)\n");
-    fgets(nome, 100, stdin);
+    fgets(nome, 100, stdin);*/
 
-    limparTerminal();
+    //história comentada para ser mais rápido.
+
+    /*limparTerminal();
     textoTela("Mas todo destino grandioso comeca com passos pequenos.\n", 200);
     textoTela("E hoje . . .\n", 500);
     textoTela("Errrn . . . Hoje! . . .\n", 500);
-    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);
-    fgets(nome, 50, stdin);
+    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);*/
+    getchar() != '\n';
+    fgets(nome, 100, stdin);
     aleatJogador(nome);
 
     limparTerminal();
@@ -284,21 +298,22 @@ void telaInicial(){
     printf("4 - Listar integrantes do grupo.\n");
     printf("5 - Fechar jogo.\n\n");
 
-    int n;
-    scanf("%d", &n);
+    char n;
+    scanf("%s", &n);
 
     switch (n) {
-        case 1:
+        case '1':
             limparTerminal();
             gerarPers();
             break;
-        case 2:
+        case '2':
+
             break;
-        case 3:
+        case '3':
             limparTerminal();
             cabecaTela("Ranking");
             break;
-        case 4:
+        case '4':
 
             limparTerminal();
             cabecaTela("Interantes");
@@ -307,11 +322,11 @@ void telaInicial(){
             printf("\n\033[32mSamuel Pereira da Silva\n\033[0m\n");
             printf("[1] - Voltar para a tela inicial.\n");
             
-            scanf("%d", &n);
+            scanf("%s", &n);
             
             telaInicial();
             break;
-        case 5:
+        case '5':
             break;
         default:
             cabecaTela("Resposta invalida. Digite novamente.");
