@@ -83,26 +83,54 @@ void gerarPasta() {
 void save(DADOS player)
 {
     FILE *arq = fopen("Dados do Jogo/save.txt", "w");
-    fprintf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, player.vida_max, player.hp, player.mana_max, player.mp, player.protecao, player.forca, player.agilidade, player.inteligencia, player.carisma);
-    for(int i = 0; i < 20; i++){
+    if (arq == NULL) {
+        printf("Erro ao salvar.\n");
+        return;
+    }
+
+    char nomeLimpo[50];
+    strcpy(nomeLimpo, player.nome);
+    char* newline = strchr(nomeLimpo, '\n');
+    if (newline) *newline = '\0';
+
+    fprintf(arq, "%s\n", nomeLimpo);
+    // CORRIGIDO: 9 especificadores %d para 9 variáveis
+    fprintf(arq, "%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n",
+            player.vida_max, player.hp, player.mana_max, player.mp,
+            player.protecao, player.forca, player.agilidade,
+            player.inteligencia, player.carisma);
+
+    for (int i = 0; i < 20; i++) {
         fprintf(arq, "%d\n", player.inventario[i]);
     }
+
     fclose(arq);
 }
 
-void load(DADOS player){
+
+void load(DADOS *player){
     FILE *arq = fopen("Dados do Jogo/save.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
-    fgets(player.nome, sizeof(player.nome), arq);
-    fscanf(arq, "%s\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d", player.nome, &player.vida_max, &player.hp, &player.mana_max, &player.mp, &player.protecao, &player.forca, &player.agilidade, &player.inteligencia, &player.carisma);
-    for(int i = 0; i < 20; i++){
-        fgets(arq, "%d", &player.inventario[i]);
+
+    fgets(player->nome, sizeof(player->nome), arq);
+    player->nome[strcspn(player->nome, "\n")] = 0;
+
+    // CORRIGIDO: 9 especificadores %d para 9 variáveis
+    fscanf(arq, "%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n",
+           &player->vida_max, &player->hp, &player->mana_max, &player->mp,
+           &player->protecao, &player->forca, &player->agilidade,
+           &player->inteligencia, &player->carisma);
+
+    for (int i = 0; i < 20; i++) {
+        fscanf(arq, "%d\n", &player->inventario[i]);
     }
+
     fclose(arq);
 }
+
 
 int numAle(int range){
     //Gera um numero de 1 a range.
@@ -118,7 +146,7 @@ void aleatJogador(char *txt){
     int status[5] = {2, 2, 2, 2, 2};
     for (int i = 0 ; i < 20 ; i++)
     {
-        status[numAle(5)-1]++;
+        status[rand()%5]++;
     }
 
     for (int i = 0; i < 5; i++) {
@@ -135,6 +163,11 @@ void aleatJogador(char *txt){
     player.hp = player.vida_max;
     player.mana_max = player.inteligencia * 5;
     player.mp = player.mana_max;
+
+    // Adicione esta inicialização para o inventário:
+    for (int i = 0; i < 20; i++) {
+        player.inventario[i] = 0; // Inicializa cada slot do inventário com 0
+    }
     save(player);
     return;
 }
