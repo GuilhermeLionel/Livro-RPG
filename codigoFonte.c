@@ -60,7 +60,7 @@ void setItens(int q){
         fgets(item[i].nome, sizeof(item[i].nome), arq);
         item[i].nome[strcspn(item[i].nome, "\n")] = 0; // Substitui caractere "\n" por "\0"
 
-        fscanf(arq, "%d\n%d\n%d\n%d\n%d\n", 
+        fscanf(arq, "Tipo: %d\nPreco: %d\nRaridade: %d\nBonus: %d\nQuantB: %d\n\n", 
                &item[i].tipo, 
                &item[i].preco, 
                &item[i].raridade, 
@@ -108,10 +108,6 @@ void save(DADOS player)
         return;
     }
     player.nome[strcspn(player.nome, "\n")] = 0;
-    /*char nomeLimpo[51];
-    strcpy(nomeLimpo, player.nome);
-    char* newline = strchr(nomeLimpo, '\n');
-    if (newline) *newline = '\0';*/
 
     fprintf(arq, "%s\n", player.nome);
     

@@ -1,11 +1,11 @@
-alex
-HP: 20/20
-MP: 30/30
+Alex
+HP: 45/45
+MP: 20/20
 Forca: 5
-Protecao: 4
-Agilidade: 8
-Inteligencia: 6
-Carisma: 7
+Protecao: 9
+Agilidade: 7
+Inteligencia: 4
+Carisma: 5
 0
 0
 0
