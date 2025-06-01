@@ -37,22 +37,42 @@ typedef struct dados{
 
 DADOS player;
 
+void cross_platform_sleep(int ms);
+void limparTerminal();
+void gerarPasta();
+void aleatJogador(char *txt);
+void setItens(int q);
+void readItems();
+void save(DADOS player);
+void load(DADOS *player);
+void textoTela(const char *texto, int seg);
+void cabecaTela(char* x);
+
 void setItens(int q){
     ITEMHANDLER item[q*6];
-    FILE *arq = fopen("Dados do Jogo/itens.txt", "r");
+    FILE *arq = fopen("Dados do Jogo/items.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
     for (int i = 0; i < q; i++) {
-        fscanf(arq, "%s\n%d\n%d\n%d\n%d\n%d", item[i*6].nome, &item[i*6+1].tipo, &item[i*6+2].preco, &item[i*6+3].raridade, &item[i*6+4].bonus, &item[i*6+5].quantBonus);
+        fgets(item[i*6].nome, sizeof(item[i*6].nome), arq);
+        item[i*6].nome[strcspn(item[i*6].nome, "\n")] = 0; // Remove newline character
+        fscanf(arq, "%d\n%d\n%d\n%d\n%d\n", 
+               &item[i*6].tipo, 
+               &item[i*6].preco, 
+               &item[i*6].raridade, 
+               &item[i*6].bonus, 
+               &item[i*6].quantBonus);
+        cross_platform_sleep(3000);
+        limparTerminal();
     }
     fclose(arq);
 }
 
 void readItems(){
     int count = 0;
-    FILE *arq = fopen("Dados do Jogo/itens.txt", "r");
+    FILE *arq = fopen("Dados do Jogo/items.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
@@ -141,6 +161,7 @@ int numAle(int range){
 
 void aleatJogador(char *txt){
     gerarPasta();
+    limparTerminal();
 
     //no total são 30 pontos de status, 20 RNG e 10 fixo
     int status[5] = {2, 2, 2, 2, 2};
@@ -148,10 +169,8 @@ void aleatJogador(char *txt){
     {
         status[rand()%5]++;
     }
-
-    for (int i = 0; i < 5; i++) {
-       printf("Status[%d] = %d\n", i, status[i]);
-    }
+    
+    txt[strcspn(txt, "\n")] = 0; // Tira o caractere "\n" da string txt e coloca "\0"
 
     strcpy(player.nome, txt);
     player.protecao = status[0];
@@ -163,6 +182,19 @@ void aleatJogador(char *txt){
     player.hp = player.vida_max;
     player.mana_max = player.inteligencia * 5;
     player.mp = player.mana_max;
+
+    printf("Nome: %s hello\n", player.nome);
+    printf("Protecao: %d\n", player.protecao);
+    printf("Forca: %d\n", player.forca);
+    printf("Agilidade: %d\n", player.agilidade);
+    printf("Inteligencia: %d\n", player.inteligencia);
+    printf("Carisma: %d\n", player.carisma);
+    printf("Vida Maxima: %d\n", player.vida_max);
+    printf("HP: %d\n", player.hp);
+    printf("Mana Maxima: %d\n", player.mana_max);
+    printf("MP: %d\n", player.mp);
+    cross_platform_sleep(5000);
+    limparTerminal();
 
     // Adicione esta inicialização para o inventário:
     for (int i = 0; i < 20; i++) {
@@ -297,9 +329,10 @@ void histInic(){
     textoTela("E hoje . . .\n", 500);
     textoTela("Errrn . . . Hoje! . . .\n", 500);
     textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);*/
-    getchar() != '\n';
+    getchar() != '\n'; 
     fgets(nome, 100, stdin);
     aleatJogador(nome);
+    readItems();
 
     limparTerminal();
     textoTela("Realmente . . .\n", 200);
@@ -310,7 +343,7 @@ void histInic(){
     for (int i = 0; i < tamanho; i++){
         printf("%c", nome[i]);
         fflush(stdout);
-        cross_platform_sleep(200);
+        cross_platform_sleep(2000 / tamanho); // Divide o tempo de espera pelo tamanho do nome 
     }
     textoTela(" .  .  .  \n", 200);
     textoTela("Um verdadeiro nome de guerreiro . . .\n\nQuer comprar algo na minha loja?", 400);
@@ -324,7 +357,7 @@ void gerarPers(){
 
 void telaInicial(){
     limparTerminal();
-    cabecaTela("A ascencao na torre!");
+    cabecaTela("A ascensao na torre!");
     printf("1 - Iniciar um novo jogo.\n");
     printf("2 - Continuar um jogo gravado.\n");
     printf("3 - Ranking de pontos.\n");
