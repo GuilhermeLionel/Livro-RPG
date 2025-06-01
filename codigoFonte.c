@@ -13,7 +13,7 @@
 
 
 typedef struct itemHandler2{
-    char nome[50];
+    char nome[51];
     int tipo;
     int preco;
     int raridade;
@@ -22,7 +22,7 @@ typedef struct itemHandler2{
 } ITEMHANDLER;
 
 typedef struct dados{
-    char nome[50];
+    char nome[51];
     int protecao;
     int vida_max;
     int hp;
@@ -49,23 +49,23 @@ void textoTela(const char *texto, int seg);
 void cabecaTela(char* x);
 
 void setItens(int q){
-    ITEMHANDLER item[q*6];
+    ITEMHANDLER item[q];
     FILE *arq = fopen("Dados do Jogo/items.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
-    for (int i = 0; i < q; i++) {
-        fgets(item[i*6].nome, sizeof(item[i*6].nome), arq);
-        item[i*6].nome[strcspn(item[i*6].nome, "\n")] = 0; // Remove newline character
+    for (int i = 0; i < q; i++) 
+    {
+        fgets(item[i].nome, sizeof(item[i].nome), arq);
+        item[i].nome[strcspn(item[i].nome, "\n")] = 0; // Substitui caractere "\n" por "\0"
+
         fscanf(arq, "%d\n%d\n%d\n%d\n%d\n", 
-               &item[i*6].tipo, 
-               &item[i*6].preco, 
-               &item[i*6].raridade, 
-               &item[i*6].bonus, 
-               &item[i*6].quantBonus);
-        cross_platform_sleep(3000);
-        limparTerminal();
+               &item[i].tipo, 
+               &item[i].preco, 
+               &item[i].raridade, 
+               &item[i].bonus, 
+               &item[i].quantBonus);
     }
     fclose(arq);
 }
@@ -107,42 +107,47 @@ void save(DADOS player)
         printf("Erro ao salvar.\n");
         return;
     }
-
-    char nomeLimpo[50];
+    player.nome[strcspn(player.nome, "\n")] = 0;
+    /*char nomeLimpo[51];
     strcpy(nomeLimpo, player.nome);
     char* newline = strchr(nomeLimpo, '\n');
-    if (newline) *newline = '\0';
+    if (newline) *newline = '\0';*/
 
-    fprintf(arq, "%s\n", nomeLimpo);
-    // CORRIGIDO: 9 especificadores %d para 9 variáveis
-    fprintf(arq, "%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n",
-            player.vida_max, player.hp, player.mana_max, player.mp,
-            player.protecao, player.forca, player.agilidade,
-            player.inteligencia, player.carisma);
+    fprintf(arq, "%s\n", player.nome);
+    
+    fprintf(arq, "HP: %d/%d\n", player.hp, player.vida_max);
+    fprintf(arq, "MP: %d/%d\n", player.mp, player.mana_max);
+    fprintf(arq, "Forca: %d\n", player.forca);
+    fprintf(arq, "Protecao: %d\n", player.protecao);
+    fprintf(arq, "Agilidade: %d\n", player.agilidade);
+    fprintf(arq, "Inteligencia: %d\n", player.inteligencia);
+    fprintf(arq, "Carisma: %d\n", player.carisma);
 
     for (int i = 0; i < 20; i++) {
         fprintf(arq, "%d\n", player.inventario[i]);
     }
-
     fclose(arq);
 }
 
 
 void load(DADOS *player){
-    FILE *arq = fopen("Dados do Jogo/save.txt", "r");
+    FILE *arq = fopen("Dados do Jogo/save.txt", "rt");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
     }
 
     fgets(player->nome, sizeof(player->nome), arq);
-    player->nome[strcspn(player->nome, "\n")] = 0;
+    player->nome[strcspn(player->nome, "\n")] = 0; //Transforma caractere "\n" em "\0"
 
     // CORRIGIDO: 9 especificadores %d para 9 variáveis
-    fscanf(arq, "%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n%d\n",
-           &player->vida_max, &player->hp, &player->mana_max, &player->mp,
-           &player->protecao, &player->forca, &player->agilidade,
-           &player->inteligencia, &player->carisma);
+    fscanf(arq, "HP: %d/%d\n", &player->hp, &player->vida_max);
+    fscanf(arq, "MP: %d/%d\n", &player->mp, &player->mana_max);
+    fscanf(arq, "Forca: %d\n", &player->forca);
+    fscanf(arq, "Protecao: %d\n", &player->protecao);
+    fscanf(arq, "Agilidade: %d\n", &player->agilidade);
+    fscanf(arq, "Inteligencia: %d\n", &player->inteligencia);
+    fscanf(arq, "Carisma: %d\n", &player->carisma);
 
     for (int i = 0; i < 20; i++) {
         fscanf(arq, "%d\n", &player->inventario[i]);
@@ -182,19 +187,6 @@ void aleatJogador(char *txt){
     player.hp = player.vida_max;
     player.mana_max = player.inteligencia * 5;
     player.mp = player.mana_max;
-
-    printf("Nome: %s hello\n", player.nome);
-    printf("Protecao: %d\n", player.protecao);
-    printf("Forca: %d\n", player.forca);
-    printf("Agilidade: %d\n", player.agilidade);
-    printf("Inteligencia: %d\n", player.inteligencia);
-    printf("Carisma: %d\n", player.carisma);
-    printf("Vida Maxima: %d\n", player.vida_max);
-    printf("HP: %d\n", player.hp);
-    printf("Mana Maxima: %d\n", player.mana_max);
-    printf("MP: %d\n", player.mp);
-    cross_platform_sleep(5000);
-    limparTerminal();
 
     // Adicione esta inicialização para o inventário:
     for (int i = 0; i < 20; i++) {
@@ -329,21 +321,23 @@ void histInic(){
     textoTela("E hoje . . .\n", 500);
     textoTela("Errrn . . . Hoje! . . .\n", 500);
     textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);*/
-    getchar() != '\n'; 
+    getchar() != '\n';
     fgets(nome, 100, stdin);
+    limparTerminal();
+    //load(&player);
     aleatJogador(nome);
     readItems();
 
     limparTerminal();
     textoTela("Realmente . . .\n", 200);
-    int tamanho = strlen(nome);
-    if (tamanho > 1 && nome[tamanho - 1] == '\n') {
-        nome[tamanho - 1] = '\0'; // Remove o caractere de nova linha
+    int tamanho = strlen(player.nome);
+    if (tamanho > 1 && player.nome[tamanho - 1] == '\n') {
+        player.nome[tamanho - 1] = '\0'; // Remove o caractere de nova linha
     }
     for (int i = 0; i < tamanho; i++){
-        printf("%c", nome[i]);
+        printf("%c", player.nome[i]);
         fflush(stdout);
-        cross_platform_sleep(2000 / tamanho); // Divide o tempo de espera pelo tamanho do nome 
+        cross_platform_sleep(1500 / tamanho); // Divide o tempo de espera pelo tamanho do nome 
     }
     textoTela(" .  .  .  \n", 200);
     textoTela("Um verdadeiro nome de guerreiro . . .\n\nQuer comprar algo na minha loja?", 400);
