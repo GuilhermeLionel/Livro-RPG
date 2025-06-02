@@ -2,19 +2,26 @@ Vazio
 Tipo: 0
 Preco: 0
 Raridade: 0
-Bonus: 0
-QuantB: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
 
 Armadura de Couro
-Tipo: 1
+Tipo: 2
 Preco: 5
 Raridade: 1
-Bonus: 5
-QuantB: 1
+Bonus: 4, 0, 0
+QuantB: 2, 0, 0
 
 Espada de Ferro
-Tipo: 2
+Tipo: 1
 Preco: 10
 Raridade: 2
-Bonus: 1
-QuantB: 10
+Bonus: 1, 8, 0
+QuantB: -5, 10, 0
+
+Espada de Madeira
+Tipo: 1
+Preco: 3
+Raridade: 1
+Bonus: 1, 8, 0
+QuantB: 3, 5, 0
