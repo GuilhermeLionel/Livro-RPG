@@ -403,6 +403,54 @@ void cabecaTela(char* x) {
     printf("\n");
 }
 
+void verifica_nome_player(char *nome) {
+    int i = 0, OK = 0; // OK: verifica se o nome original sofreu alguma alteração
+    char nome_corrigido[40] = {0}, nome_novo[100]; 
+    // nome_corrigido = altera o nome (sem os casos não permitidos)
+    // nome_novo = pede um novo nome para a recursão
+    limparTerminal();
+    while (nome[i] != '\n') {
+        if (nome[i] >= '0' && nome[i] <= '9') {
+            OK = 1;
+            textoTela("Que legal, uma pessoa com nome igual aos da internet...\n", 200);
+            textoTela("Saudades do meu amigo Herobrine123.\n", 400);
+            textoTela("Enfim, tem algum outro nome que eu possa te chamar?\n", 200);
+            fgets(nome_novo, 100, stdin);
+            verifica_nome_player(nome_novo); // recursiva para verificar o novo nome;
+            break;
+        }
+        else if (nome[i] == ' ') {
+            OK = 1;
+            for(i = 0; nome[i] != ' '; i++) 
+                nome_corrigido[i] = nome[i]; // copia a string até o caractere de espaço para nome_corrigido
+            strcpy(player.nome, nome_corrigido); // tranfere o texto corrigido para nome.player
+            textoTela("Nome maneiro, mas vou te chamar apenas de...", 200);
+            printf("\b%s\n", player.nome); // não consegui colocar essa parte na textoTela() :(
+            textoTela("...", 600);
+            textoTela("Beleza?", 800);
+            break; 
+        }
+        i++;
+    }
+    if (OK == 0) { // OK == 0: nome original permaneceu
+        strcpy(player.nome, nome);
+        
+        textoTela("Realmente . . .\n", 200);
+        int tamanho = strlen(player.nome);
+        if (tamanho > 1 && player.nome[tamanho - 1] == '\n') {
+            player.nome[tamanho - 1] = '\0'; // Remove o caractere de nova linha
+        }
+        for (int i = 0; i < tamanho; i++){
+            printf("%c", player.nome[i]);
+            fflush(stdout);
+            cross_platform_sleep(1500 / tamanho); // Divide o tempo de espera pelo tamanho do nome 
+        }
+        textoTela(" .  .  .  \n", 200);
+        textoTela("Um verdadeiro nome de guerreiro . . .\n\n", 400);
+    }
+    aleatJogador(player.nome); // player.nome vai para a função
+    readItems();
+}
 
 void histInic(){
     char nome[100] = {0};
@@ -477,27 +525,14 @@ void histInic(){
     /*limparTerminal();
     textoTela("Mas todo destino grandioso comeca com passos pequenos.\n", 200);
     textoTela("E hoje . . .\n", 500);
-    textoTela("Errrn . . . Hoje! . . .\n", 500);
-    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);*/
+    textoTela("Errrn . . . Hoje! . . .\n", 500); */
+    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);
     getchar() != '\n';
     fgets(nome, 100, stdin);
-    limparTerminal();
-    aleatJogador(nome);
-    readItems();
-
-    limparTerminal();
-    textoTela("Realmente . . .\n", 200);
-    int tamanho = strlen(player.nome);
-    if (tamanho > 1 && player.nome[tamanho - 1] == '\n') {
-        player.nome[tamanho - 1] = '\0'; // Remove o caractere de nova linha
-    }
-    for (int i = 0; i < tamanho; i++){
-        printf("%c", player.nome[i]);
-        fflush(stdout);
-        cross_platform_sleep(1500 / tamanho); // Divide o tempo de espera pelo tamanho do nome 
-    }
-    textoTela(" .  .  .  \n", 200);
-    textoTela("Um verdadeiro nome de guerreiro . . .\n\nQuer comprar algo na minha loja?", 400);
+    verifica_nome_player(nome);
+    
+    // movi essa parte pra função verifica_nome_player()
+    textoTela("Quer comprar algo na minha loja?", 400); 
     printf("\n(Pressione ENTER para continuar...)\n");
     getchar(); // Espera o usuário pressionar ENTER
     limparTerminal();
