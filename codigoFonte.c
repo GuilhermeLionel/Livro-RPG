@@ -410,7 +410,18 @@ void verifica_nome_player(char *nome) {
     // nome_novo = pede um novo nome para a recursão
     limparTerminal();
     while (nome[i] != '\n') {
-        if (nome[i] >= '0' && nome[i] <= '9') {
+        if (nome[i] == ' ') { // + de uma palavra
+            OK = 1;
+            for(i = 0; nome[i] != ' '; i++) 
+                nome_corrigido[i] = nome[i]; // copia a string até o caractere de espaço para nome_corrigido
+            strcpy(player.nome, nome_corrigido); // transfere o texto corrigido para nome.player
+            textoTela("Nome maneiro, mas vou te chamar apenas de...", 200);
+            printf("%s\n", player.nome); // não consegui colocar essa parte na textoTela() :(
+            textoTela("...", 600);
+            textoTela("Beleza?", 800);
+            break; 
+        }
+        else if (!(nome[i] >= 'A' && nome[i] <= 'Z') && !(nome[i] >= 'a' && nome[i] <= 'z')) { // números e caracteres especiais
             OK = 1;
             textoTela("Que legal, uma pessoa com nome igual aos da internet...\n", 200);
             textoTela("Saudades do meu amigo Herobrine123.\n", 400);
@@ -419,17 +430,7 @@ void verifica_nome_player(char *nome) {
             verifica_nome_player(nome_novo); // recursiva para verificar o novo nome;
             break;
         }
-        else if (nome[i] == ' ') {
-            OK = 1;
-            for(i = 0; nome[i] != ' '; i++) 
-                nome_corrigido[i] = nome[i]; // copia a string até o caractere de espaço para nome_corrigido
-            strcpy(player.nome, nome_corrigido); // tranfere o texto corrigido para nome.player
-            textoTela("Nome maneiro, mas vou te chamar apenas de...", 200);
-            printf("\b%s\n", player.nome); // não consegui colocar essa parte na textoTela() :(
-            textoTela("...", 600);
-            textoTela("Beleza?", 800);
-            break; 
-        }
+        
         i++;
     }
     if (OK == 0) { // OK == 0: nome original permaneceu
