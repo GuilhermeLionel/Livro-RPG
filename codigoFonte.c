@@ -32,7 +32,7 @@ typedef struct dados{
     int agilidade;
     int inteligencia;
     int carisma;
-    int inventario[20];
+    int inventario[2][20];
     int moedas;
 } DADOS;
 
@@ -58,7 +58,7 @@ void tipoItem(char *tipo, int n)
     switch(n)
     {
         case 0:
-            strcpy(tipo, "Consumivel");
+            strcpy(tipo, "Vazio");
             break;
         case 1:
             strcpy(tipo, "Arma");
@@ -67,10 +67,10 @@ void tipoItem(char *tipo, int n)
             strcpy(tipo, "Armadura");
             break;
         case 3:
-            strcpy(tipo, "Colecionavel");
+            strcpy(tipo, "Reliquia");
             break;
         case 4:
-            strcpy(tipo, "Reliquia");
+            strcpy(tipo, "Consumivel");
             break;
         default:
             strcpy(tipo, "Desconhecido");
@@ -108,14 +108,30 @@ void bonusItem(char *bonus, int n)
     }
 }
 
-void loja(int level)
+int espacoInv(int id)
+{
+    int i, a = 1; // Variavel a define se o item é stackavel ou nao, com 0 para nao e 1 para sim
+    if((item[id].tipo >= 0 && item[id].tipo <= 3)) a = 0; // Se o item não for do tipo Arma, Armadura ou Reliquia, a variavel a recebe 1, caso contrario recebe 0
+    switch(a)
+    {
+        case 1:
+            for(i = 0; player.inventario[0][i] != id; i++) if(i >= 20) return -1; // Procura o id no inventario e se não estiver presente retorna -1
+            break;
+        case 0:
+            for(i = 0; player.inventario[0][i] != 0; i++) if(i >= 20) return -1; // Procura o primeiro espaço vazio no inventário e se não tiver retorna -1
+            break;
+    }
+    return i; // Retorna o índice do primeiro espaço com o id desejado no inventário
+}
+
+void vitrine(int a[])
 {
     char tipo[20], nomeBonus[20];
     int espacos, resto;
     int i, j;
-    int x, tamanhoNumero, tamanhoString, a[3], quantBonus, y[3];
-    int largura = 30; // Tamanho de caracteres reservado na horizontal para cada item
-
+    int x, tamanhoNumero, tamanhoString, quantBonus;
+    int largura = 30;
+    limparTerminal();
     for(i = 1; i <= 3; i++) // Imprime os numeros de 1 a 3 espaçados igualmente
     {
         for(j = 0; j < (largura - 1)/2; j++) printf(" ");
@@ -124,15 +140,6 @@ void loja(int level)
     }
     printf("\n");
 
-    a[0] = numAle(3);  // Gera 3 numeros aleatorios de 1 a 3 que seriam os ids dos itens
-    a[1] = numAle(3);
-    a[2] = numAle(3);
-    while(1)  // Garante que os 3 numeros sejam diferentes
-    {
-        if(a[0] == a[1]) a[1] = numAle(3);
-        if(a[0] == a[2] || a[1] == a[2]) a[2] = numAle(3);
-        if(a[0] != a[1] && a[0] != a[2] && a[1] != a[2]) break;
-    }
 
     for(i = 0; i < 3; i++) //Imprime os nomes dos itens espaçados igualmente
     {
@@ -146,14 +153,23 @@ void loja(int level)
     
     for(i = 0; i < 3; i++)
     {
-        x = item[a[i]].preco;
-        for(tamanhoNumero = 0; x > 0; tamanhoNumero++) x /= 10; //Calcula o tamanho de caracteres do numero do preco
-        espacos = (largura - tamanhoNumero - 14)/2; // -14 é por casua do "Preco: " e " Moedas"
-        resto = (largura - tamanhoNumero - 14) % 2; // Calcula o resto para saber se precisa de mais um espaço
-        for(j = 0; j < espacos; j++) printf(" ");
-        printf("Preco: %d Moedas", item[a[i]].preco);
-        for(j = 0; j < espacos + resto; j++) printf(" ");
-
+        if(item[a[i]].tipo != 0){
+            x = item[a[i]].preco;
+            if(x != 1){
+                for(tamanhoNumero = 0; x > 0; tamanhoNumero++) x /= 10; //Calcula o tamanho de caracteres do numero do preco
+                espacos = (largura - tamanhoNumero - 14)/2; // -14 é por casua do "Preco: " e " Moedas"
+                resto = (largura - tamanhoNumero - 14) % 2; // Calcula o resto para saber se precisa de mais um espaço
+                for(j = 0; j < espacos; j++) printf(" ");
+                printf("Preco: %d Moedas", item[a[i]].preco);
+                for(j = 0; j < espacos + resto; j++) printf(" ");
+            }
+            else{  //caso o preco seja igual a 1 retira o s no moeda
+                for(j = 0; j < 8; j++)printf(" ");
+                printf("Preco: 1 Moeda");
+                for(j = 0; j < 8; j++)printf(" ");
+            }
+        }
+        else for(j = 0; j < largura; j++) printf(" ");
     }
     printf("\n");
 
@@ -170,35 +186,104 @@ void loja(int level)
     
     for(i = 0; i < 3; i++)
     {
-        for(j = 0, tamanhoNumero = 0, quantBonus = 0; j < 3; j++) // Imprime os bonus do item
-        {
-            if(item[a[i]].bonus[0][j] != 0) // Verifica se o bonus é diferente de 0
+        if(item[a[i]].tipo != 0){
+            for(j = 0, tamanhoNumero = 0, quantBonus = 0; j < 3; j++) // Imprime os bonus do item
             {
-                quantBonus++;
-                x = item[a[i]].bonus[1][j];
-                for(; x != 0; tamanhoNumero++) x /= 10; 
+                if(item[a[i]].bonus[0][j] != 0) // Verifica se o bonus é diferente de 0
+                {
+                    quantBonus++;
+                    x = item[a[i]].bonus[1][j];
+                    for(; x != 0; tamanhoNumero++) x /= 10; 
+                }
             }
+            tamanhoNumero += quantBonus; // +1 para o sinal de cada bonus
+            
+            for(j = 0, tamanhoString = 0; j < quantBonus; j++) // Imprime os bonus do item
+            {
+                bonusItem(nomeBonus, item[a[i]].bonus[0][j]); 
+                tamanhoString += strlen(nomeBonus);
+            }
+            tamanhoString += quantBonus; // + 1 para cada espaco entre o numero e o bonus
+            espacos = (largura - tamanhoString - tamanhoNumero - (2 * (quantBonus - 1))) / 2;
+            resto = (largura - tamanhoString - tamanhoNumero - (2 * (quantBonus - 1))) % 2;
+            for(j = 0; j < espacos; j++) printf(" ");
+            for(j = 0; j < quantBonus; j++) // Imprime os bonus do item
+            {
+                bonusItem(nomeBonus, item[a[i]].bonus[0][j]);
+                if(item[a[i]].bonus[1][j] > 0)printf("+%d %s", item[a[i]].bonus[1][j], nomeBonus);
+                if(item[a[i]].bonus[1][j] < 0)printf("%d %s", item[a[i]].bonus[1][j], nomeBonus);
+                if(j < quantBonus - 1) printf("  ");
+            }
+            for(x = 0; x < espacos + resto; x++) printf(" ");
         }
-        tamanhoNumero += quantBonus; // +1 para o sinal de cada bonus
-        
-        for(j = 0, tamanhoString = 0; j < quantBonus; j++) // Imprime os bonus do item
-        {
-            bonusItem(nomeBonus, item[a[i]].bonus[0][j]); 
-            tamanhoString += strlen(nomeBonus);
-        }
-        espacos = (largura - tamanhoString - 1 - tamanhoNumero - (2 * (quantBonus - 1))) / 2;
-        resto = (largura - tamanhoString - 1 - tamanhoNumero - (2 * (quantBonus - 1))) % 2;
-        for(x = 0; x < espacos; x++) printf(" ");
-        for(j = 0; j < quantBonus; j++) // Imprime os bonus do item
-        {
-            bonusItem(nomeBonus, item[a[i]].bonus[0][j]);
-            if(item[a[i]].bonus[1][j] > 0)printf("+%d %s", item[a[i]].bonus[1][j], nomeBonus);
-            if(item[a[i]].bonus[1][j] < 0)printf("%d %s", item[a[i]].bonus[1][j], nomeBonus);
-            if(j < quantBonus - 1) printf("  ");
-        }
-        for(x = 0; x < espacos + resto; x++) printf(" ");
+        else for(j = 0; j < largura; j++) printf(" ");
     }
     printf("\n");
+    printf("Suas moedas: %d\n", player.moedas);
+    printf("\n");
+    printf("Digite o numero do item que deseja comprar ou 0 para sair.\n");
+    int escolha;
+    while(1) // Garante que a escolha seja valida
+    {
+        scanf("%d", &escolha);
+        if(escolha < 0 || escolha > 3) printf("Escolha invalida. Digite novamente.\n");
+        else 
+        {
+            if(escolha == 0) break;
+            if(item[a[escolha-1]].tipo == 0) // Verifica se o item é vazio
+            {
+                printf("Esse item não pode ser comprado.\n");
+                cross_platform_sleep(2000);
+                vitrine(a);
+            }
+            if(item[a[escolha - 1]].preco > player.moedas) 
+            {
+                printf("Voce nao tem moedas suficientes para comprar esse item.\n");
+                cross_platform_sleep(2000);
+                vitrine(a);
+            }
+            else
+            {
+                if(espacoInv(a[escolha - 1]) < 0)  // Verifica se o inventario tem espaco para o item
+                {
+                    printf("Voce nao tem espaco suficiente no inventario para comprar esse item.\n");
+                    cross_platform_sleep(2000);
+                    vitrine(a);
+                }
+                else{
+                    player.inventario[0][espacoInv(a[escolha - 1])] = a[escolha - 1]; // Adiciona o item ao inventario
+                    player.inventario[1][espacoInv(a[escolha - 1])]++; // Adiciona a quantidade do item ao inventario
+                    player.moedas -= item[a[escolha - 1]].preco; // Subtrai o preco do item das moedas do jogador
+                    printf("Item comprado com sucesso!\n");
+                    if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0;
+                    cross_platform_sleep(1000);
+                    vitrine(a); // Atualiza a vitrine
+                }
+            }
+        }
+
+        //código para voltar a fase
+    }
+
+}
+
+void loja(int level)
+{
+    int a[3]; // Vetor que guarda os ids dos itens
+
+
+    a[0] = numAle(3);  // Gera 3 numeros aleatorios de 1 a 3 que seriam os ids dos itens
+    a[1] = numAle(3);
+    a[2] = numAle(3);
+
+    while(1)  // Garante que os 3 numeros sejam diferentes
+    {
+        if(a[0] == a[1]) a[1] = numAle(3);
+        if(a[0] == a[2] || a[1] == a[2]) a[2] = numAle(3);
+        if(a[0] != a[1] && a[0] != a[2] && a[1] != a[2]) break;
+    }
+    
+    vitrine(a);
 }
 
 
@@ -279,7 +364,7 @@ void save(DADOS player)
     fprintf(arq, "Moedas: %d\n", player.moedas);
 
     for (int i = 0; i < 20; i++) {
-        fprintf(arq, "%d\n", player.inventario[i]);
+        fprintf(arq, "%d %d\n", player.inventario[0][i], player.inventario[1][i]);
     }
     fclose(arq);
 }
@@ -306,7 +391,7 @@ void load(DADOS *player){
     fscanf(arq, "Moedas: %d\n", &player->moedas);
 
     for (int i = 0; i < 20; i++) {
-        fscanf(arq, "%d\n", &player->inventario[i]);
+        fscanf(arq, "%d %d\n", &player->inventario[0][i], &player->inventario[1][i]);
     }
 
     fclose(arq);
@@ -326,7 +411,7 @@ void aleatJogador(char *txt){
 
     //no total são 30 pontos de status, 20 RNG e 10 fixo
     int status[5] = {2, 2, 2, 2, 2};
-    int i;
+    int i, j;
     for (i = 0 ; i < 20 ; i++)
     {
         status[rand()%5]++;
@@ -347,8 +432,10 @@ void aleatJogador(char *txt){
     player.moedas = 10;
 
     // Adicione esta inicialização para o inventário:
-    for (i = 0; i < 20; i++) {
-        player.inventario[i] = 0; // Inicializa cada slot do inventário com 0
+    for (i = 0; i < 2; i++) {
+        for(j = 0; j < 20; j++){
+            player.inventario[i][j] = 0; // Inicializa cada slot do inventário com 0
+        }
     }
     save(player);
     return;

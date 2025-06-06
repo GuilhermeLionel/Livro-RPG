@@ -1,29 +1,29 @@
-Samuel
-HP: 30/30
-MP: 10/10
-Forca: 5
-Protecao: 6
-Agilidade: 10
-Inteligencia: 2
-Carisma: 7
+JHBhjbf
+HP: 35/35
+MP: 35/35
+Forca: 6
+Protecao: 7
+Agilidade: 7
+Inteligencia: 7
+Carisma: 3
 Moedas: 10
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
-0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
+0 0
