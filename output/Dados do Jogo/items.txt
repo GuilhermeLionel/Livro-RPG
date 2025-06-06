@@ -25,3 +25,115 @@ Preco: 3
 Raridade: 1
 Bonus: 1, 8, 0
 QuantB: 3, 5, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
+
+Vazio
+Tipo: 0
+Preco: 0
+Raridade: 0
+Bonus: 0, 0, 0
+QuantB: 0, 0, 0
