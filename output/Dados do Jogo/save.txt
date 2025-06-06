@@ -1,11 +1,11 @@
-UmTresCinco
-HP: 50/50
-MP: 15/15
+sam
+HP: 35/35
+MP: 20/20
 Forca: 5
-Protecao: 10
-Agilidade: 5
-Inteligencia: 3
-Carisma: 7
+Protecao: 7
+Agilidade: 8
+Inteligencia: 4
+Carisma: 6
 Moedas: 1000
 0 0
 0 0

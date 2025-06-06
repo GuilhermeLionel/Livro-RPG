@@ -621,7 +621,7 @@ void verifica_nome_player(char *nome) {
 }
 
 void histInic(){
-    char nome[100] = {0};
+    char nome[101] = {0};
     /*textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
     textoTela("Quer dizer\n", 300);
     textoTela(". . .\n", 1000);
@@ -697,13 +697,14 @@ void histInic(){
     textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300); */
     getchar() != '\n';
     int OK = 1;
-    while (OK) { 
+    while (OK) {  
         fgets(nome, 100, stdin);
         if (nome[0] == '\n') {
+            strcpy(nome, ""); // reseta a string
+            limparTerminal();
             textoTela("Nao quer falar seu nome??", 400);
             textoTela("Isso e falta de educacao, sabia?", 200);
-            textoTela("Fala um nome qualquer entao, so pra eu registrar aqui:", 300);
-            getchar() != '\n';
+            textoTela("Fala um nome qualquer entao, so pra eu registrar aqui:\n\n", 300);
         }
         else OK = 0; // nome foi digitado 
     }
