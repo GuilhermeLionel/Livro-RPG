@@ -40,6 +40,10 @@ typedef struct dados{
 DADOS player;
 
 int numAle(int range);
+int espacoInv(int id);
+int digitos(int n);
+int espacoInv(int id);
+void vitrine(int a[]);
 void cross_platform_sleep(int ms);
 void limparTerminal();
 void gerarPasta();
@@ -54,8 +58,45 @@ void loja(int level);
 void histInic();
 void tipoItem(char *tipo, int n);
 void addItem(int id);
+<<<<<<< Updated upstream
 void strip(char *nome);
 void verifica_nome_player(char *nome);
+=======
+void verInventario();
+void bonusItem(char *bonus, int n);
+
+
+int digitos(int n)
+{
+    int count = 0;
+    if(n == 0) return 1; // Se o numero for 0, retorna 1
+    while(n > 0)
+    {
+        n /= 10;
+        count++;
+    }
+    return count; // Retorna a quantidade de digitos do numero
+}
+
+void verInventario()
+{
+    limparTerminal();
+    int i, j = 0, k;
+    int largura = 30;
+    int espaco;
+    for(i = 0; i < 5; i++)
+    {
+        for(j = 0; j < 4; j++)
+        {
+            printf("%d. %s", i * 4 + j + 1, item[player.inventario[0][4 * i + j]].nome);
+            espaco = largura - strlen(item[player.inventario[0][4 * i + j]].nome) - 2 - digitos(4 * i + j + 1);
+            for(k = 0; k < espaco; k++) printf(" ");
+        }
+        printf("\n");
+    }
+    getchar(); // Espera o usuário pressionar ENTER
+}
+>>>>>>> Stashed changes
 
 void addItem(int id)
 {
@@ -124,18 +165,19 @@ void bonusItem(char *bonus, int n)
 
 int espacoInv(int id)
 {
-    int i, a = 1; // Variavel a define se o item é stackavel ou nao, com 0 para nao e 1 para sim
-    if((item[id].tipo >= 0 && item[id].tipo <= 3)) a = 0; // Se o item não for do tipo Arma, Armadura ou Reliquia, a variavel a recebe 1, caso contrario recebe 0
-    switch(a)
+    int i, stack = 1, semId = 0; // Variavel a define se o item é stackavel ou nao, com 0 para nao e 1 para sim
+    if((item[id].tipo >= 0 && item[id].tipo <= 3)) stack = 0; // Se o item não for do tipo Arma, Armadura ou Reliquia, a variavel a recebe 1, caso contrario recebe 0
+    switch(stack)
     {
         case 1:
-            for(i = 0; player.inventario[0][i] != id; i++) if(i+1 >= 20) return -1; // Procura o id no inventario e se não estiver presente retorna -1
-            break;
+            for(i = 0; player.inventario[0][i] != id; i++) if(i+1 >= 20) semId = 1; // Procura o id no inventario e se não estiver presente retorna -1
+            if(!semId) break;
         case 0:
             for(i = 0; player.inventario[0][i] != 0; i++) if(i+1 >= 20) return -1; // Procura o primeiro espaço vazio no inventário e se não tiver retorna -1
             break;
     }
     if(i <= 19) return i; // Retorna o índice do primeiro espaço com o id desejado no inventário
+    else return -1; // Se não encontrar retorna -1
 }
 
 void vitrine(int a[])
@@ -233,45 +275,61 @@ void vitrine(int a[])
         else for(j = 0; j < largura; j++) printf(" ");
     }
     printf("\n");
-    printf("Suas moedas: %d\n", player.moedas);
+    printf("\nSuas moedas: %d\n", player.moedas);
     printf("\n");
-    printf("Digite o numero do item que deseja comprar ou 0 para sair.\n");
+    printf("Digite o numero do item que deseja comprar: \n[0] SAIR;\n[4] VENDER ITENS;\n[5] INVENTARIO.\n");
     int escolha;
     while(1) // Garante que a escolha seja valida
     {
         scanf("%d", &escolha);
-        if(escolha < 0 || escolha > 3) printf("Escolha invalida. Digite novamente.\n");
+        if(escolha < 0 || escolha > 5) printf("Escolha invalida. Digite novamente.\n");
         else 
         {
             if(escolha == 0) break;
-            if(item[a[escolha-1]].tipo == 0) // Verifica se o item é vazio
+            if(escolha >= 1 && escolha <= 3)
             {
-                printf("Esse item não pode ser comprado.\n");
-                cross_platform_sleep(2000);
-                vitrine(a);
-            }
-            if(item[a[escolha - 1]].preco > player.moedas) 
-            {
-                printf("Voce nao tem moedas suficientes para comprar esse item.\n");
-                cross_platform_sleep(2000);
-                vitrine(a);
-            }
-            else
-            {
-                if(espacoInv(a[escolha - 1]) < 0)  // Verifica se o inventario tem espaco para o item
+                if(item[a[escolha-1]].tipo == 0) // Verifica se o item é vazio
                 {
-                    printf("Voce nao tem espaco suficiente no inventario para comprar esse item.\n");
+                    printf("Esse item não pode ser comprado.\n");
                     cross_platform_sleep(2000);
                     vitrine(a);
                 }
-                else{
-                    addItem(a[escolha - 1]); // Adiciona o item ao inventario
-                    player.moedas -= item[a[escolha - 1]].preco; // Subtrai o preco do item das moedas do jogador
-                    printf("Item comprado com sucesso!\n");
-                    if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0;
-                    cross_platform_sleep(1000);
-                    vitrine(a); // Atualiza a vitrine
+                if(item[a[escolha - 1]].preco > player.moedas) 
+                {
+                    printf("Voce nao tem moedas suficientes para comprar esse item.\n");
+                    cross_platform_sleep(2000);
+                    vitrine(a);
                 }
+                else
+                {
+                    if(espacoInv(a[escolha - 1]) < 0)  // Verifica se o inventario tem espaco para o item
+                    {
+                        printf("Voce nao tem espaco suficiente no inventario para comprar esse item.\n");
+                        cross_platform_sleep(2000);
+                        vitrine(a);
+                    }
+                    else{
+                        addItem(a[escolha - 1]); // Adiciona o item ao inventario
+                        player.moedas -= item[a[escolha - 1]].preco; // Subtrai o preco do item das moedas do jogador
+                        printf("Item comprado com sucesso!\n");
+                        if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0;
+                        cross_platform_sleep(1000);
+                        vitrine(a); // Atualiza a vitrine
+                    }
+                }
+            }
+            if(escolha == 4)
+            {
+                verInventario();
+                cross_platform_sleep(2000);
+                vitrine(a);
+            }
+            if(escolha == 5)
+            {
+                verInventario();
+                printf("\n(Pressione ENTER para continuar...)\n");
+                getchar(); // Espera o usuário pressionar ENTER
+                vitrine(a);
             }
         }
 
@@ -442,7 +500,7 @@ void aleatJogador(char *txt){
     player.hp = player.vida_max;
     player.mana_max = player.inteligencia * 5;
     player.mp = player.mana_max;
-    player.moedas = 10;
+    player.moedas = 1000;
 
     // Adicione esta inicialização para o inventário:
     for (i = 0; i < 2; i++) {
