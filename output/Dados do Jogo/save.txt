@@ -1,11 +1,11 @@
-JHBhjbf
-HP: 35/35
-MP: 35/35
-Forca: 6
-Protecao: 7
-Agilidade: 7
-Inteligencia: 7
-Carisma: 3
+Samuel
+HP: 25/25
+MP: 25/25
+Forca: 8
+Protecao: 5
+Agilidade: 4
+Inteligencia: 5
+Carisma: 8
 Moedas: 10
 0 0
 0 0

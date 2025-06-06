@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
@@ -53,6 +54,8 @@ void loja(int level);
 void histInic();
 void tipoItem(char *tipo, int n);
 void addItem(int id);
+void strip(char *nome);
+void verifica_nome_player(char *nome);
 
 void addItem(int id)
 {
@@ -500,17 +503,29 @@ void cabecaTela(char* x) {
     printf("\n");
 }
 
+void strip(char *nome) {
+    int start = 0, end = strlen(nome) - 1, i;
+    while (isspace((unsigned char)nome[start])) 
+        start++;
+    while (end >= start && isspace((unsigned char)nome[end])) 
+        end--;
+    for (i = 0; start <= end; start++, i++) 
+        nome[i] = nome[start];
+    nome[i] = '\0';
+}
+
 void verifica_nome_player(char *nome) {
     int i = 0, OK = 0; // OK: verifica se o nome original sofreu alguma alteração
-    char nome_corrigido[40] = {0}, nome_novo[100]; 
+    char nome_corrigido[101] = {0}, nome_novo[101] = {0}; 
     // nome_corrigido = altera o nome (sem os casos não permitidos)
     // nome_novo = pede um novo nome para a recursão
     limparTerminal();
-    while (nome[i] != '\n') {
+    while (nome[i] != '\0') {
         if (nome[i] == ' ') { // + de uma palavra
             OK = 1;
             for(i = 0; nome[i] != ' '; i++) 
                 nome_corrigido[i] = nome[i]; // copia a string até o caractere de espaço para nome_corrigido
+            nome_corrigido[i] = '\0';
             strcpy(player.nome, nome_corrigido); // transfere o texto corrigido para nome.player
             textoTela("Nome maneiro, mas vou te chamar apenas de...", 200);
             printf("%s\n", player.nome); // não consegui colocar essa parte na textoTela() :(
@@ -524,10 +539,10 @@ void verifica_nome_player(char *nome) {
             textoTela("Saudades do meu amigo Herobrine123.\n", 400);
             textoTela("Enfim, tem algum outro nome que eu possa te chamar?\n", 200);
             fgets(nome_novo, 100, stdin);
+            if (nome_novo[0] == ' ' || nome_novo[strlen(nome_novo) - 1 == ' '])strip(nome_novo);
             verifica_nome_player(nome_novo); // recursiva para verificar o novo nome;
             break;
         }
-        
         i++;
     }
     if (OK == 0) { // OK == 0: nome original permaneceu
@@ -623,10 +638,11 @@ void histInic(){
     /*limparTerminal();
     textoTela("Mas todo destino grandioso comeca com passos pequenos.\n", 200);
     textoTela("E hoje . . .\n", 500);
-    textoTela("Errrn . . . Hoje! . . .\n", 500); */
-    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);
+    textoTela("Errrn . . . Hoje! . . .\n", 500); 
+    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300); */
     getchar() != '\n';
     fgets(nome, 100, stdin);
+    if (nome[0] == ' ' || nome[strlen(nome) - 1 == ' '])strip(nome);
     verifica_nome_player(nome);
     
     // movi essa parte pra função verifica_nome_player()
