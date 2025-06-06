@@ -58,10 +58,8 @@ void loja(int level);
 void histInic();
 void tipoItem(char *tipo, int n);
 void addItem(int id);
-<<<<<<< Updated upstream
 void strip(char *nome);
 void verifica_nome_player(char *nome);
-=======
 void verInventario();
 void bonusItem(char *bonus, int n);
 
@@ -96,7 +94,6 @@ void verInventario()
     }
     getchar(); // Espera o usuário pressionar ENTER
 }
->>>>>>> Stashed changes
 
 void addItem(int id)
 {
@@ -699,7 +696,17 @@ void histInic(){
     textoTela("Errrn . . . Hoje! . . .\n", 500); 
     textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300); */
     getchar() != '\n';
-    fgets(nome, 100, stdin);
+    int OK = 1;
+    while (OK) { 
+        fgets(nome, 100, stdin);
+        if (nome[0] == '\n') {
+            textoTela("Nao quer falar seu nome??", 400);
+            textoTela("Isso e falta de educacao, sabia?", 200);
+            textoTela("Fala um nome qualquer entao, so pra eu registrar aqui:", 300);
+            getchar() != '\n';
+        }
+        else OK = 0; // nome foi digitado 
+    }
     strip(nome);
     verifica_nome_player(nome);
     

@@ -1,24 +1,12 @@
-<<<<<<< Updated upstream
-Smith
-HP: 35/35
-MP: 35/35
-Forca: 6
-Protecao: 7
-Agilidade: 7
-Inteligencia: 7
-Carisma: 3
-Moedas: 10
-=======
-Alkjf
-HP: 45/45
-MP: 30/30
+UmTresCinco
+HP: 50/50
+MP: 15/15
 Forca: 5
-Protecao: 9
-Agilidade: 6
-Inteligencia: 6
-Carisma: 4
+Protecao: 10
+Agilidade: 5
+Inteligencia: 3
+Carisma: 7
 Moedas: 1000
->>>>>>> Stashed changes
 0 0
 0 0
 0 0
