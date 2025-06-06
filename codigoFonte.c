@@ -52,6 +52,17 @@ void cabecaTela(char* x);
 void loja(int level);
 void histInic();
 void tipoItem(char *tipo, int n);
+void addItem(int id);
+
+void addItem(int id)
+{
+    int espaco = espacoInv(id);
+    if(espaco != -1)
+    {
+        player.inventario[0][espaco] = id;
+        player.inventario[1][espaco]++;
+    }
+}
 
 void tipoItem(char *tipo, int n)
 {
@@ -115,13 +126,13 @@ int espacoInv(int id)
     switch(a)
     {
         case 1:
-            for(i = 0; player.inventario[0][i] != id; i++) if(i >= 20) return -1; // Procura o id no inventario e se não estiver presente retorna -1
+            for(i = 0; player.inventario[0][i] != id; i++) if(i+1 >= 20) return -1; // Procura o id no inventario e se não estiver presente retorna -1
             break;
         case 0:
-            for(i = 0; player.inventario[0][i] != 0; i++) if(i >= 20) return -1; // Procura o primeiro espaço vazio no inventário e se não tiver retorna -1
+            for(i = 0; player.inventario[0][i] != 0; i++) if(i+1 >= 20) return -1; // Procura o primeiro espaço vazio no inventário e se não tiver retorna -1
             break;
     }
-    return i; // Retorna o índice do primeiro espaço com o id desejado no inventário
+    if(i <= 19) return i; // Retorna o índice do primeiro espaço com o id desejado no inventário
 }
 
 void vitrine(int a[])
@@ -251,8 +262,7 @@ void vitrine(int a[])
                     vitrine(a);
                 }
                 else{
-                    player.inventario[0][espacoInv(a[escolha - 1])] = a[escolha - 1]; // Adiciona o item ao inventario
-                    player.inventario[1][espacoInv(a[escolha - 1])]++; // Adiciona a quantidade do item ao inventario
+                    addItem(a[escolha - 1]); // Adiciona o item ao inventario
                     player.moedas -= item[a[escolha - 1]].preco; // Subtrai o preco do item das moedas do jogador
                     printf("Item comprado com sucesso!\n");
                     if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0;
