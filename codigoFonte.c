@@ -539,7 +539,7 @@ void verifica_nome_player(char *nome) {
             textoTela("Saudades do meu amigo Herobrine123.\n", 400);
             textoTela("Enfim, tem algum outro nome que eu possa te chamar?\n", 200);
             fgets(nome_novo, 100, stdin);
-            if (nome_novo[0] == ' ' || nome_novo[strlen(nome_novo) - 1 == ' '])strip(nome_novo);
+            strip(nome_novo);
             verifica_nome_player(nome_novo); // recursiva para verificar o novo nome;
             break;
         }
@@ -642,7 +642,7 @@ void histInic(){
     textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300); */
     getchar() != '\n';
     fgets(nome, 100, stdin);
-    if (nome[0] == ' ' || nome[strlen(nome) - 1 == ' '])strip(nome);
+    strip(nome);
     verifica_nome_player(nome);
     
     // movi essa parte pra função verifica_nome_player()
