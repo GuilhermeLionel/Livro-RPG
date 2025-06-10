@@ -128,9 +128,10 @@ void usarItem(int espaco)
         {
             addItem(player.equipado[tipo]); // Adiciona o item equipado de volta ao inventário
             ajustaBonus(player.equipado[tipo], -1); // Remove os bônus do item equipado
-            player.equipado[tipo] = id; // Equipa o novo item
-            ajustaBonus(id, 1); // Adiciona os bônus do novo item equipado
+            player.equipado[tipo] = 0; // Remove o item equipado
         }
+        player.equipado[tipo] = id; // Equipa o novo item
+        ajustaBonus(id, 1); // Adiciona os bônus do novo item equipado
     }
 }
 
