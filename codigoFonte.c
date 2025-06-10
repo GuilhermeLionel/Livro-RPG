@@ -79,28 +79,28 @@ void ajustaBonus(int id, int sinal)
         {
             switch(item[id].bonus[0][i])
             {
-                case 1: // HP
+                case 1: // Forca
+                    player.forca += item[id].bonus[1][i] * sinal;
+                    break;
+                case 2: // Agilidade
+                    player.agilidade += item[id].bonus[1][i] * sinal;
+                    break;
+                case 3: // Inteligencia
+                    player.inteligencia += item[id].bonus[1][i] * sinal;
+                    break;
+                case 4: // Carisma
+                    player.carisma += item[id].bonus[1][i] * sinal;
+                    break;
+                case 5: // Protecao
+                    player.protecao += item[id].bonus[1][i] * sinal;
+                    break;
+                case 6: // HP
                     player.vida_max += item[id].bonus[1][i] * sinal;
                     player.hp += item[id].bonus[1][i] * sinal; // Ajusta o HP atual
                     break;
-                case 2: // MP
+                case 7: // MP
                     player.mana_max += item[id].bonus[1][i] * sinal;
                     player.mp += item[id].bonus[1][i] * sinal; // Ajusta o MP atual
-                    break;
-                case 3: // Forca
-                    player.forca += item[id].bonus[1][i] * sinal;
-                    break;
-                case 4: // Agilidade
-                    player.agilidade += item[id].bonus[1][i] * sinal;
-                    break;
-                case 5: // Inteligencia
-                    player.inteligencia += item[id].bonus[1][i] * sinal;
-                    break;
-                case 6: // Carisma
-                    player.carisma += item[id].bonus[1][i] * sinal;
-                    break;
-                case 7: // Protecao
-                    player.protecao += item[id].bonus[1][i] * sinal;
                     break;
                 case 8: // Dano
                     // mudar depois
@@ -446,7 +446,7 @@ void bonusItem(char *bonus, int n)
             strcpy(bonus, "Car");
             break;
         case 5:
-            strcpy(bonus, "Prt");
+            strcpy(bonus, "Protec");
             break;
         case 6:
             strcpy(bonus, "HP");
@@ -727,6 +727,7 @@ void save(DADOS player)
     fprintf(arq, "Inteligencia: %d\n", player.inteligencia);
     fprintf(arq, "Carisma: %d\n", player.carisma);
     fprintf(arq, "Moedas: %d\n", player.moedas);
+    fprintf(arq, "Equipados: %d, %d, %d, %d\n", player.equipado[0], player.equipado[1], player.equipado[2], player.equipado[3]);
 
     for (int i = 0; i < 20; i++) {
         fprintf(arq, "%d %d\n", player.inventario[0][i], player.inventario[1][i]);
@@ -754,6 +755,7 @@ void load(DADOS *player){
     fscanf(arq, "Inteligencia: %d\n", &player->inteligencia);
     fscanf(arq, "Carisma: %d\n", &player->carisma);
     fscanf(arq, "Moedas: %d\n", &player->moedas);
+    fscanf(arq, "Equipados: %d, %d, %d, %d\n", &player->equipado[0], &player->equipado[1], &player->equipado[2], &player->equipado[3]);
 
     for (int i = 0; i < 20; i++) {
         fscanf(arq, "%d %d\n", &player->inventario[0][i], &player->inventario[1][i]);
@@ -802,6 +804,11 @@ void aleatJogador(char *txt){
             player.inventario[i][j] = 0; // Inicializa cada slot do inventário com 0
         }
     }
+
+    for(i = 0; i < 4; i++) {
+        player.equipado[i] = 0; // Inicializa os itens equipados com 0
+    }
+
     save(player);
     return;
 }
