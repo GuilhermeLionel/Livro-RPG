@@ -1,11 +1,11 @@
-fesd
-HP: 40/40
-MP: 20/20
-Forca: 3
-Protecao: 8
-Agilidade: 8
-Inteligencia: 4
-Carisma: 7
+kk
+HP: 35/35
+MP: 30/30
+Forca: 6
+Protecao: 7
+Agilidade: 2
+Inteligencia: 6
+Carisma: 9
 Moedas: 1000
 0 0
 0 0
