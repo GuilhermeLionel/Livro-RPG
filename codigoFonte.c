@@ -150,11 +150,14 @@ int localInv(int id)
 int qtdInv(int id)
 {
     int qtd = 0, i;
-    for(i = 0; i < 20; i++)
+    if(localInv(id) > 0)
     {
-        if(player.inventario[0][i] == id)
+        for(i = localInv(id); i < 20; i++)
         {
-            qtd += player.inventario[1][i];
+            if(player.inventario[0][i] == id)
+            {
+                qtd += player.inventario[1][i];
+            }
         }
     }
     return qtd;
@@ -463,15 +466,14 @@ void bonusItem(char *bonus, int n)
 int espacoInv(int id)
 {
     int i, stack = 1, semId = 0; // Variavel a define se o item é stackavel ou nao, com 0 para nao e 1 para sim
-    if((item[id].tipo >= 0 && item[id].tipo <= 3)) stack = 0; // Se o item não for do tipo Arma, Armadura ou Reliquia, a variavel a recebe 1, caso contrario recebe 0
+    if(item[id].tipo >= 0 && item[id].tipo <= 3) stack = 0; // Se o item for do tipo Vazio, Arma, Armadura ou Reliquia, a variavel a recebe 1, caso contrario recebe 0
     switch(stack)
     {
-        case 1:
-            for(i = 0; player.inventario[0][i] != id; i++) if(i+1 >= 20) semId = 1; // Procura o id no inventario e se não estiver presente retorna -1
-            if(!semId) break;
-        case 0:
-            for(i = 0; player.inventario[0][i] != 0; i++) if(i+1 >= 20) return -1; // Procura o primeiro espaço vazio no inventário e se não tiver retorna -1
-            break;
+        case 1: // Se o item for stackavel, procura o id do item no inventario
+            for(i = 0; player.inventario[0][i] != id; i++) if(i == 19) semId = 1;
+            if(!semId) break; // Se o id estiver presente, não precisa procurar por espaço vazio
+        case 0: // Se o item não for stackavel ou é stackavel, mas nao esta presente no inventario, procura o primeiro espaço vazio no inventário
+            for(i = 0; player.inventario[0][i] != 0; i++) if(i == 19) break;
     }
     if(i <= 19) return i; // Retorna o índice do primeiro espaço com o id desejado no inventário
     else return -1; // Se não encontrar retorna -1
