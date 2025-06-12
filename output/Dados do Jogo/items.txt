@@ -5,135 +5,142 @@ Raridade: 0
 Bonus: 0, 0, 0
 QuantB: 0, 0, 0
 
-Armadura de Couro
-Tipo: 2
+Adaga Enferrujada
+Tipo: 1
+Preco: 2
+Raridade: 1
+Bonus: 1, 2, 8
+QuantB: 2, -1, 3
+
+Espada de Bronze
+Tipo: 1
 Preco: 5
 Raridade: 1
-Bonus: 4, 0, 0
-QuantB: 2, 0, 0
+Bonus: 3, 8, 0
+QuantB: 4, 6, 0
 
-Espada de Ferro
+Machado de Pedra
 Tipo: 1
-Preco: 10
+Preco: 6
+Raridade: 1
+Bonus: 1, 8, 2
+QuantB: 6, 5, -2
+
+Arco de Galhos
+Tipo: 1
+Preco: 7
+Raridade: 1
+Bonus: 8, 1, 0
+QuantB: 3, 7, 0
+
+Cajado de Iniciante
+Tipo: 1
+Preco: 8
+Raridade: 1
+Bonus: 3, 8, 0
+QuantB: 5, 5, 0
+
+Espada Curta do Bandido
+Tipo: 1
+Preco: 14
 Raridade: 2
 Bonus: 1, 8, 0
-QuantB: -5, 10, 0
+QuantB: 7, 13, 0
 
-Espada de Madeira
+Machado de Batalha do Orc
 Tipo: 1
-Preco: 3
-Raridade: 1
-Bonus: 1, 8, 0
-QuantB: 3, 5, 0
+Preco: 17
+Raridade: 2
+Bonus: 1, 8, 2
+QuantB: 9, 11, -1
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Lança de Ferro
+Tipo: 1
+Preco: 15
+Raridade: 2
+Bonus: 1, 5, 8
+QuantB: 8, 4, 8
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Besta Reforçada
+Tipo: 1
+Preco: 21
+Raridade: 2
+Bonus: 2, 8, 0
+QuantB: 6, 14, 0
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Glaive da Legião
+Tipo: 1
+Preco: 24
+Raridade: 2
+Bonus: 2, 3, 8
+QuantB: 7, 6, 7
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Espada Larga Rúnica
+Tipo: 1
+Preco: 45
+Raridade: 3
+Bonus: 1, 5, 8
+QuantB: 11, 9, 10
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Martelo de Guerra Enânico
+Tipo: 1
+Preco: 50
+Raridade: 3
+Bonus: 1, 3, 8
+QuantB: 14, 7, 9
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Arco Élfico da Precisão
+Tipo: 1
+Preco: 48
+Raridade: 3
+Bonus: 2, 4, 8
+QuantB: 9, 8, 13
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Foice Espectral
+Tipo: 1
+Preco: 55
+Raridade: 3
+Bonus: 1, 2, 8
+QuantB: 12, 9, 9
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Cajado do Arquimago
+Tipo: 1
+Preco: 60
+Raridade: 3
+Bonus: 3, 7, 8
+QuantB: 13, 9, 8
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Machado da Fúria
+Tipo: 1
+Preco: 80
+Raridade: 4
+Bonus: 1, 5, 8
+QuantB: 19, 16, 10
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Lâmina da Serenidade
+Tipo: 1
+Preco: 85
+Raridade: 4
+Bonus: 2, 3, 8
+QuantB: 17, 13, 15
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Bastão do Conjurador
+Tipo: 1
+Preco: 90
+Raridade: 4
+Bonus: 3, 7, 8
+QuantB: 21, 11, 13
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Arco da Tempestade
+Tipo: 1
+Preco: 95
+Raridade: 4
+Bonus: 2, 4, 8
+QuantB: 19, 11, 15
 
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
-
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
-
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
-
-Vazio
-Tipo: 0
-Preco: 0
-Raridade: 0
-Bonus: 0, 0, 0
-QuantB: 0, 0, 0
+Adaga do Assassino
+Tipo: 1
+Preco: 75
+Raridade: 4
+Bonus: 2, 1, 8
+QuantB: 24, 6, 15
