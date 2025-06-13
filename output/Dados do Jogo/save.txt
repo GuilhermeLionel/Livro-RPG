@@ -1,12 +1,13 @@
-fgthjy
+Alex
 Level 1: 0/50
-HP: 35/35
+Skill Points: 0
+HP: 45/45
 MP: 20/20
-Forca: 5
-Protecao: 7
-Agilidade: 6
+Forca: 2
+Protecao: 9
+Agilidade: 10
 Inteligencia: 4
-Carisma: 8
+Carisma: 5
 Moedas: 1000
 Equipados: 0, 0, 0, 0
 0 0
