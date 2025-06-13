@@ -12,7 +12,9 @@
 #include <sys/stat.h> // mkdir
 #endif
 
-#define MAX_ITEMS 20 // Define o número máximo de itens
+#define MAX_ITEMS 66 // Define o número máximo de itens
+
+int items = 0;
 
 typedef struct buffHandler2 {
     int alvo; // 0 = Inimigo, 1 = O propio
@@ -56,6 +58,9 @@ typedef struct dados{
     int inventario[2][20];
     int moedas;
     int equipado[4];
+    int exp;
+    int level;
+    int expMax;
 } DADOS;
 
 DADOS player;
@@ -128,6 +133,42 @@ void ajustaBonus(int id, int sinal)
                 case 8: // Dano
                     // mudar depois
                     break;
+                case 9: // % HP Max
+                    player.vida_max += (player.vida_max * item[id].bonus[1][i] / 100) * sinal;
+                    player.hp += (player.vida_max * item[id].bonus[1][i] / 100) * sinal; // Ajusta o HP atual
+                    break;
+                case 10: // % MP Max
+                    player.mana_max += (player.mana_max * (item[id].bonus[1][i] + 100) / 100) * sinal;
+                    player.mp += (player.mana_max * (item[id].bonus[1][i] + 100) / 100) * sinal;
+                    break;
+            }
+        }
+    }
+}
+
+void consumivel(int id)
+{
+    int i;
+    for(i = 0; i < 3; i++)
+    {
+        if(item[id].bonus[0][i] != 0) 
+        {
+            switch(item[id].bonus[0][i])
+            {
+                case 6: // HP
+                    player.hp += item[id].bonus[1][i];
+                    break;
+                case 7: // MP
+                    player.mp += item[id].bonus[1][i];
+                    break;
+                case 9: // % HP Max
+                    player.hp += (player.vida_max * item[id].bonus[1][i] / 100);
+                    if(player.hp > player.vida_max) player.hp = player.vida_max;
+                    break;
+                case 10: // % MP Max
+                    player.mp += (player.mana_max * item[id].bonus[1][i] / 100);
+                    if (player.mp > player.mana_max) player.mp = player.mana_max;
+                    break;
             }
         }
     }
@@ -156,6 +197,11 @@ void usarItem(int espaco)
         player.equipado[tipo] = id; // Equipa o novo item
         ajustaBonus(id, 1); // Adiciona os bônus do novo item equipado
     }
+    if(tipo == 5) // Se o item for do tipo Consumível
+    {
+        consumivel(id);
+        lixo(espaco, 1);
+    }
 }
 
 int localInv(int id)
@@ -173,9 +219,10 @@ int localInv(int id)
 int qtdInv(int id)
 {
     int qtd = 0, i;
-    if(localInv(id) > 0)
+    int local = localInv(id);
+    if(local >= 0)
     {
-        for(i = localInv(id); i < 20; i++)
+        for(i = local; i < 20; i++)
         {
             if(player.inventario[0][i] == id)
             {
@@ -483,6 +530,13 @@ void bonusItem(char *bonus, int n)
         case 8:
             strcpy(bonus, "Dano");
             break;
+        case 9:
+            strcpy(bonus, "%% HP");
+            break;
+        case 10:
+            strcpy(bonus, "%% MP");
+            break;
+
     }
 }
 
@@ -493,7 +547,14 @@ int espacoInv(int id)
     switch(stack)
     {
         case 1: // Se o item for stackavel, procura o id do item no inventario
-            for(i = 0; player.inventario[0][i] != id; i++) if(i == 19) semId = 1;
+            for(i = 0; player.inventario[0][i] != id; i++) 
+            {
+                if(i == 19) 
+                {
+                    semId = 1;
+                    break;
+                }
+            }
             if(!semId) break; // Se o id estiver presente, não precisa procurar por espaço vazio
         case 0: // Se o item não for stackavel ou é stackavel, mas nao esta presente no inventario, procura o primeiro espaço vazio no inventário
             for(i = 0; player.inventario[0][i] != 0; i++) if(i == 19) break;
@@ -628,33 +689,37 @@ void vitrine(int a[])
                     cross_platform_sleep(2000);
                     vitrine(a);
                 }
-                if(item[a[escolha - 1]].preco > player.moedas) 
-                {
-                    limparTerminal();
-                    printf("Voce nao tem moedas suficientes para comprar esse item.\n");
-                    cross_platform_sleep(2000);
-                    vitrine(a);
-                }
                 else
                 {
-                    if(espacoInv(a[escolha - 1]) < 0)  // Verifica se o inventario tem espaco para o item
+                    if(item[a[escolha - 1]].preco > player.moedas) 
                     {
                         limparTerminal();
-                        printf("Voce nao tem espaco suficiente no inventario para comprar esse item.\n");
+                        printf("Voce nao tem moedas suficientes para comprar esse item.\n");
                         cross_platform_sleep(2000);
                         vitrine(a);
                     }
-                    else{
-                        addItem(a[escolha - 1]); // Adiciona o item ao inventario
-                        player.moedas -= item[a[escolha - 1]].preco; // Subtrai o preco do item das moedas do jogador
-                        printf("Item comprado com sucesso!\n");
-                        //if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0; //Retira o item da loja
-                        cross_platform_sleep(1000);
-                        vitrine(a); // Atualiza a vitrine
+                    else
+                    {
+                        if(espacoInv(a[escolha - 1]) < 0)  // Verifica se o inventario tem espaco para o item
+                        {
+                            limparTerminal();
+                            printf("Voce nao tem espaco suficiente no inventario para comprar esse item.\n");
+                            cross_platform_sleep(2000);
+                            vitrine(a);
+                        }
+                        else
+                        {
+                            limparTerminal();
+                            addItem(a[escolha - 1]); // Adiciona o item ao inventario
+                            player.moedas -= item[a[escolha - 1]].preco; // Subtrai o preco do item das moedas do jogador
+                            printf("Item comprado com sucesso!\n");
+                            //if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0; //Retira o item da loja
+                            cross_platform_sleep(1000);
+                            vitrine(a); // Atualiza a vitrine
+                        }
                     }
                 }
             }
-            
         }
     }
 }
@@ -690,10 +755,10 @@ int idAleatorio(int raridade)
 {
     int i;
     int quantidade = 0;
-    for(i = 0; i < MAX_ITEMS; i++) quantidade++;
+    for(i = 0; i < items; i++) quantidade++;
     int id[quantidade]; // Vetor que guarda os ids dos itens
     quantidade = 0;
-    for(i = 0; i < MAX_ITEMS; i++)
+    for(i = 0; i < items; i++)
     {
         if(item[i].raridade == raridade) 
         {
@@ -775,7 +840,6 @@ void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
         a[1] = 4; // Força um item lendario
     }
 
-
     id[0] = idAleatorio(a[0]);
     id[1] = idAleatorio(a[1]);
     id[2] = idAleatorio(a[2]);
@@ -783,7 +847,7 @@ void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
     int quantidade[3] = {0}, i, j;  // Tem que saber da quantidade para nao dar problema de repeticao quando for diferenciar os ids
     for(i = 0; i < 3; i++)
     {
-        for(j = 0; j < MAX_ITEMS; j++) if(item[j].raridade == a[i]) quantidade[i]++;  // Conta quantos itens existem com a raridade escolhida
+        for(j = 0; j < items; j++) if(item[j].raridade == a[i]) quantidade[i]++;  // Conta quantos itens existem com a raridade escolhida
     }
 
     if((id[0] == id[1] || id[0] == id[2] || id[1] == id[2]) && (quantidade[0] >= 3 || quantidade[1] >= 3 || quantidade[2] >= 3)) // Se os ids forem iguais, gera novos ids
@@ -801,6 +865,11 @@ void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
 
 void setItens(int q){
     int i;
+    if(q > MAX_ITEMS)
+    {
+        printf("Quantidade de itens invalida.\n");
+        exit(1);
+    }
     FILE *arq = fopen("Dados do Jogo/items.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
@@ -837,8 +906,9 @@ void readItems(){
         count++;
     }
     fclose(arq);
-    count = count / 6;
-    setItens(count);
+    count = (count + 1) / 7;
+    items = count;
+    setItens(items);
 }
 
 
@@ -866,6 +936,7 @@ void save(DADOS player)
 
     fprintf(arq, "%s\n", player.nome);
     
+    fprintf(arq, "Level %d: %d/%d\n", player.level, player.exp, player.expMax);
     fprintf(arq, "HP: %d/%d\n", player.hp, player.vida_max);
     fprintf(arq, "MP: %d/%d\n", player.mp, player.mana_max);
     fprintf(arq, "Forca: %d\n", player.forca);
@@ -893,7 +964,7 @@ void load(DADOS *player){
     fgets(player->nome, sizeof(player->nome), arq);
     player->nome[strcspn(player->nome, "\n")] = 0; //Transforma caractere "\n" em "\0"
 
-    
+    fscanf(arq, "Level %d: %d/%d\n", &player->level, &player->exp, &player->expMax);
     fscanf(arq, "HP: %d/%d\n", &player->hp, &player->vida_max);
     fscanf(arq, "MP: %d/%d\n", &player->mp, &player->mana_max);
     fscanf(arq, "Forca: %d\n", &player->forca);
@@ -955,6 +1026,10 @@ void aleatJogador(char *txt){
     for(i = 0; i < 4; i++) {
         player.equipado[i] = 0; // Inicializa os itens equipados com 0
     }
+    
+    player.level = 1;
+    player.exp = 0;
+    player.expMax = 50;
 
     sala = 0; // Inicializa a sala como 0
 
@@ -1176,7 +1251,6 @@ void histInic(){
 
 void gerarPers(){
     histInic();
-    readItems();
 }
 
 void telaInicial(){

@@ -1,11 +1,12 @@
-ht
-HP: 25/25
-MP: 30/30
-Forca: 9
-Protecao: 5
+fgthjy
+Level 1: 0/50
+HP: 35/35
+MP: 20/20
+Forca: 5
+Protecao: 7
 Agilidade: 6
-Inteligencia: 6
-Carisma: 4
+Inteligencia: 4
+Carisma: 8
 Moedas: 1000
 Equipados: 0, 0, 0, 0
 0 0
