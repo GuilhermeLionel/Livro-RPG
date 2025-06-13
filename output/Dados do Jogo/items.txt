@@ -54,42 +54,42 @@ Raridade: 2
 Bonus: 1, 8, 2
 QuantB: 9, 11, -1
 
-Lança de Ferro
+Lanca de Ferro
 Tipo: 1
 Preco: 15
 Raridade: 2
 Bonus: 1, 5, 8
 QuantB: 8, 4, 8
 
-Besta Reforçada
+Besta Reforcada
 Tipo: 1
 Preco: 21
 Raridade: 2
 Bonus: 2, 8, 0
 QuantB: 6, 14, 0
 
-Glaive da Legião
+Glaive da Legiao
 Tipo: 1
 Preco: 24
 Raridade: 2
 Bonus: 2, 3, 8
 QuantB: 7, 6, 7
 
-Espada Larga Rúnica
+Espada Larga Runica
 Tipo: 1
 Preco: 45
 Raridade: 3
 Bonus: 1, 5, 8
 QuantB: 11, 9, 10
 
-Martelo de Guerra Enânico
+Martelo de Guerra Enanico
 Tipo: 1
 Preco: 50
 Raridade: 3
 Bonus: 1, 3, 8
 QuantB: 14, 7, 9
 
-Arco Élfico da Precisão
+Arco Elfico da Precisao
 Tipo: 1
 Preco: 48
 Raridade: 3
@@ -110,21 +110,21 @@ Raridade: 3
 Bonus: 3, 7, 8
 QuantB: 13, 9, 8
 
-Machado da Fúria
+Machado da Furia
 Tipo: 1
 Preco: 80
 Raridade: 4
 Bonus: 1, 5, 8
 QuantB: 19, 16, 10
 
-Lâmina da Serenidade
+Lamina da Serenidade
 Tipo: 1
 Preco: 85
 Raridade: 4
 Bonus: 2, 3, 8
 QuantB: 17, 13, 15
 
-Bastão do Conjurador
+Bastao do Conjurador
 Tipo: 1
 Preco: 90
 Raridade: 4
@@ -152,7 +152,7 @@ Raridade: 1
 Bonus: 5, 2, 0
 QuantB: 2, -1, 0
 
-Túnica Simples
+Tunica Simples
 Tipo: 2
 Preco: 3
 Raridade: 1
@@ -187,7 +187,7 @@ Raridade: 2
 Bonus: 5, 1, 0
 QuantB: 10, 5, 0
 
-Couro Batido Reforçado
+Couro Batido Reforcado
 Tipo: 2
 Preco: 20
 Raridade: 2
@@ -201,7 +201,7 @@ Raridade: 2
 Bonus: 5, 1, 0
 QuantB: 15, 3, 0
 
-Traje de Batalha do Caçador
+Traje de Batalha do Cacador
 Tipo: 2
 Preco: 22
 Raridade: 2
@@ -215,21 +215,21 @@ Raridade: 2
 Bonus: 5, 1, 0
 QuantB: 10, 4, 0
 
-Cota de Malha do Sábio Rústico
+Cota de Malha do Sabio Rustico
 Tipo: 2
 Preco: 40
 Raridade: 3
 Bonus: 5, 1, 3
 QuantB: 15, 7, 5
 
-Armadura de Placas Templária
+Armadura de Placas Templaria
 Tipo: 2
 Preco: 50
 Raridade: 3
 Bonus: 5, 1, 4
 QuantB: 18, 9, 3
 
-Armadura de Escamas Dracônicas
+Armadura de Escamas Draconicas
 Tipo: 2
 Preco: 55
 Raridade: 3
@@ -243,7 +243,7 @@ Raridade: 3
 Bonus: 5, 2, 4
 QuantB: 10, 12, 6
 
-Vestes do Sábio Antigo
+Vestes do Sabio Antigo
 Tipo: 2
 Preco: 45
 Raridade: 3
@@ -257,7 +257,7 @@ Raridade: 4
 Bonus: 5, 1, 2
 QuantB: 30, 10, 5
 
-Armadura do Legado do Rei Leão
+Armadura do Legado do Rei Leao
 Tipo: 2
 Preco: 95
 Raridade: 4
@@ -271,7 +271,7 @@ Raridade: 4
 Bonus: 5, 1, 3
 QuantB: 30, 10, 5
 
-Armadura Etérea do Sonho
+Armadura Eterea do Sonho
 Tipo: 2
 Preco: 85
 Raridade: 4
@@ -285,7 +285,7 @@ Raridade: 4
 Bonus: 5, 1, 2
 QuantB: 40, 4, 1
 
-Armadura de Escama de Dragão Negro
+Armadura de Escama de Dragao Negro
 Tipo: 2
 Preco: 200
 Raridade: 4
@@ -306,7 +306,7 @@ Raridade: 1
 Bonus: 3, 5, 2
 QuantB: 10, -3, -2
 
-Selo da Paciência
+Selo da Paciencia
 Tipo: 3
 Preco: 12
 Raridade: 1
@@ -320,7 +320,7 @@ Raridade: 1
 Bonus: 1, 2, 0
 QuantB: 4, 5, 0
 
-Pingente da Vitalidade Frágil
+Pingente da Vitalidade Fragil
 Tipo: 3
 Preco: 25
 Raridade: 2
@@ -334,28 +334,28 @@ Raridade: 2
 Bonus: 3, 4, 0
 QuantB: 9, 8, 0
 
-Manopla do Artesão Distraído
+Manopla do Artesao Distraido
 Tipo: 3
 Preco: 35
 Raridade: 2
 Bonus: 1, 2, 0
 QuantB: 12, 7, 0
 
-Coroa do Andarilho Solitário
+Coroa do Andarilho Solitario
 Tipo: 3
 Preco: 40
 Raridade: 2
 Bonus: 2, 3, 0
 QuantB: 10, 9, 0
 
-Cálice do Rejuvenescimento Ancestral
+Calice do Rejuvenescimento Ancestral
 Tipo: 3
 Preco: 55
 Raridade: 3
 Bonus: 5, 1, 4
 QuantB: 15, 8, 4
 
-Orbe da Persuasão Divina
+Orbe da Persuasao Divina
 Tipo: 3
 Preco: 60
 Raridade: 3
@@ -369,150 +369,93 @@ Raridade: 3
 Bonus: 3, 1, 4
 QuantB: 12, 7, 9
 
-Coração de Basilisco Petrificado
+Coracao de Basilisco Petrificado
 Tipo: 3
 Preco: 70
 Raridade: 3
 Bonus: 5, 1, 2
 QuantB: 15, 9, 6
 
-Olho do Dragão Primordial
+Olho do Dragao Primordial
 Tipo: 3
 Preco: 120
 Raridade: 4
 Bonus: 1, 2, 5
 QuantB: 20, 15, 10
 
-Cálice da Realeza Caída
+Calice da Realeza Caida
 Tipo: 3
 Preco: 95
 Raridade: 4
 Bonus: 4, 1, 5
 QuantB: 20, 15, 10
 
-Fragmento do Coração do Mundo
+Fragmento do Coracao do Mundo
 Tipo: 3
 Preco: 100
 Raridade: 4
 Bonus: 3, 5, 1
 QuantB: 25, 15, 5
 
-Pingente da Essência Elemental
+Pingente da Essencia Elemental
 Tipo: 3
 Preco: 110
 Raridade: 4
 Bonus: 3, 2, 1
 QuantB: 20, 15, 10
 
-Capacete de Couro Simples
-Tipo: 4
-Preco: 7
+Pocao de Cura Leve
+Tipo: 5
+Preco: 10
 Raridade: 1
-Bonus: 5, 2, 0
-QuantB: 4, -1, 0
+Bonus: 6, 0, 0
+QuantB: 20, 0, 0
 
-Elmo Envelhecido
-Tipo: 4
-Preco: 9
-Raridade: 1
-Bonus: 5, 1, 0
-QuantB: 5, -2, 0
-
-Capuz Acolchoado
-Tipo: 4
-Preco: 6
-Raridade: 1
-Bonus: 5, 3, 0
-QuantB: 3, 2, 0
-
-Tiara de Aprendiz
-Tipo: 4
-Preco: 8
-Raridade: 1
-Bonus: 3, 4, 0
-QuantB: 4, 3, 0
-
-Elmo de Guarda Reforçado
-Tipo: 4
-Preco: 18
+Pocao de Cura Media
+Tipo: 5
+Preco: 35
 Raridade: 2
-Bonus: 5, 1, 0
-QuantB: 10, 5, 0
+Bonus: 6, 0, 0
+QuantB: 70, 0, 0
 
-Gorro de Caçador Sombrio
-Tipo: 4
-Preco: 22
-Raridade: 2
-Bonus: 2, 5, 0
-QuantB: 12, 6, 0
-
-Capacete de Aço Temperado
-Tipo: 4
-Preco: 25
-Raridade: 2
-Bonus: 5, 1, 0
-QuantB: 15, 3, 0
-
-Capuz de Arcano Incomum
-Tipo: 4
-Preco: 20
-Raridade: 2
-Bonus: 3, 4, 0
-QuantB: 10, 9, 0
-
-Elmo do Paladino Sagrado
-Tipo: 4
-Preco: 50
+Pocao de Cura Forte
+Tipo: 5
+Preco: 70
 Raridade: 3
-Bonus: 5, 1, 4
-QuantB: 18, 9, 3
+Bonus: 6, 0, 0
+QuantB: 150, 0, 0
 
-Coroa da Sabedoria Antiga
-Tipo: 4
-Preco: 55
-Raridade: 3
-Bonus: 3, 5, 4
-QuantB: 12, 10, 8
-
-Capacete do Batedor Veloz
-Tipo: 4
-Preco: 48
-Raridade: 3
-Bonus: 2, 5, 1
-QuantB: 15, 8, 5
-
-Máscara do Inquisidor Sombrio
-Tipo: 4
-Preco: 60
-Raridade: 3
-Bonus: 4, 3, 5
-QuantB: 10, 12, 8
-
-Elmo da Forja Estelar
-Tipo: 4
+Elixir da Vida Plena
+Tipo: 5
 Preco: 120
 Raridade: 4
-Bonus: 5, 1, 6
-QuantB: 30, 10, 5
+Bonus: 6, 0, 0
+QuantB: 300, 0, 0
 
-Coroa do Conjurador Celeste
-Tipo: 4
+Cantil de Mana Pequeno
+Tipo: 5
+Preco: 12
+Raridade: 1
+Bonus: 7, 0, 0
+QuantB: 15, 0, 0
+
+Frasco de Mana Concentrada
+Tipo: 5
+Preco: 40
+Raridade: 2
+Bonus: 7, 0, 0
+QuantB: 60, 0, 0
+
+Tomo Mistico Recarregado
+Tipo: 5
+Preco: 80
+Raridade: 3
+Bonus: 7, 0, 0
+QuantB: 120, 0, 0
+
+Essencia do Fluxo Infinito
+Tipo: 5
 Preco: 130
 Raridade: 4
-Bonus: 3, 2, 4
-QuantB: 25, 10, 10
-
-Capacete do Vácuo Ecoante
-Tipo: 4
-Preco: 140
-Raridade: 4
-Bonus: 3, 5, 1
-QuantB: 30, 10, 5
-
-Cocar da Fera Ancestral
-Tipo: 4
-Preco: 150
-Raridade: 4
-Bonus: 1, 2, 5
-QuantB: 25, 15, 5
-
+Bonus: 7, 0, 0
+QuantB: 250, 0, 0
