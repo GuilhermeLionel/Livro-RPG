@@ -291,3 +291,115 @@ Preco: 200
 Raridade: 4
 Bonus: 1, 2, 5
 QuantB: 20, 20, 5
+
+Amuleto Quebrado
+Tipo: 3
+Preco: 8
+Raridade: 1
+Bonus: 5, 2, 0
+QuantB: 4, 3, 0
+
+Pedra do Sussurro
+Tipo: 3
+Preco: 10
+Raridade: 1
+Bonus: 3, 5, 2
+QuantB: 10, -3, -2
+
+Selo da Paciência
+Tipo: 3
+Preco: 12
+Raridade: 1
+Bonus: 5, 1, 0
+QuantB: 5, 2, 0
+
+Anel de Cobre Polido
+Tipo: 3
+Preco: 15
+Raridade: 1
+Bonus: 1, 2, 0
+QuantB: 4, 5, 0
+
+Pingente da Vitalidade Frágil
+Tipo: 3
+Preco: 25
+Raridade: 2
+Bonus: 5, 1, 0
+QuantB: 12, 4, 0
+
+Fragmento de Gema Reluzente
+Tipo: 3
+Preco: 30
+Raridade: 2
+Bonus: 3, 4, 0
+QuantB: 9, 8, 0
+
+Manopla do Artesão Distraído
+Tipo: 3
+Preco: 35
+Raridade: 2
+Bonus: 1, 2, 0
+QuantB: 12, 7, 0
+
+Coroa do Andarilho Solitário
+Tipo: 3
+Preco: 40
+Raridade: 2
+Bonus: 2, 3, 0
+QuantB: 10, 9, 0
+
+Cálice do Rejuvenescimento Ancestral
+Tipo: 3
+Preco: 55
+Raridade: 3
+Bonus: 5, 1, 4
+QuantB: 15, 8, 4
+
+Orbe da Persuasão Divina
+Tipo: 3
+Preco: 60
+Raridade: 3
+Bonus: 4, 3, 2
+QuantB: 10, 10, 8
+
+Tomo do Conhecimento Esquecido
+Tipo: 3
+Preco: 65
+Raridade: 3
+Bonus: 3, 1, 4
+QuantB: 12, 7, 9
+
+Coração de Basilisco Petrificado
+Tipo: 3
+Preco: 70
+Raridade: 3
+Bonus: 5, 1, 2
+QuantB: 15, 9, 6
+
+Olho do Dragão Primordial
+Tipo: 3
+Preco: 120
+Raridade: 4
+Bonus: 1, 2, 5
+QuantB: 20, 15, 10
+
+Cálice da Realeza Caída
+Tipo: 3
+Preco: 95
+Raridade: 4
+Bonus: 4, 1, 5
+QuantB: 20, 15, 10
+
+Fragmento do Coração do Mundo
+Tipo: 3
+Preco: 100
+Raridade: 4
+Bonus: 3, 5, 1
+QuantB: 25, 15, 5
+
+Pingente da Essência Elemental
+Tipo: 3
+Preco: 110
+Raridade: 4
+Bonus: 3, 2, 1
+QuantB: 20, 15, 10
