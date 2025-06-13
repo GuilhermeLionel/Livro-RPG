@@ -1,12 +1,13 @@
-kk
-HP: 35/35
+ht
+HP: 25/25
 MP: 30/30
-Forca: 6
-Protecao: 7
-Agilidade: 2
+Forca: 9
+Protecao: 5
+Agilidade: 6
 Inteligencia: 6
-Carisma: 9
+Carisma: 4
 Moedas: 1000
+Equipados: 0, 0, 0, 0
 0 0
 0 0
 0 0

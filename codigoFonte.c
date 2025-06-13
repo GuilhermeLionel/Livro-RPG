@@ -12,6 +12,26 @@
 #include <sys/stat.h> // mkdir
 #endif
 
+#define MAX_ITEMS 20 // Define o número máximo de itens
+
+typedef struct buffHandler2 {
+    int alvo; // 0 = Inimigo, 1 = O propio
+    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Ataque Especial (Inteligencia), 3 = HP, 4 = Prot, 5 = Stun
+    int duracao; // Duração do buff em turnos
+    float valor; // Valor do buff
+} BUFFHANDLER;
+
+typedef struct abilityHandler2{
+    char nome[51];
+    char descricao[201];
+    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Ataque Especial (Magia), 3 = Cura Fixa, 4 = Prot, 5 = Buff/Debuff
+    BUFFHANDLER buff; // Buff que a habilidade pode causar
+    float qtdmg; // Dano ou cura
+    int custo; // Custo de mana
+    int chance; // Chance de acerto da habilidade
+    int requisito[2][3]; // Requisitos para usar a habilidade (0 = Nenhum, 1 = Forca, 2 = Inteligencia, 3 = Carisma, 4 = Protecao, Agilidade) [tipo de requisito][quant. de requisito]
+
+} ABILITYHANDLER;
 
 typedef struct itemHandler2{
     char nome[51];
@@ -20,7 +40,7 @@ typedef struct itemHandler2{
     int raridade;
     int bonus[2][3];
 } ITEMHANDLER;
-ITEMHANDLER item[20];
+ITEMHANDLER item[MAX_ITEMS];
 
 typedef struct dados{
     char nome[51];
@@ -39,8 +59,11 @@ typedef struct dados{
 } DADOS;
 
 DADOS player;
+int sala = 0;
 
 
+int idAleatorio(int raridade); // Gera um id aleatorio dado a raridade do item
+int aleatorizaChance(int tamanho, float chance[tamanho]); // Dado o tamanho do vetor chance, rola um dado de 0 ate o tamanho do vetor menos - 1 e retorna o valor sorteado considerando as chances de cada valor
 int localInv(int id); // Retorna a posição mais proxima de zero de um item com determinado id no inventário
 int qtdInv(int id); // Retorna a quantidade do item no inventário
 int numAle(int range);
@@ -581,9 +604,10 @@ void vitrine(int a[])
     while(1) // Garante que a escolha seja valida
     {
         scanf("%d", &escolha);
-        if(escolha < 0 || escolha > 5) printf("Escolha invalida. Digite novamente.\n");
+        if(escolha < 0 || escolha > 6) printf("Escolha invalida. Digite novamente.\n");
         else 
         {
+            if(escolha == 0) break;
             if(escolha == 4)
             {
                 verInventario(2);
@@ -594,17 +618,19 @@ void vitrine(int a[])
                 verInventario(1);
                 vitrine(a);
             }
-            if(escolha == 0) break;
+            if(escolha == 6) loja(sala);
             if(escolha >= 1 && escolha <= 3)
             {
                 if(item[a[escolha-1]].tipo == 0) // Verifica se o item é vazio
                 {
+                    limparTerminal();
                     printf("Esse item não pode ser comprado.\n");
                     cross_platform_sleep(2000);
                     vitrine(a);
                 }
                 if(item[a[escolha - 1]].preco > player.moedas) 
                 {
+                    limparTerminal();
                     printf("Voce nao tem moedas suficientes para comprar esse item.\n");
                     cross_platform_sleep(2000);
                     vitrine(a);
@@ -613,6 +639,7 @@ void vitrine(int a[])
                 {
                     if(espacoInv(a[escolha - 1]) < 0)  // Verifica se o inventario tem espaco para o item
                     {
+                        limparTerminal();
                         printf("Voce nao tem espaco suficiente no inventario para comprar esse item.\n");
                         cross_platform_sleep(2000);
                         vitrine(a);
@@ -629,29 +656,147 @@ void vitrine(int a[])
             }
             
         }
-
-        //código para voltar a fase
     }
-
 }
 
-void loja(int level)
+int aleatorizaChance(int tamanho, float chance[tamanho])
 {
-    int a[3]; // Vetor que guarda os ids dos itens
-
-
-    a[0] = numAle(3);  // Gera 3 numeros aleatorios de 1 a 3 que seriam os ids dos itens
-    a[1] = numAle(3);
-    a[2] = numAle(3);
-
-    while(1)  // Garante que os 3 numeros sejam diferentes
+    int i;
+    int total = 0;
+    for(i = 0; i < tamanho; i++) total += chance[i];
+    if(total == 0) // Se a soma das chances for 0, não há itens para sortear
     {
-        if(a[0] == a[1]) a[1] = numAle(3);
-        if(a[0] == a[2] || a[1] == a[2]) a[2] = numAle(3);
-        if(a[0] != a[1] && a[0] != a[2] && a[1] != a[2]) break;
+        printf("soma 0");
+        cross_platform_sleep(2000);
+        return 0;
     }
-    
-    vitrine(a);
+    if(total != 100)
+    {
+        printf("Erro: A soma das chances deve ser 100%%.\n");
+        cross_platform_sleep(2000);
+        return 0;
+    }	
+    int sorteio = numAle(101) - 1;
+    for(i = 0; i < tamanho; i++)
+    {
+        if(sorteio > chance[i]) sorteio -= chance[i];
+        else if(chance[i] == 0) continue; // Se a chance for 0, pula para o próximo
+        else break; // Se a chance for maior que 0, sai do loop
+    }
+    return i;
+}
+
+int idAleatorio(int raridade)
+{
+    int i;
+    int quantidade = 0;
+    for(i = 0; i < MAX_ITEMS; i++) quantidade++;
+    int id[quantidade]; // Vetor que guarda os ids dos itens
+    quantidade = 0;
+    for(i = 0; i < MAX_ITEMS; i++)
+    {
+        if(item[i].raridade == raridade) 
+        {
+            id[quantidade++] = i;
+        }
+    }
+    return id[numAle(quantidade) - 1];
+}
+
+
+void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
+{
+    int a[3], id[3]; // Vetor que guarda os ids dos itens
+    float chance[5] = {0.0, 0.0, 0.0, 0.0, 0.0}; // Vetor que guarda as chances de raridade de item ser escolhido
+    if(level <= 10) // Se o level for entre 0 e 10, a chance de um item de raridade 1 é 90% e 2 é 10%
+    {
+        chance[1] = 90.0;
+        chance[2] = 10.0;
+    }
+    if(level >= 11 && level <= 30) 
+    {
+        chance[1] = 80.0;
+        chance[2] = 20.0;
+    }
+    if(level >= 31 && level <= 40)
+    {
+        chance[1] = 60.0;
+        chance[2] = 35.0;
+        chance[3] = 5.0;
+    }
+    if(level >= 41 && level <= 50) 
+    {
+        chance[1] = 50.0;
+        chance[2] = 40.0;
+        chance[3] = 10.0;
+        chance[4] = 1.0; // Chance de 1% de sair um item de raridade 4
+    }
+    if(level >=51 && level <=60) 
+    {
+        chance[1] = 35.0;
+        chance[2] = 45.0;
+        chance[3] = 20.0;
+        chance[4] = 2.0;
+    }
+    if(level >= 61 && level <= 70) 
+    {
+        chance[1] = 17.0;
+        chance[2] = 50.0;
+        chance[3] = 30.0;
+        chance[4] = 3.0;
+    }
+    if(level >= 71 && level <= 80) 
+    {
+        chance[1] = 6.0;
+        chance[2] = 50.0;
+        chance[3] = 40.0;
+        chance[4] = 4.0;
+    }
+    if(level >= 81 && level <= 90) 
+    {
+        chance[1] = 5.0;
+        chance[2] = 35.0;
+        chance[3] = 55.0;
+        chance[4] = 5.0;
+    }
+    if(level >= 91 && level <= 100) 
+    {
+        chance[2] = 20.0;
+        chance[3] = 80.0;
+    }
+
+    a[0] = aleatorizaChance(5, chance);
+    a[1] = aleatorizaChance(5, chance);
+    a[2] = aleatorizaChance(5, chance);
+
+
+    if(level >= 91 && level <= 100) // Se o level for entre 91 e 100
+    {
+        a[1] = 4; // Força um item lendario
+    }
+
+
+    id[0] = idAleatorio(a[0]);
+    id[1] = idAleatorio(a[1]);
+    id[2] = idAleatorio(a[2]);
+
+    int quantidade[3] = {0}, i, j;  // Tem que saber da quantidade para nao dar problema de repeticao quando for diferenciar os ids
+    for(i = 0; i < 3; i++)
+    {
+        for(j = 0; j < MAX_ITEMS; j++) if(item[j].raridade == a[i]) quantidade[i]++;  // Conta quantos itens existem com a raridade escolhida
+    }
+
+    if((id[0] == id[1] || id[0] == id[2] || id[1] == id[2]) && (quantidade[0] >= 3 || quantidade[1] >= 3 || quantidade[2] >= 3)) // Se os ids forem iguais, gera novos ids
+    {
+        while(id[0] == id[1] || id[0] == id[2] || id[1] == id[2])
+        {
+            if(id[0] == id[1] && quantidade[1] >= 3) id[1] = idAleatorio(a[1]);
+            if(id[0] == id[2] && quantidade[2] >= 3) id[2] = idAleatorio(a[2]);
+            if(id[1] == id[2] && quantidade[2] >= 3) id[2] = idAleatorio(a[2]);
+        }
+    }
+
+    vitrine(id);
 }
 
 void setItens(int q){
@@ -811,6 +956,8 @@ void aleatJogador(char *txt){
         player.equipado[i] = 0; // Inicializa os itens equipados com 0
     }
 
+    sala = 0; // Inicializa a sala como 0
+
     save(player);
     return;
 }
@@ -919,7 +1066,8 @@ void verifica_nome_player(char *nome) {
             fflush(stdout);
             cross_platform_sleep(1500 / tamanho); // Divide o tempo de espera pelo tamanho do nome 
         }
-        textoTela("  .  .  .  \n", 200);
+        printf(" ");// Imprime o nome do jogador com um espaço no final
+        textoTela(".  .  .  \n", 200);
         textoTela("Um verdadeiro nome de guerreiro . . .\n\n", 400);
     }
     aleatJogador(player.nome); // player.nome vai para a função
@@ -1022,7 +1170,7 @@ void histInic(){
     printf("\n(Pressione ENTER para continuar...)\n");
     getchar(); // Espera o usuário pressionar ENTER
     limparTerminal();
-    loja(1);
+    loja(0);
 }
 
 
