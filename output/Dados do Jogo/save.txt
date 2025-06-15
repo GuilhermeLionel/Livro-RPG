@@ -1,12 +1,12 @@
-Alex
+qpeixe
 Level 1: 0/50
 Skill Points: 0
-HP: 45/45
-MP: 20/20
-Forca: 2
-Protecao: 9
-Agilidade: 10
-Inteligencia: 4
+HP: 30/30
+MP: 25/25
+Forca: 11
+Protecao: 6
+Agilidade: 3
+Inteligencia: 5
 Carisma: 5
 Moedas: 1000
 Equipados: 0, 0, 0, 0
