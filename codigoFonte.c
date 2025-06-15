@@ -102,6 +102,8 @@ void mostrarStatus();
 void consumivel(int id);
 void limparBuffer();
 void limparLinhas(int qtd);
+void calculoXp(int expAt, int expMax, int lvl);
+void aleatStatus(int status[], int pontos);
 
 void limparLinhas(int qtd)
 {
@@ -194,7 +196,8 @@ void mostrarStatus()
     printf("Carisma: %d\n", player.carisma);
     printf("Protecao: %d\n", player.protecao);
     printf("\nSkill Points: %d\n", player.skillPoints);
-    printf("EXP:\n");
+    printf("EXP: %d\n", player.exp);
+    printf("PROXIMO LEVEL: %d\n", player.expMax-player.exp);
     
 
     printf("Press [ENTER]\n");
@@ -954,8 +957,9 @@ void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
     }
     if(level >= 91 && level <= 100) 
     {
-        chance[2] = 20.0;
+        chance[2] = 10.0;
         chance[3] = 80.0;
+        chance[4] = 10.0;
     }
 
     a[0] = aleatorizaChance(5, chance);
@@ -987,7 +991,8 @@ void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
             if(id[1] == id[2] && quantidade[2] >= 3) id[2] = idAleatorio(a[2]);
         }
     }
-
+    player.exp = 50;
+    calculoXp(player.exp, player.expMax, player.level);
     vitrine(id);
 }
 
@@ -1121,30 +1126,57 @@ int numAle(int range){
     return n;
 }
 
+void calculoXp(int expAt, int expMax, int lvl){
+    int status[5] = {0, 0, 0, 0, 0};
+    if (expAt >= expMax) //posteriormente esse if será tirado, vamos colocar ele na condição de ganhar uma batalha
+    {
+        expAt-=expMax;
+        expMax*=1.5;
+        lvl++;
+        aleatStatus(status, 15);
+    }
+}
+
+void aleatStatus(int status[], int pontos){
+    for (int i = 0 ; i < pontos ; i++)
+    {
+        status[numAle(5)-1]++;
+    }
+
+    player.protecao += status[0];
+    player.forca += status[1];
+    player.agilidade += status[2];
+    player.inteligencia += status[3];
+    player.carisma += status[4];
+    player.vidaMax = player.protecao * 5;
+    player.hp = player.vidaMax;
+    player.manaMax = player.inteligencia * 5;
+    player.mp = player.manaMax;
+}
+
+
 void aleatJogador(char *txt){
     gerarPasta();
     limparTerminal();
 
     //no total são 30 pontos de status, 20 RNG e 10 fixo
     int status[5] = {2, 2, 2, 2, 2};
+    player.protecao = 0;
+    player.forca = 0;
+    player.agilidade = 0;
+    player.inteligencia = 0;
+    player.carisma = 0;
+    player.level = 1;
+    player.expMax = 50;
     int i, j;
-    for (i = 0 ; i < 20 ; i++)
-    {
-        status[rand()%5]++;
-    }
+
+    aleatStatus(status, 20);
     
+
     txt[strcspn(txt, "\n")] = 0; // Tira o caractere "\n" da string txt e coloca "\0"
 
     strcpy(player.nome, txt);
-    player.protecao = status[0];
-    player.forca = status[1];
-    player.agilidade = status[2];
-    player.inteligencia = status[3];
-    player.carisma = status[4];
-    player.vidaMax = player.protecao * 5;
-    player.hp = player.vidaMax;
-    player.manaMax = player.inteligencia * 5;
-    player.mp = player.manaMax;
+   
     player.moedas = 1000;
 
     // Adicione esta inicialização para o inventário:
