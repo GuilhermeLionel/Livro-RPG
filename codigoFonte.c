@@ -3,6 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+#include <locale.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -47,7 +48,7 @@ ITEMHANDLER item[MAX_ITEMS];
 typedef struct dados{
     char nome[51];
     int protecao;
-    int vidaMax;
+    int hpMax;
     int hp;
     int mp;
     int manaMax;
@@ -86,12 +87,12 @@ void save(DADOS player);
 void load(DADOS *player, int *sala);
 void textoTela(const char *texto, int seg);
 void cabecaTela(char* x);
-void loja(int level);
+void loja();
 void histInic();
 void tipoItem(char *tipo, int n);
 void addItem(int id);
 void strip(char *nome);
-void verifica_nome_player(char *nome);
+void verificaNomePlayer(char *nome);
 void verInventario(int modo);
 void bonusItem(char *bonus, int n);
 void lixo(int espaco, int qtd);
@@ -104,6 +105,122 @@ void limparBuffer();
 void limparLinhas(int qtd);
 void calculoExp();
 void aleatStatus(int pontos);
+void tomadaDecisao();
+void checkInput(int * n, int min, int max);
+void cura(int qtd);
+
+void cura(int qtd)
+{
+    player.hp += qtd;
+    if(player.hp > player.hpMax) player.hp = player.hpMax;
+}
+
+
+void tomadaDecisao()
+{
+    char txt[400];
+    limparTerminal();
+    int escolha;
+    if(sala == 0)
+    {
+        printf("Qual sera o seu primeiro passo?\n\n");
+        printf("[1] Loja\n[2] Conversar\n[3] Subir a torre\n\n");
+        checkInput(&escolha, 1, 3);
+        switch(escolha)
+        {
+            case 1:
+                loja();
+                tomadaDecisao();
+                break;
+            case 2:
+                //Dialogo de conversa
+                break;
+            case 3:
+                sala = 5;
+                save(player);
+                tomadaDecisao();
+                break;
+        }
+    }
+    else if(sala % 10 == 5)
+    {
+        textoTela("Voce encontrou uma fogueira . . .\n", 400);
+        textoTela("Deseja parar e descansar?\n", 200);
+        printf("[1] Sim [0] Nao\n\n");
+        checkInput(&escolha, 0, 1);
+        switch(escolha)
+        {
+            case 1:
+                limparTerminal();
+                textoTela("Voce decide parar para descansar . . .\n", 400);
+                float a = numAle(26) + 4.0;
+                int b = a / 100.0 * (float) player.hpMax, c = a;
+                cura(b);
+                sprintf(txt, "Voce recuperou %d%% de HP\n", c);
+                textoTela(txt, 200);
+                printf("Pressione [ENTER] para continuar\n");
+                limparBuffer();
+            case 0:
+                limparTerminal();
+                textoTela("Voce segue o seu caminho . . .\n\n", 400);
+                sala=9;
+                printf("Pressione [ENTER] para continuar\n");
+                limparBuffer();
+                tomadaDecisao();
+                break;
+        }
+    }
+    else if(sala % 10 == 9)
+    {
+        textoTela("Voce encontrou uma loja\n", 200);
+        textoTela("O vendedor acena para voce . . .\n", 400);
+        textoTela("Deseja falar com ele?\n", 100);
+        printf("[1] Sim [0] Nao\n\n");
+        checkInput(&escolha, 0, 1);
+
+        limparTerminal();
+        switch(escolha)
+        {
+            case 1:
+                textoTela("O mesmo vendedor do inicio . . .\n", 200);
+                textoTela("Voce se pergunta como ele chegou aqui\n", 400);
+                printf("Pressione [ENTER] para continuar\n");
+                limparBuffer();
+                loja();
+                limparBuffer();
+                textoTela("O vendedor te diz boa sorte antes de ir . . .\n", 300);
+                if(sala < 10) textoTela("Voce se pergunta o porque . . .\n", 400);
+                printf("Pressione [ENTER] para continuar\n");
+                limparBuffer();
+            case 0:
+                limparTerminal();
+                textoTela("Voce segue o seu caminho . . .\n\n", 400);
+                sala=19;
+                printf("Pressione [ENTER] para continuar\n");
+                limparBuffer();
+                tomadaDecisao();
+                break;
+        }
+    }
+}
+
+void checkInput(int * n, int min, int max)
+{
+    int erro = 0;
+    while(1)
+    {
+        if(scanf(" %d", n) != 1 || *n < min || *n > max)
+        {
+            limparLinhas(1);
+            if(erro) limparLinhas(1);
+            printf("Escolha ivalida, por favor digite um numero entre %d e %d\n", min, max);
+            erro = 1;
+            limparBuffer();
+        }
+        else break;
+    }
+    limparBuffer();
+}
 
 void limparLinhas(int qtd)
 {
@@ -141,7 +258,7 @@ void mostrarStatus()
 
     printf("\n");
 
-    sprintf(txt, "HP: %d/%d", player.hp, player.vidaMax);
+    sprintf(txt, "HP: %d/%d", player.hp, player.hpMax);
     printf("%s", txt);
     espacos = largura - strlen(txt);
     for(i = 0; i < espacos; i++) printf(" ");
@@ -263,7 +380,7 @@ void ajustaBonus(int id, int sinal)
                     player.protecao += item[id].bonus[1][i] * sinal;
                     break;
                 case 6: // HP
-                    player.vidaMax += item[id].bonus[1][i] * sinal;
+                    player.hpMax += item[id].bonus[1][i] * sinal;
                     player.hp += item[id].bonus[1][i] * sinal; // Ajusta o HP atual
                     break;
                 case 7: // MP
@@ -274,8 +391,8 @@ void ajustaBonus(int id, int sinal)
                     // mudar depois
                     break;
                 case 9: // % HP Max
-                    player.vidaMax += (player.vidaMax * item[id].bonus[1][i] / 100) * sinal;
-                    player.hp += (player.vidaMax * item[id].bonus[1][i] / 100) * sinal; // Ajusta o HP atual
+                    player.hpMax += (player.hpMax * item[id].bonus[1][i] / 100) * sinal;
+                    player.hp += (player.hpMax * item[id].bonus[1][i] / 100) * sinal; // Ajusta o HP atual
                     break;
                 case 10: // % MP Max
                     player.manaMax += (player.manaMax * (item[id].bonus[1][i] + 100) / 100) * sinal;
@@ -302,8 +419,8 @@ void consumivel(int id)
                     player.mp += item[id].bonus[1][i];
                     break;
                 case 9: // % HP Max
-                    player.hp += (player.vidaMax * item[id].bonus[1][i] / 100);
-                    if(player.hp > player.vidaMax) player.hp = player.vidaMax;
+                    player.hp += (player.hpMax * item[id].bonus[1][i] / 100);
+                    if(player.hp > player.hpMax) player.hp = player.hpMax;
                     break;
                 case 10: // % MP Max
                     player.mp += (player.manaMax * item[id].bonus[1][i] / 100);
@@ -531,11 +648,13 @@ void verInventario(int modo)
             {
                 limparTerminal();
                 getchar();
+                limparBuffer();
                 descreverItem(player.inventario[0][escolha - 1]); // Descreve o item escolhido
                 printf("\n");
                 for(i = 0; i < ((60 - 32) / 2); i++) printf(" ");
                 printf("Pressione [ENTER] para continuar\n\n");
                 getchar(); // Espera o ENTER do usuário
+                limparBuffer();
                 verInventario(1);
             }
             break;
@@ -846,7 +965,7 @@ void vitrine(int a[])
         verInventario(1);
         vitrine(a);
     }
-    if(escolha == 6) loja(sala);
+    if(escolha == 6) loja();
     if(escolha >= 1 && escolha <= 3)
     {
         if(item[a[escolha-1]].tipo == 0) // Verifica se o item é vazio
@@ -934,62 +1053,62 @@ int idAleatorio(int raridade)
 }
 
 
-void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
+void loja() // Sempre antes de boss. Boss a cada 10 fases
 {
     int a[3], id[3]; // Vetor que guarda os ids dos itens
     float chance[5] = {0.0, 0.0, 0.0, 0.0, 0.0}; // Vetor que guarda as chances de raridade de item ser escolhido
-    if(level <= 10) // Se o level for entre 0 e 10, a chance de um item de raridade 1 é 90% e 2 é 10%
+    if(sala <= 10) // Se o sala for entre 0 e 10, a chance de um item de raridade 1 é 90% e 2 é 10%
     {
         chance[1] = 90.0;
         chance[2] = 10.0;
     }
-    if(level >= 11 && level <= 30) 
+    if(sala >= 11 && sala <= 30) 
     {
         chance[1] = 80.0;
         chance[2] = 20.0;
     }
-    if(level >= 31 && level <= 40)
+    if(sala >= 31 && sala <= 40)
     {
         chance[1] = 60.0;
         chance[2] = 35.0;
         chance[3] = 5.0;
     }
-    if(level >= 41 && level <= 50) 
+    if(sala >= 41 && sala <= 50) 
     {
         chance[1] = 50.0;
         chance[2] = 40.0;
         chance[3] = 10.0;
         chance[4] = 1.0; // Chance de 1% de sair um item de raridade 4
     }
-    if(level >=51 && level <=60) 
+    if(sala >=51 && sala <=60) 
     {
         chance[1] = 35.0;
         chance[2] = 45.0;
         chance[3] = 20.0;
         chance[4] = 2.0;
     }
-    if(level >= 61 && level <= 70) 
+    if(sala >= 61 && sala <= 70) 
     {
         chance[1] = 17.0;
         chance[2] = 50.0;
         chance[3] = 30.0;
         chance[4] = 3.0;
     }
-    if(level >= 71 && level <= 80) 
+    if(sala >= 71 && sala <= 80) 
     {
         chance[1] = 6.0;
         chance[2] = 50.0;
         chance[3] = 40.0;
         chance[4] = 4.0;
     }
-    if(level >= 81 && level <= 90) 
+    if(sala >= 81 && sala <= 90) 
     {
         chance[1] = 5.0;
         chance[2] = 35.0;
         chance[3] = 55.0;
         chance[4] = 5.0;
     }
-    if(level >= 91 && level <= 100) 
+    if(sala >= 91 && sala <= 100) 
     {
         chance[2] = 10.0;
         chance[3] = 80.0;
@@ -1001,7 +1120,7 @@ void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
     a[2] = aleatorizaChance(5, chance);
 
 
-    if(level >= 91 && level <= 100) // Se o level for entre 91 e 100
+    if(sala >= 91 && sala <= 100) // Se o sala for entre 91 e 100
     {
         a[1] = 4; // Força um item lendario
     }
@@ -1105,7 +1224,7 @@ void save(DADOS player)
     fprintf(arq, "Sala: %d\n", sala);
     fprintf(arq, "Level %d: %d/%d\n", player.level, player.exp, player.expMax);
     fprintf(arq, "Skill Points: %d\n", player.skillPoints);
-    fprintf(arq, "HP: %d/%d\n", player.hp, player.vidaMax);
+    fprintf(arq, "HP: %d/%d\n", player.hp, player.hpMax);
     fprintf(arq, "MP: %d/%d\n", player.mp, player.manaMax);
     fprintf(arq, "Forca: %d\n", player.forca);
     fprintf(arq, "Protecao: %d\n", player.protecao);
@@ -1136,7 +1255,7 @@ void load(DADOS *player, int *sala) {
     fscanf(arq, "Sala: %d\n", sala);
     fscanf(arq, "Level %d: %d/%d\n", &player->level, &player->exp, &player->expMax);
     fscanf(arq, "Skill Points: %d\n", &player->skillPoints);
-    fscanf(arq, "HP: %d/%d\n", &player->hp, &player->vidaMax);
+    fscanf(arq, "HP: %d/%d\n", &player->hp, &player->hpMax);
     fscanf(arq, "MP: %d/%d\n", &player->mp, &player->manaMax);
     fscanf(arq, "Forca: %d\n", &player->forca);
     fscanf(arq, "Protecao: %d\n", &player->protecao);
@@ -1185,7 +1304,7 @@ void aleatStatus(int pontos)
     player.agilidade += status[2];
     player.inteligencia += status[3];
     player.carisma += status[4];
-    player.vidaMax = player.protecao * 5;
+    player.hpMax = player.protecao * 5;
     player.hp += status[0] * 5;
     player.manaMax = player.inteligencia * 5;
     player.mp += status[3] * 5;
@@ -1202,8 +1321,8 @@ void aleatJogador(char *txt){
     player.agilidade = 2;
     player.inteligencia = 2;
     player.carisma = 2;
-    player.vidaMax = player.protecao * 5;
-    player.hp = player.vidaMax;
+    player.hpMax = player.protecao * 5;
+    player.hp = player.hpMax;
     player.manaMax = player.inteligencia * 5;
     player.mp = player.manaMax;
 
@@ -1258,6 +1377,18 @@ void cross_platform_sleep(int ms) {
 #endif
 }
 
+void txtTela(char * mensagem, int seg)
+{
+    char *palavra = strtok(mensagem, " ");
+    while (palavra != NULL) {
+        printf("%s ", palavra);
+        fflush(stdout);
+        cross_platform_sleep(seg); // Usando função multiplataforma
+        palavra = strtok(NULL, " ");
+    }
+    printf("\n");
+}
+
 void textoTela(const char *texto, int seg) {
     char menssagem[256];
     strcpy(menssagem, texto);
@@ -1302,14 +1433,25 @@ void strip(char *nome) {
     nome[i] = '\0';
 }
 
-void verifica_nome_player(char *nome) {
+void verificaNomePlayer(char *nome) {
     int i = 0, OK = 0; // OK: verifica se o nome original sofreu alguma alteração
     char nome_corrigido[101] = {0}, nome_novo[101] = {0}; 
     // nome_corrigido = altera o nome (sem os casos não permitidos)
     // nome_novo = pede um novo nome para a recursão
     limparTerminal();
     while (nome[i] != '\0') {
-        if (nome[i] == ' ') { // + de uma palavra
+        if (!(nome[i] >= 'A' && nome[i] <= 'Z') && !(nome[i] >= 'a' && nome[i] <= 'z')) { // números e caracteres especiais
+            OK = 1;
+            textoTela("Que legal, uma pessoa com nome igual aos da internet...\n", 200);
+            textoTela("Saudades do meu amigo Herobrine123.\n", 400);
+            textoTela("Nunca vi um guerreiro tao valente como esse homem.\n", 500);
+            textoTela("Enfim, tem algum outro nome que eu possa te chamar?\n", 200);
+            fgets(nome_novo, 100, stdin);
+            strip(nome_novo);
+            verificaNomePlayer(nome_novo); // recursiva para verificar o novo nome;
+            break;
+        }
+        else if (nome[i] == ' ') { // + de uma palavra
             OK = 1;
             for(i = 0; nome[i] != ' '; i++) 
                 nome_corrigido[i] = nome[i]; // copia a string até o caractere de espaço para nome_corrigido
@@ -1321,16 +1463,7 @@ void verifica_nome_player(char *nome) {
             textoTela("Beleza?", 800);
             break; 
         }
-        else if (!(nome[i] >= 'A' && nome[i] <= 'Z') && !(nome[i] >= 'a' && nome[i] <= 'z')) { // números e caracteres especiais
-            OK = 1;
-            textoTela("Que legal, uma pessoa com nome igual aos da internet...\n", 200);
-            textoTela("Saudades do meu amigo Herobrine123.\n", 400);
-            textoTela("Enfim, tem algum outro nome que eu possa te chamar?\n", 200);
-            fgets(nome_novo, 100, stdin);
-            strip(nome_novo);
-            verifica_nome_player(nome_novo); // recursiva para verificar o novo nome;
-            break;
-        }
+        
         i++;
     }
     if (OK == 0) { // OK == 0: nome original permaneceu
@@ -1382,7 +1515,7 @@ void histInic(){
     textoTela("Reis se ajoelharam. Imperios cairam.\n", 300);
     textoTela("Valdoran nao pedia permissao...\n", 400);
     textoTela("Eles queriam...\n", 400);
-    textoTela("Eles \033[31mtomavam...\033[0m\n", 600);
+    textoTela("Eles \[31mto033mavam...\033[0m\n", 600);
     printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
@@ -1442,20 +1575,20 @@ void histInic(){
         else OK = 0; // nome foi digitado 
     }
     strip(nome);
-    verifica_nome_player(nome);
+    verificaNomePlayer(nome);
     
-    // movi essa parte pra função verifica_nome_player()
+    // movi essa parte pra função verificaNomePlayer()
     textoTela("Quer comprar algo na minha loja?", 400); 
     printf("\n(Pressione ENTER para continuar...)\n");
-    getchar(); // Espera o usuário pressionar ENTER
+    limparBuffer();
     limparTerminal();
-    loja(0);
     mostrarStatus();
+    tomadaDecisao();
 }
 
 void telaInicial(){
     limparTerminal();
-    cabecaTela("A ascensao na torre!");
+    cabecaTela("A ascenso na torre!");
     printf("1 - Iniciar um novo jogo.\n");
     printf("2 - Continuar um jogo gravado.\n");
     printf("3 - Ranking de pontos.\n");
@@ -1473,6 +1606,7 @@ void telaInicial(){
         case '2':
             load(&player, &sala);
             mostrarStatus();
+            tomadaDecisao();
             break;
         case '3':
             limparTerminal();
@@ -1503,6 +1637,7 @@ void telaInicial(){
 
 int main(){
     srand(time(NULL));
+    setlocale(LC_ALL, "");
     readItems();
     telaInicial();
     return 0;
