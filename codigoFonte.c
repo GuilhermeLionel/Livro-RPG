@@ -83,7 +83,7 @@ void aleatJogador(char *txt);
 void setItens(int q);
 void readItems();
 void save(DADOS player);
-void load(DADOS *player);
+void load(DADOS *player, int *sala);
 void textoTela(const char *texto, int seg);
 void cabecaTela(char* x);
 void loja(int level);
@@ -102,8 +102,8 @@ void mostrarStatus();
 void consumivel(int id);
 void limparBuffer();
 void limparLinhas(int qtd);
-void calculoXp(int expAt, int expMax, int lvl);
-void aleatStatus(int status[], int pontos);
+void calculoExp();
+void aleatStatus(int pontos);
 
 void limparLinhas(int qtd)
 {
@@ -122,6 +122,8 @@ void limparBuffer()
 
 void mostrarStatus()
 {
+    limparTerminal();
+
     int largura = 50;
     int espacos;
     int i;
@@ -196,12 +198,32 @@ void mostrarStatus()
     printf("Carisma: %d\n", player.carisma);
     printf("Protecao: %d\n", player.protecao);
     printf("\nSkill Points: %d\n", player.skillPoints);
-    printf("EXP: %d\n", player.exp);
-    printf("PROXIMO LEVEL: %d\n", player.expMax-player.exp);
-    
 
-    printf("Press [ENTER]\n");
-    getchar();
+    int barSize = 60;
+
+    float media = (float)player.exp / (float)player.expMax;
+    if (media > 1) media = 1;
+
+    for(i = 0; i < media * barSize; i++) printf("=");
+    for(i = 0; i < (barSize - media * barSize); i++) printf("-");
+    printf("  %d/%d", player.exp, player.expMax);
+    printf("\nEXP\n\n");
+    
+    int escolha;
+
+    scanf("%d", &escolha);
+
+    if(escolha == 1) 
+    {
+        player.exp += (float)player.expMax / 5.0;
+        mostrarStatus();
+    }
+    if(escolha == 2)
+    {
+        calculoExp();
+        save(player);
+        mostrarStatus();
+    }
 }
 
 void ajustaBonus(int id, int sinal)
@@ -992,7 +1014,7 @@ void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
         }
     }
     player.exp = 50;
-    calculoXp(player.exp, player.expMax, player.level);
+    calculoExp(player.exp, player.expMax, player.level);
     vitrine(id);
 }
 
@@ -1068,7 +1090,7 @@ void save(DADOS player)
     player.nome[strcspn(player.nome, "\n")] = 0;
 
     fprintf(arq, "%s\n", player.nome);
-    
+    fprintf(arq, "Sala: %d\n", sala);
     fprintf(arq, "Level %d: %d/%d\n", player.level, player.exp, player.expMax);
     fprintf(arq, "Skill Points: %d\n", player.skillPoints);
     fprintf(arq, "HP: %d/%d\n", player.hp, player.vidaMax);
@@ -1089,7 +1111,7 @@ void save(DADOS player)
 }
 
 
-void load(DADOS *player){
+void load(DADOS *player, int *sala) {
     FILE *arq = fopen("Dados do Jogo/save.txt", "rt");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
@@ -1098,7 +1120,8 @@ void load(DADOS *player){
 
     fgets(player->nome, sizeof(player->nome), arq);
     player->nome[strcspn(player->nome, "\n")] = 0; //Transforma caractere "\n" em "\0"
-
+    
+    fscanf(arq, "Sala: %d\n", &sala);
     fscanf(arq, "Level %d: %d/%d\n", &player->level, &player->exp, &player->expMax);
     fscanf(arq, "Skill Points: %d\n", &player->skillPoints);
     fscanf(arq, "HP: %d/%d\n", &player->hp, &player->vidaMax);
@@ -1126,18 +1149,20 @@ int numAle(int range){
     return n;
 }
 
-void calculoXp(int expAt, int expMax, int lvl){
-    int status[5] = {0, 0, 0, 0, 0};
-    if (expAt >= expMax) //posteriormente esse if será tirado, vamos colocar ele na condição de ganhar uma batalha
+void calculoExp()
+{
+    while(player.exp >= player.expMax) //posteriormente esse if será tirado, vamos colocar ele na condição de ganhar uma batalha
     {
-        expAt-=expMax;
-        expMax*=1.5;
-        lvl++;
-        aleatStatus(status, 15);
+        player.exp -= player.expMax;
+        player.expMax*=1.5;
+        player.level++;
+        aleatStatus(15);
     }
 }
 
-void aleatStatus(int status[], int pontos){
+void aleatStatus(int pontos)
+{
+    int status[5] = {0};
     for (int i = 0 ; i < pontos ; i++)
     {
         status[numAle(5)-1]++;
@@ -1149,9 +1174,9 @@ void aleatStatus(int status[], int pontos){
     player.inteligencia += status[3];
     player.carisma += status[4];
     player.vidaMax = player.protecao * 5;
-    player.hp = player.vidaMax;
+    player.hp += status[0] * 5;
     player.manaMax = player.inteligencia * 5;
-    player.mp = player.manaMax;
+    player.mp += status[3] * 5;
 }
 
 
@@ -1159,18 +1184,22 @@ void aleatJogador(char *txt){
     gerarPasta();
     limparTerminal();
 
-    //no total são 30 pontos de status, 20 RNG e 10 fixo
-    int status[5] = {2, 2, 2, 2, 2};
-    player.protecao = 0;
-    player.forca = 0;
-    player.agilidade = 0;
-    player.inteligencia = 0;
-    player.carisma = 0;
+    //no total são 30 pontos de status, 20 RNG e 10 fixos
+    player.protecao = 2;
+    player.forca = 2;
+    player.agilidade = 2;
+    player.inteligencia = 2;
+    player.carisma = 2;
+    player.vidaMax = player.protecao * 5;
+    player.hp = player.vidaMax;
+    player.manaMax = player.inteligencia * 5;
+    player.mp = player.manaMax;
+
     player.level = 1;
     player.expMax = 50;
     int i, j;
 
-    aleatStatus(status, 20);
+    aleatStatus(20);
     
 
     txt[strcspn(txt, "\n")] = 0; // Tira o caractere "\n" da string txt e coloca "\0"
@@ -1309,7 +1338,6 @@ void verifica_nome_player(char *nome) {
         textoTela("Um verdadeiro nome de guerreiro . . .\n\n", 400);
     }
     aleatJogador(player.nome); // player.nome vai para a função
-    readItems();
 }
 
 void histInic(){
@@ -1435,7 +1463,8 @@ void telaInicial(){
             gerarPers();
             break;
         case '2':
-
+            load(&player, &sala);
+            mostrarStatus();
             break;
         case '3':
             limparTerminal();
@@ -1466,6 +1495,7 @@ void telaInicial(){
 
 int main(){
     srand(time(NULL));
+    readItems();
     telaInicial();
     return 0;
 }
