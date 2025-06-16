@@ -18,5 +18,7 @@ int main() {
 
     printf("%d", b);
 
+    printf("\033[33mTexto em amarelo no terminal!\033[0m\n");
+
     return 0;
 }

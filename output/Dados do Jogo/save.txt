@@ -1,13 +1,14 @@
-Alllll
+Alex
+Sala: 0
 Level 1: 0/50
 Skill Points: 0
-HP: 15/15
-MP: 20/20
-Forca: 7
-Protecao: 3
-Agilidade: 8
-Inteligencia: 4
-Carisma: 8
+HP: 25/25
+MP: 30/30
+Forca: 5
+Protecao: 5
+Agilidade: 7
+Inteligencia: 6
+Carisma: 7
 Moedas: 1000
 Equipados: 0, 0, 0, 0
 0 0

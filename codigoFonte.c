@@ -102,14 +102,8 @@ void mostrarStatus();
 void consumivel(int id);
 void limparBuffer();
 void limparLinhas(int qtd);
-<<<<<<< HEAD
-void calculoXp(int expAt, int expMax, int lvl);
-void aleatStatus(int status[], int pontos);
-void tomadaDecisao();
-=======
 void calculoExp();
 void aleatStatus(int pontos);
->>>>>>> 8b26f14b88701ae0e10e45670eb83077ddeeaab2
 
 void limparLinhas(int qtd)
 {
@@ -202,7 +196,18 @@ void mostrarStatus()
 
     printf("\n");
     printf("Carisma: %d\n", player.carisma);
-    printf("Protecao: %d\n", player.protecao);
+
+    sprintf(txt, "Protecao: %d", player.protecao);
+    printf("%s", txt);
+    espacos = largura - strlen(txt);
+    for(i = 0; i < espacos; i++) printf(" ");
+
+    sprintf(txt, "Moedas: \033[33m%d\033[0m", player.moedas);
+    espacos = (largura + 9 - strlen(txt))/2;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("%s\n", txt);
+    
+
     printf("\nSkill Points: %d\n", player.skillPoints);
 
     int barSize = 60;
@@ -210,7 +215,7 @@ void mostrarStatus()
     float media = (float)player.exp / (float)player.expMax;
     if (media > 1) media = 1;
 
-    for(i = 0; i < media * barSize; i++) printf("=");
+    for(i = 0; i < media * barSize; i++) printf("\033[32m=\033[0m");
     for(i = 0; i < (barSize - media * barSize); i++) printf("-");
     printf("  %d/%d", player.exp, player.expMax);
     printf("\nEXP\n\n");
@@ -222,6 +227,7 @@ void mostrarStatus()
     if(escolha == 1) 
     {
         player.exp += (float)player.expMax / 5.0;
+        calculoExp();
         mostrarStatus();
     }
     if(escolha == 2)
@@ -1019,8 +1025,8 @@ void loja(int level) // Sempre antes de boss. Boss a cada 10 fases
             if(id[1] == id[2] && quantidade[2] >= 3) id[2] = idAleatorio(a[2]);
         }
     }
-    player.exp = 50;
-    calculoExp(player.exp, player.expMax, player.level);
+    
+    calculoExp();
     vitrine(id);
 }
 
@@ -1127,7 +1133,7 @@ void load(DADOS *player, int *sala) {
     fgets(player->nome, sizeof(player->nome), arq);
     player->nome[strcspn(player->nome, "\n")] = 0; //Transforma caractere "\n" em "\0"
     
-    fscanf(arq, "Sala: %d\n", &sala);
+    fscanf(arq, "Sala: %d\n", sala);
     fscanf(arq, "Level %d: %d/%d\n", &player->level, &player->exp, &player->expMax);
     fscanf(arq, "Skill Points: %d\n", &player->skillPoints);
     fscanf(arq, "HP: %d/%d\n", &player->hp, &player->vidaMax);
@@ -1201,8 +1207,9 @@ void aleatJogador(char *txt){
     player.manaMax = player.inteligencia * 5;
     player.mp = player.manaMax;
 
-    player.level = 1;
+    player.level =1;
     player.expMax = 50;
+    player.exp=0;
     int i, j;
 
     aleatStatus(20);
