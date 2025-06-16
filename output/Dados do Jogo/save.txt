@@ -1,13 +1,13 @@
-qpeixe
+Guilherme
 Level 1: 0/50
 Skill Points: 0
-HP: 30/30
+HP: 15/15
 MP: 25/25
-Forca: 11
-Protecao: 6
-Agilidade: 3
+Forca: 8
+Protecao: 3
+Agilidade: 6
 Inteligencia: 5
-Carisma: 5
+Carisma: 8
 Moedas: 1000
 Equipados: 0, 0, 0, 0
 0 0

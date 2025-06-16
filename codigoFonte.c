@@ -15,7 +15,7 @@
 #define MAX_ITEMS 66 // Define o número máximo de itens
 
 int items = 0;
-
+ 
 typedef struct buffHandler2 {
     int alvo; // 0 = Inimigo, 1 = O propio
     int tipo; // 0 = Vazio, 1 = Ataque, 2 = Ataque Especial (Inteligencia), 3 = HP, 4 = Prot, 5 = Stun
@@ -1378,15 +1378,15 @@ void histInic(){
     textoTela("E o maior guerreiro da vila? . . . . .\n", 500);
     textoTela("Um velho que jura ter lutado com uma galinha possuida.\n", 300);
     printf("\n\n(Pressione ENTER para continuar...)\n");
-    fgets(nome, 100, stdin);*/
+    fgets(nome, 100, stdin);
 
     //história comentada para ser mais rápido.
 
-    /*limparTerminal();
+    limparTerminal();
     textoTela("Mas todo destino grandioso comeca com passos pequenos.\n", 200);
     textoTela("E hoje . . .\n", 500);
-    textoTela("Errrn . . . Hoje! . . .\n", 500); 
-    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300); */
+    textoTela("Errrn . . . Hoje! . . .\n", 500); */
+    textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);
     getchar();
     int OK = 1;
     while (OK) {  
