@@ -104,6 +104,7 @@ void limparBuffer();
 void limparLinhas(int qtd);
 void calculoXp(int expAt, int expMax, int lvl);
 void aleatStatus(int status[], int pontos);
+void tomadaDecisao();
 
 void limparLinhas(int qtd)
 {
@@ -1412,11 +1413,6 @@ void histInic(){
     mostrarStatus();
 }
 
-
-void gerarPers(){
-    histInic();
-}
-
 void telaInicial(){
     limparTerminal();
     cabecaTela("A ascensao na torre!");
@@ -1432,7 +1428,7 @@ void telaInicial(){
     switch (n) {
         case '1':
             limparTerminal();
-            gerarPers();
+            histInic();
             break;
         case '2':
 

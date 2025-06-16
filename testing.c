@@ -11,5 +11,12 @@
 #include <sys/stat.h> // mkdir
 #endif
 int main() {
+
+    int a = 8, b;
+
+    b = a>2 ? (3):(1);
+
+    printf("%d", b);
+
     return 0;
 }
