@@ -1,12 +1,12 @@
-Guilherme
+Alllll
 Level 1: 0/50
 Skill Points: 0
 HP: 15/15
-MP: 25/25
-Forca: 8
+MP: 20/20
+Forca: 7
 Protecao: 3
-Agilidade: 6
-Inteligencia: 5
+Agilidade: 8
+Inteligencia: 4
 Carisma: 8
 Moedas: 1000
 Equipados: 0, 0, 0, 0
