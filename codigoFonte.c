@@ -123,7 +123,7 @@ void tomadaDecisao()
     int escolha;
     if(sala == 0)
     {
-        printf("Qual sera o seu primeiro passo?\n\n");
+        textoTela("Qual sera o seu primeiro passo?\n", 300);
         printf("[1] Loja\n[2] Conversar\n[3] Subir a torre\n\n");
         checkInput(&escolha, 1, 3);
         switch(escolha)
@@ -163,7 +163,7 @@ void tomadaDecisao()
             case 0:
                 limparTerminal();
                 textoTela("Voce segue o seu caminho . . .\n\n", 400);
-                sala=9;
+                sala=99;
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
                 tomadaDecisao();
@@ -183,19 +183,42 @@ void tomadaDecisao()
         {
             case 1:
                 textoTela("O mesmo vendedor do inicio . . .\n", 200);
-                textoTela("Voce se pergunta como ele chegou aqui\n", 400);
+                if(sala < 60) textoTela("Voce se pergunta como ele chegou aqui\n\n", 200);
+                else textoTela("Voce ja aceitou que ele e onipresente\n\n", 300);
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
                 loja();
                 limparBuffer();
                 textoTela("O vendedor te diz boa sorte antes de ir . . .\n", 300);
-                if(sala < 10) textoTela("Voce se pergunta o porque . . .\n", 400);
+                if(sala < 10) textoTela("Voce se pergunta o porque . . .\n\n", 400);
+                else if(sala < 20) textoTela("Agora voce sabe o porque . . .\n\n", 200);
+                else if(sala < 60) textoTela("Pelo menos, voce sabe o que esta por vir\n\n", 300);
+                else if(sala < 90) textoTela("E bom saber que alguem torce por voce\n\n", 200);
+                else
+                {
+                    textoTela("Voce sente um peso na voz dele . . .\n", 300);
+                    textoTela("Ao mesmo tempo voce sente um peso no seu peito\n", 300);
+                    cross_platform_sleep(500);
+                    textoTela("Essa vez e diferente . . .\n\n", 500);
+                    printf("Pressione [ENTER] para continuar\n");
+                    limparBuffer();
+                    limparTerminal();
+                    textoTela(". . .\n", 500);
+                    cross_platform_sleep(500);
+                    textoTela("Voce se lembra depois de muito tempo . . .\n", 500);
+                    cross_platform_sleep(500);
+                    textoTela("Do que e sentir de medo . . .\n", 400);
+                    cross_platform_sleep(500);
+                    textoTela("Nao", 200);
+                    cross_platform_sleep(1000);
+                    textoTela("Voce nao sabe o que esta por vir\n\n", 600);
+                }
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
             case 0:
                 limparTerminal();
                 textoTela("Voce segue o seu caminho . . .\n\n", 400);
-                sala=19;
+                sala += 90;
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
                 tomadaDecisao();
@@ -1080,9 +1103,9 @@ void loja() // Sempre antes de boss. Boss a cada 10 fases
         chance[3] = 10.0;
         chance[4] = 1.0; // Chance de 1% de sair um item de raridade 4
     }
-    if(sala >=51 && sala <=60) 
+    if(sala >=51 && sala <= 60) 
     {
-        chance[1] = 35.0;
+        chance[1] = 33.0;
         chance[2] = 45.0;
         chance[3] = 20.0;
         chance[4] = 2.0;

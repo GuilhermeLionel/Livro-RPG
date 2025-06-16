@@ -3,11 +3,11 @@ Sala: 5
 Level 1: 0/50
 Skill Points: 0
 HP: 30/30
-MP: 35/35
-Forca: 4
+MP: 30/30
+Forca: 5
 Protecao: 6
 Agilidade: 5
-Inteligencia: 7
+Inteligencia: 6
 Carisma: 8
 Moedas: 1000
 Equipados: 0, 0, 0, 0
