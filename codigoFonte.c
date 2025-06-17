@@ -159,7 +159,7 @@ void tomadaDecisao()
     char txt[400];
     limparTerminal();
     int escolha;
-    
+
     if(sala == 0)
     {
         textoTela("Qual sera o seu primeiro passo?\n", 300);
@@ -942,7 +942,7 @@ void tipoItem(char *tipo, int n)
             strcpy(tipo, "Vazio");
             break;
         case 1:
-            strcpy(tipo, "Arma");
+            strcpy(tipo, "Arma Cortante");
             break;
         case 2:
             strcpy(tipo, "Armadura");
@@ -957,7 +957,10 @@ void tipoItem(char *tipo, int n)
             strcpy(tipo, "Consumivel");
             break;
         case 6:
-            strcpy(tipo, "Item de Batalha");
+            strcpy(tipo, "Arma de Alcance");
+            break;
+        case 7:
+            strcpy(tipo, "Arma de Impacto");
             break;
         default:
             strcpy(tipo, "Desconhecido");
