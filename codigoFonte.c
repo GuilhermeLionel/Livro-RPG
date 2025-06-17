@@ -116,6 +116,23 @@ void cura(int qtd)
 }
 
 
+int loja0[3], checkLoja0 = 1;
+void lojinhaInicial()
+{
+    loja0[0] = idAleatorio(1);
+    loja0[1] = idAleatorio(1);
+    loja0[2] = idAleatorio(1);
+    while(1)
+    {
+        if(loja0[0] == loja0[1]) loja0[1] = idAleatorio(1);
+        else if(loja0[0] == loja0[2]) loja0[2] = idAleatorio(1);
+        else if(loja0[1] == loja0[2]) loja0[2] = idAleatorio(1);
+        else break;
+    }
+    checkLoja0 = 0;
+    vitrine(loja0);
+}
+
 void tomadaDecisao()
 {
     char txt[400];
@@ -123,13 +140,14 @@ void tomadaDecisao()
     int escolha;
     if(sala == 0)
     {
-        printf("Qual sera o seu primeiro passo?\n\n");
+        textoTela("Qual sera o seu primeiro passo?\n", 300);
         printf("[1] Loja\n[2] Conversar\n[3] Subir a torre\n\n");
         checkInput(&escolha, 1, 3);
         switch(escolha)
         {
             case 1:
-                loja();
+                if(checkLoja0) lojinhaInicial();
+                else vitrine(loja0);
                 tomadaDecisao();
                 break;
             case 2:
@@ -163,7 +181,7 @@ void tomadaDecisao()
             case 0:
                 limparTerminal();
                 textoTela("Voce segue o seu caminho . . .\n\n", 400);
-                sala=9;
+                sala=99;
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
                 tomadaDecisao();
@@ -183,33 +201,79 @@ void tomadaDecisao()
         {
             case 1:
                 textoTela("O mesmo vendedor do inicio . . .\n", 200);
-                textoTela("Voce se pergunta como ele chegou aqui\n", 400);
+                if(sala < 60) textoTela("Voce se pergunta como ele chegou aqui\n\n", 200);
+                else textoTela("Voce ja aceitou que ele e onipresente\n\n", 300);
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
                 loja();
                 limparBuffer();
                 textoTela("O vendedor te diz boa sorte antes de ir . . .\n", 300);
-                if(sala < 10) textoTela("Voce se pergunta o porque . . .\n", 400);
+                if(sala < 10) textoTela("Voce se pergunta o porque . . .\n\n", 400);
+                else if(sala < 20) textoTela("Agora voce sabe o porque . . .\n\n", 200);
+                else if(sala < 60) textoTela("Pelo menos, voce sabe o que esta por vir\n\n", 300);
+                else if(sala < 90) textoTela("E bom saber que alguem torce por voce\n\n", 200);
+                else
+                {
+                    textoTela("Voce sente um peso na voz dele . . .\n", 300);
+                    textoTela("Ao mesmo tempo voce sente um peso no seu peito\n", 300);
+                    cross_platform_sleep(500);
+                    textoTela("Essa vez e diferente . . .\n\n", 500);
+                    printf("Pressione [ENTER] para continuar\n");
+                    limparBuffer();
+                    limparTerminal();
+                    textoTela(". . .\n", 500);
+                    cross_platform_sleep(500);
+                    textoTela("Voce se lembra depois de muito tempo . . .\n", 500);
+                    cross_platform_sleep(500);
+                    textoTela("Do que e sentir medo . . .\n", 400);
+                    cross_platform_sleep(500);
+                    textoTela("Nao", 200);
+                    cross_platform_sleep(1000);
+                    textoTela("Voce nao sabe o que esta por vir\n\n", 600);
+                }
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
             case 0:
                 limparTerminal();
                 textoTela("Voce segue o seu caminho . . .\n\n", 400);
-                sala=19;
+                sala += 90;
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
                 tomadaDecisao();
                 break;
         }
     }
+    else if(sala % 10 == 0)
+    {
+        //codigo bosss
+        
+
+        //apos vitoria
+        limparTerminal();
+        textoTela("Voce se levanta e segue o seu caminho . . .\n\n", 400);
+        printf("Pressione [ENTER] para continuar\n");
+        limparBuffer();
+        sala++;
+        save(player);
+        printf("Seu jogo foi salvo automaticamente\n\n");
+        printf("Pressione [ENTER] para continuar\n");
+        limparBuffer();
+        tomadaDecisao();
+    }
+    else
+    {
+
+    }
 }
 
 void checkInput(int * n, int min, int max)
 {
     int erro = 0;
+    int a;
     while(1)
     {
-        if(scanf(" %d", n) != 1 || *n < min || *n > max)
+        a = scanf(" %d", n);
+        if(a != 1 || a == EOF || *n < min || *n > max)
         {
             limparLinhas(1);
             if(erro) limparLinhas(1);
@@ -279,7 +343,10 @@ void mostrarStatus()
 
     sprintf(txt, "Forca: %d", player.forca);
     printf("%s", txt);
-    espacos = largura - strlen(txt);
+    espacos = largura - strlen(txt) - 3 - 15;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[1]");
+    espacos = largura - espacos - strlen(txt) - 3;
     for(i = 0; i < espacos; i++) printf(" ");
 
     sprintf(txt, "%s", item[player.equipado[1]].nome);
@@ -289,9 +356,12 @@ void mostrarStatus()
 
     printf("\n");
 
-    sprintf(txt, "Agilidade: %d", player.agilidade);
+    sprintf(txt, "Inteligencia: %d", player.inteligencia);
     printf("%s", txt);
-    espacos = largura - strlen(txt);
+    espacos = largura - strlen(txt) - 3 - 15;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[2]");
+    espacos = largura - espacos - strlen(txt) - 3;
     for(i = 0; i < espacos; i++) printf(" ");
 
     sprintf(txt, "%s", item[player.equipado[2]].nome);
@@ -301,9 +371,12 @@ void mostrarStatus()
 
     printf("\n");
 
-    sprintf(txt, "Inteligencia: %d", player.inteligencia);
+    sprintf(txt, "Protecao: %d", player.protecao);
     printf("%s", txt);
-    espacos = largura - strlen(txt);
+    espacos = largura - strlen(txt) - 3 - 15;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[3]");
+    espacos = largura - espacos - strlen(txt) - 3;
     for(i = 0; i < espacos; i++) printf(" ");
 
     sprintf(txt, "%s", item[player.equipado[0]].nome);
@@ -312,11 +385,23 @@ void mostrarStatus()
     printf("%s", txt);
 
     printf("\n");
-    printf("Carisma: %d\n", player.carisma);
 
-    sprintf(txt, "Protecao: %d", player.protecao);
+    sprintf(txt, "Agilidade: %d", player.agilidade);
+    espacos = largura - strlen(txt) - 3 - 15;
     printf("%s", txt);
-    espacos = largura - strlen(txt);
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[4]");
+    espacos = largura - espacos - strlen(txt) - 3;
+    for(i = 0; i < espacos; i++) printf(" ");
+
+    printf("\n");
+
+    sprintf(txt, "Carisma: %d", player.carisma);
+    printf("%s", txt);
+    espacos = largura - strlen(txt) - 3 - 15;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[5]");
+    espacos = largura - espacos - strlen(txt) - 3;
     for(i = 0; i < espacos; i++) printf(" ");
 
     sprintf(txt, "Moedas: \033[33m%d\033[0m", player.moedas);
@@ -437,20 +522,23 @@ void usarItem(int espaco)
     int tipo = item[id].tipo; // Tipo do item a ser usado
     if(id == 0) 
     {
-        printf("Esse item nao pode ser usado.\n");
-        cross_platform_sleep(2000);
+        printf("Esse item nao pode ser usado.\n\n");
+        printf("Pressione [ENTER] para continuar");
         return;
     }
     lixo(espaco, 1); // Remove o item do inventário
     if(tipo >= 1 && tipo <= 4)
     {
+        printf("Voce usou %s\n\n", item[id].nome);
         tipo = tipo - 1; // Ajusta o tipo para o índice do vetor equipado
         if(player.equipado[tipo] != 0) 
         {
+            printf("Voce desequipou %s\n\n", item[player.equipado[tipo]].nome);
             addItem(player.equipado[tipo]); // Adiciona o item equipado de volta ao inventário
             ajustaBonus(player.equipado[tipo], -1); // Remove os bônus do item equipado
             player.equipado[tipo] = 0; // Remove o item equipado
         }
+        printf("\n");
         player.equipado[tipo] = id; // Equipa o novo item
         ajustaBonus(id, 1); // Adiciona os bônus do novo item equipado
     }
@@ -542,7 +630,7 @@ void descreverItem(int id)
         if(i < qtdBonus - 1) printf("  ");
     }
     for(i = 0; i < espaco + resto; i++) printf(" ");
-    printf("\n");
+    printf("\n\n");
     int local;
     local = localInv(id); // Verifica se o item está no inventário
     if(local >= 0)
@@ -553,7 +641,6 @@ void descreverItem(int id)
     {
         printf("Voce nao tem esse item.\n");
     }
-    printf("\n");
 }
 
 
@@ -647,14 +734,21 @@ void verInventario(int modo)
             else 
             {
                 limparTerminal();
-                getchar();
                 limparBuffer();
                 descreverItem(player.inventario[0][escolha - 1]); // Descreve o item escolhido
                 printf("\n");
-                for(i = 0; i < ((60 - 32) / 2); i++) printf(" ");
-                printf("Pressione [ENTER] para continuar\n\n");
-                getchar(); // Espera o ENTER do usuário
-                limparBuffer();
+                sprintf(txt, "[1] USAR ITEM [0] VOLTAR");
+                int t = strlen(txt);
+                for(i = 0; i < ((60 - t) / 2); i++) printf(" ");
+                printf("%s\n\n", txt);
+                checkInput(&escolha2, 0, 1);
+                if(escolha2 == 1) 
+                {
+                    limparTerminal();
+                    usarItem(escolha - 1);
+                    printf("Pressione [ENTER] para continuar\n");
+                    limparBuffer();
+                }
                 verInventario(1);
             }
             break;
@@ -999,7 +1093,7 @@ void vitrine(int a[])
                     addItem(a[escolha - 1]); // Adiciona o item ao inventario
                     player.moedas -= item[a[escolha - 1]].preco; // Subtrai o preco do item das moedas do jogador
                     printf("Item comprado com sucesso!\n");
-                    //if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0; //Retira o item da loja
+                    if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0; //Retira o item da loja
                     cross_platform_sleep(1000);
                     vitrine(a); // Atualiza a vitrine
                 }
@@ -1080,9 +1174,9 @@ void loja() // Sempre antes de boss. Boss a cada 10 fases
         chance[3] = 10.0;
         chance[4] = 1.0; // Chance de 1% de sair um item de raridade 4
     }
-    if(sala >=51 && sala <=60) 
+    if(sala >=51 && sala <= 60) 
     {
-        chance[1] = 35.0;
+        chance[1] = 33.0;
         chance[2] = 45.0;
         chance[3] = 20.0;
         chance[4] = 2.0;
@@ -1568,8 +1662,8 @@ void histInic(){
         if (nome[0] == '\n') {
             strcpy(nome, ""); // reseta a string
             limparTerminal();
-            textoTela("Nao quer falar seu nome??", 400);
-            textoTela("Isso e falta de educacao, sabia?", 200);
+            textoTela("Nao quer falar seu nome??\n", 400);
+            textoTela("Isso e falta de educacao, sabia?\n", 200);
             textoTela("Fala um nome qualquer entao, so pra eu registrar aqui:\n\n", 300);
         }
         else OK = 0; // nome foi digitado 
