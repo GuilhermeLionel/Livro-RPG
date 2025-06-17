@@ -1818,6 +1818,7 @@ void telaInicial(){
 
 int main(){
     srand(time(NULL));
+    setlocale(LC_ALL, "");
     readItems();
     telaInicial();
     return 0;

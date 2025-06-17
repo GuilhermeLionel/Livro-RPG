@@ -53,6 +53,9 @@ int main() {
     char nomeArquivo[100]; int min, max;
     strcpy(nomeArquivo, "Dados do Jogo/testeArquivoDialogo.txt");
     min = 1; max = 1;
+    // scanf("%s", nomeArquivo);
+    // scanf(" %d", &min);
+    // scanf(" %d",&max);
     imprimeDialogo(nomeArquivo, min, max);
     return 0;
 }
