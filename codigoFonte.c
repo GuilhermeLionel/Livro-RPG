@@ -116,6 +116,23 @@ void cura(int qtd)
 }
 
 
+int loja0[3], checkLoja0 = 1;
+void lojinhaInicial()
+{
+    loja0[0] = idAleatorio(1);
+    loja0[1] = idAleatorio(1);
+    loja0[2] = idAleatorio(1);
+    while(1)
+    {
+        if(loja0[0] == loja0[1]) loja0[1] = idAleatorio(1);
+        else if(loja0[0] == loja0[2]) loja0[2] = idAleatorio(1);
+        else if(loja0[1] == loja0[2]) loja0[2] = idAleatorio(1);
+        else break;
+    }
+    checkLoja0 = 0;
+    vitrine(loja0);
+}
+
 void tomadaDecisao()
 {
     char txt[400];
@@ -129,7 +146,8 @@ void tomadaDecisao()
         switch(escolha)
         {
             case 1:
-                loja();
+                if(checkLoja0) lojinhaInicial();
+                else vitrine(loja0);
                 tomadaDecisao();
                 break;
             case 2:
@@ -137,6 +155,8 @@ void tomadaDecisao()
                 break;
             case 3:
                 sala = 5;
+                free(loja0);
+                free(checkLoja0);
                 save(player);
                 tomadaDecisao();
                 break;
@@ -224,6 +244,27 @@ void tomadaDecisao()
                 tomadaDecisao();
                 break;
         }
+    }
+    else if(sala % 10 == 0)
+    {
+        //codigo bosss
+        
+
+        //apos vitoria
+        limparTerminal();
+        textoTela("Voce se levanta e segue o seu caminho . . .\n\n", 400);
+        printf("Pressione [ENTER] para continuar\n");
+        limparBuffer();
+        sala++;
+        save(player);
+        printf("Seu jogo foi salvo automaticamente\n\n");
+        printf("Pressione [ENTER] para continuar\n");
+        limparBuffer();
+        tomadaDecisao();
+    }
+    else
+    {
+
     }
 }
 
@@ -1024,7 +1065,7 @@ void vitrine(int a[])
                     addItem(a[escolha - 1]); // Adiciona o item ao inventario
                     player.moedas -= item[a[escolha - 1]].preco; // Subtrai o preco do item das moedas do jogador
                     printf("Item comprado com sucesso!\n");
-                    //if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0; //Retira o item da loja
+                    if(item[a[escolha-1]].tipo != 4) a[escolha-1] = 0; //Retira o item da loja
                     cross_platform_sleep(1000);
                     vitrine(a); // Atualiza a vitrine
                 }
@@ -1593,8 +1634,8 @@ void histInic(){
         if (nome[0] == '\n') {
             strcpy(nome, ""); // reseta a string
             limparTerminal();
-            textoTela("Nao quer falar seu nome??", 400);
-            textoTela("Isso e falta de educacao, sabia?", 200);
+            textoTela("Nao quer falar seu nome??\n", 400);
+            textoTela("Isso e falta de educacao, sabia?\n", 200);
             textoTela("Fala um nome qualquer entao, so pra eu registrar aqui:\n\n", 300);
         }
         else OK = 0; // nome foi digitado 

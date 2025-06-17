@@ -1,14 +1,14 @@
-Alex
-Sala: 5
-Level 3: 44/112
+DDDFGHJJ
+Sala: 0
+Level 1: 0/50
 Skill Points: 0
-HP: 65/65
-MP: 45/45
-Forca: 16
-Protecao: 13
-Agilidade: 8
-Inteligencia: 9
-Carisma: 14
+HP: 45/45
+MP: 25/25
+Forca: 8
+Protecao: 9
+Agilidade: 5
+Inteligencia: 5
+Carisma: 3
 Moedas: 1000
 Equipados: 0, 0, 0, 0
 0 0
