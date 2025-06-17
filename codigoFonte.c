@@ -133,6 +133,21 @@ void lojinhaInicial()
     vitrine(loja0);
 }
 
+void imprimeDialogo(char *nomeArquivo, int min, int max) {
+    FILE *arquivo = fopen(nomeArquivo, "rt");
+    char texto[401];
+    int idNum = 0, duracao;
+    while (idNum < max) {
+        fscanf(arquivo, "dialogo: ");
+        fgets(texto, 400, arquivo);
+        fscanf(arquivo, "id: %d\n", &idNum);
+        fscanf(arquivo, "duracao: %d\n\n", &duracao);
+        if (idNum >= min) 
+            textoTela(texto, duracao);
+    }
+    fclose(arquivo);
+}
+
 void tomadaDecisao()
 {
     char txt[400];
