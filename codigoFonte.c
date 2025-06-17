@@ -3,7 +3,6 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-#include <locale.h>
 
 #ifdef _WIN32
 #include <windows.h>
