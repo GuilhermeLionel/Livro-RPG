@@ -76,6 +76,8 @@ int qtdInv(int id); // Retorna a quantidade do item no inventário
 int numAle(int range);
 int espacoInv(int id); // Retorna o espaco em que um item pode ser alocado no inventario
 int digitos(int n); // Retorna a quantidade de dígitos do número
+int salaAleatoria();
+
 void vitrine(int a[]);
 void cross_platform_sleep(int ms);
 void limparTerminal();
@@ -192,7 +194,7 @@ void tomadaDecisao()
     {
         textoTela("Voce encontrou uma loja\n", 200);
         textoTela("O vendedor acena para voce . . .\n", 400);
-        textoTela("Deseja falar com ele?\n", 100);
+        textoTela("Deseja falar com ele?\n", 200);
         printf("[1] Sim [0] Nao\n\n");
         checkInput(&escolha, 0, 1);
 
@@ -236,7 +238,7 @@ void tomadaDecisao()
             case 0:
                 limparTerminal();
                 textoTela("Voce segue o seu caminho . . .\n\n", 400);
-                sala += 90;
+                sala++;
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
                 tomadaDecisao();
@@ -255,6 +257,7 @@ void tomadaDecisao()
         limparBuffer();
         sala++;
         save(player);
+        limparTerminal();
         printf("Seu jogo foi salvo automaticamente\n\n");
         printf("Pressione [ENTER] para continuar\n");
         limparBuffer();
@@ -262,8 +265,59 @@ void tomadaDecisao()
     }
     else
     {
-
+        int caso;
+        caso = salaAleatoria();
+        switch(caso)
+        {
+            case 0:
+                printf("Alo");
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            default:
+                printf("Algo ta errado\n");
+                break;
+        }
+        sala++;
+        tomadaDecisao();
     }
+}
+
+
+
+int salaAleatoria()
+{
+    int caso;
+    int a, b;
+    int chance = numAle(101) - 1;
+    int vazio = 10, inimigo = 70;
+    caso = chance < vazio ? 0 :
+            chance < vazio + inimigo ? 1 : 2;
+    switch(caso)
+    {
+        case 1:  // Se for um inimigo vai calcular chance de ser um inimigo aleatorio
+            a = 60, b = 30; // Inimigo 1 = 60%, Inimigo 2 = 30%, Inimigo 3 = 10%
+            chance = numAle(101) - 1;
+            caso = chance < a ? 1 : 
+                chance < a + b ? 2 : 3;
+            break;
+        case 2:
+            a = 80; // Se for item, vai calcular a chance de ser bau = 80% e pergaminho = 20%
+            chance = numAle(101) - 1;
+            caso = chance < a ? 4 : 5;
+            break;
+        default:
+            break;
+    }
+    return caso;
 }
 
 void checkInput(int * n, int min, int max)
