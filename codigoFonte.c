@@ -520,7 +520,7 @@ void mostrarStatus()
 
     if(escolha == 1) 
     {
-        player.exp += (float)player.expMax / 5.0;
+        player.exp += (float)player.expMax /2.0;
         calculoExp();
         mostrarStatus();
     }
@@ -1240,56 +1240,57 @@ void loja() // Sempre antes de boss. Boss a cada 10 fases
 {
     int a[3], id[3]; // Vetor que guarda os ids dos itens
     float chance[5] = {0.0, 0.0, 0.0, 0.0, 0.0}; // Vetor que guarda as chances de raridade de item ser escolhido
+    float peso1 = 0.05, peso2 = 0.15, peso3 = 0.5, peso4 = 2.0;
     if(sala <= 10) // Se o sala for entre 0 e 10, a chance de um item de raridade 1 é 90% e 2 é 10%
     {
-        chance[1] = 90.0;
-        chance[2] = 10.0;
+        chance[1] = 90.0 + player.carisma * peso1;
+        chance[2] = 10.0 + player.carisma * peso2;
     }
     if(sala >= 11 && sala <= 30) 
     {
-        chance[1] = 80.0;
-        chance[2] = 20.0;
+        chance[1] = 80.0 + player.carisma * peso1;
+        chance[2] = 20.0 + player.carisma * peso2;
     }
     if(sala >= 31 && sala <= 40)
     {
-        chance[1] = 60.0;
-        chance[2] = 35.0;
-        chance[3] = 5.0;
+        chance[1] = 60.0 + player.carisma * peso1;
+        chance[2] = 35.0 + player.carisma * peso2;
+        chance[3] = 5.0 + player.carisma * peso3;
     }
     if(sala >= 41 && sala <= 50) 
     {
-        chance[1] = 50.0;
-        chance[2] = 40.0;
-        chance[3] = 10.0;
-        chance[4] = 1.0; // Chance de 1% de sair um item de raridade 4
+        chance[1] = 50.0 + player.carisma * peso1;
+        chance[2] = 40.0 + player.carisma * peso2;
+        chance[3] = 10.0 + player.carisma * peso3;
+        chance[4] = 1.0 + player.carisma * peso4; // Chance de 1% de sair um item de raridade 4
     }
     if(sala >=51 && sala <= 60) 
     {
-        chance[1] = 33.0;
-        chance[2] = 45.0;
-        chance[3] = 20.0;
-        chance[4] = 2.0;
+        chance[1] = 33.0 + player.carisma * peso1;
+        chance[2] = 45.0 + player.carisma * peso2;
+        chance[3] = 20.0 + player.carisma * peso3;
+        chance[4] = 2.0 + player.carisma * peso4;
     }
     if(sala >= 61 && sala <= 70) 
     {
-        chance[1] = 17.0;
-        chance[2] = 50.0;
-        chance[3] = 30.0;
-        chance[4] = 3.0;
+        chance[1] = 17.0 + player.carisma * peso1;
+        chance[2] = 50.0 + player.carisma * peso2;
+        chance[3] = 30.0 + player.carisma * peso3;
+        chance[4] = 3.0 + player.carisma * peso4;
     }
     if(sala >= 71 && sala <= 80) 
     {
-        chance[1] = 6.0;
-        chance[2] = 50.0;
-        chance[3] = 40.0;
-        chance[4] = 4.0;
+        chance[1] = 6.0 + player.carisma * peso1;
+        chance[2] = 50.0 + player.carisma * peso2;
+        chance[3] = 40.0 + player.carisma * peso3;
+        chance[4] = 4.0 + player.carisma * peso4;
     }
     if(sala >= 81 && sala <= 90) 
     {
-        chance[1] = 5.0;
-        chance[2] = 35.0;
-        chance[3] = 55.0;
-        chance[4] = 5.0;
+        chance[1] = 5.0 + player.carisma * peso1;
+        chance[2] = 35.0 + player.carisma * peso2;
+        chance[3] = 55.0 + player.carisma * peso3;
+        chance[4] = 5.0 + player.carisma * peso4;
     }
     if(sala >= 91 && sala <= 100) 
     {
@@ -1339,7 +1340,7 @@ void setItens(int q){
         printf("Quantidade de itens invalida.\n");
         exit(1);
     }
-    FILE *arq = fopen("Dados do Jogo/items.txt", "r");
+    FILE *arq = fopen("Dados-do-Jogo/items.txt", "rt");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
@@ -1365,7 +1366,7 @@ void setItens(int q){
 
 void readItems(){
     int count = 0;
-    FILE *arq = fopen("Dados do Jogo/items.txt", "r");
+    FILE *arq = fopen("Dados-do-Jogo/items.txt", "rt");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;
@@ -1383,11 +1384,11 @@ void readItems(){
 
 void gerarPasta() {
     #ifdef _WIN32
-        _mkdir("Dados do Jogo");
+        _mkdir("Dados-do-Jogo");
     #else
-        mkdir("Dados do Jogo", 0777);
+        mkdir("Dados-do-Jogo", 0777);
     #endif
-    FILE *arq = fopen("Dados do Jogo/save.txt", "w");
+    FILE *arq = fopen("Dados-do-Jogo/save.txt", "w");
     if (arq == NULL) {
         printf("Erro ao criar o arquivo.\n");
     }
@@ -1396,7 +1397,7 @@ void gerarPasta() {
 
 void save(DADOS player)
 {
-    FILE *arq = fopen("Dados do Jogo/save.txt", "w");
+    FILE *arq = fopen("Dados-do-Jogo/save.txt", "w");
     if (arq == NULL) {
         printf("Erro ao salvar.\n");
         return;
@@ -1426,7 +1427,7 @@ void save(DADOS player)
 
 
 void load(DADOS *player, int *sala) {
-    FILE *arq = fopen("Dados do Jogo/save.txt", "rt");
+    FILE *arq = fopen("Dados-do-Jogo/save.txt", "rt");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
         return;

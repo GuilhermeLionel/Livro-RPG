@@ -5,13 +5,6 @@ Raridade: 0
 Bonus: 0, 0, 0
 QuantB: 0, 0, 0
 
-Bastao do Aprendiz
-Tipo: 7
-Preco: 6
-Raridade: 1
-Bonus: 1, 2, 8
-QuantB: 10, -3, 2
-
 Adaga Enferrujada
 Tipo: 1
 Preco: 2
@@ -34,14 +27,14 @@ Bonus: 1, 8, 2
 QuantB: 6, 5, -2
 
 Arco de Galhos
-Tipo: 6
+Tipo: 1
 Preco: 7
 Raridade: 1
 Bonus: 8, 1, 0
 QuantB: 3, 7, 0
 
 Cajado de Iniciante
-Tipo: 6
+Tipo: 1
 Preco: 8
 Raridade: 1
 Bonus: 3, 8, 0
@@ -69,7 +62,7 @@ Bonus: 1, 5, 8
 QuantB: 8, 4, 8
 
 Besta Reforcada
-Tipo: 6
+Tipo: 1
 Preco: 21
 Raridade: 2
 Bonus: 2, 8, 0
@@ -82,13 +75,6 @@ Raridade: 2
 Bonus: 2, 3, 8
 QuantB: 7, 6, 7
 
-Esmaga-Furia
-Tipo: 7
-Preco: 30
-Raridade: 2
-Bonus: 1, 5, 8
-QuantB: 14, 5, 6
-
 Espada Larga Runica
 Tipo: 1
 Preco: 45
@@ -97,14 +83,14 @@ Bonus: 1, 5, 8
 QuantB: 11, 9, 10
 
 Martelo de Guerra Enanico
-Tipo: 7
+Tipo: 1
 Preco: 50
 Raridade: 3
 Bonus: 1, 3, 8
 QuantB: 14, 7, 9
 
 Arco Elfico da Precisao
-Tipo: 6
+Tipo: 1
 Preco: 48
 Raridade: 3
 Bonus: 2, 4, 8
@@ -118,7 +104,7 @@ Bonus: 1, 2, 8
 QuantB: 12, 9, 9
 
 Cajado do Arquimago
-Tipo: 6
+Tipo: 1
 Preco: 60
 Raridade: 3
 Bonus: 3, 7, 8
@@ -139,14 +125,14 @@ Bonus: 2, 3, 8
 QuantB: 17, 13, 15
 
 Bastao do Conjurador
-Tipo: 7
+Tipo: 1
 Preco: 90
 Raridade: 4
 Bonus: 3, 7, 8
 QuantB: 21, 11, 13
 
 Arco da Tempestade
-Tipo: 6
+Tipo: 1
 Preco: 95
 Raridade: 4
 Bonus: 2, 4, 8
