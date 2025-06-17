@@ -1,39 +1,17 @@
-<<<<<<< HEAD
-dirceu
-=======
-aLEX
-<<<<<<< HEAD
-Sala: 101
+Alex
+Sala: 0
 Level 1: 0/50
-=======
->>>>>>> e28e9179838f24930a4f2d929489e17f8d142bcb
-Sala: 5
-Level 5: 17/252
->>>>>>> 8338623c93fedfb86cb826ace53ff6315ae6049c
 Skill Points: 0
-<<<<<<< HEAD
-HP: 80/80
-MP: 80/80
-Forca: 21
-Protecao: 16
-Agilidade: 18
-Inteligencia: 16
-Carisma: 19
+HP: 30/30
+MP: 40/40
+Forca: 6
+Protecao: 6
+Agilidade: 6
+Inteligencia: 8
+Carisma: 4
 Moedas: 1000
 Equipados: 0, 0, 0, 0
 0 0
-=======
-HP: 30/30
-MP: 30/30
-Forca: 6
-Protecao: 5
-Agilidade: 1
-Inteligencia: 16
-Carisma: 8
-Moedas: 981
-Equipados: 0, 21, 43, 0
-24 1
->>>>>>> e28e9179838f24930a4f2d929489e17f8d142bcb
 0 0
 0 0
 0 0

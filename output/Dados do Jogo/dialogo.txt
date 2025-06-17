@@ -1,6 +1,9 @@
 dialogo: uwhdiuhe
-id: 1
+duracao: 300
+id: 0
 dialogo: jjfhh
-id: 2
+duracao: 400
+id: 1
 dialogo: udiuhdh
-id: 3
+duracao: 500
+id: 2

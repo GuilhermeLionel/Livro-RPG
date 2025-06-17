@@ -13,27 +13,30 @@
 #include <sys/stat.h> // mkdir
 #endif
 
-#define MAX_ITEMS 66 // Define o número máximo de itens
+#define MAX_ITEMS 100 // Define o número máximo de itens
 
 int items = 0;
  
 typedef struct buffHandler2 {
-    int alvo; // 0 = Inimigo, 1 = O propio
     int tipo; // 0 = Vazio, 1 = Ataque, 2 = Ataque Especial (Inteligencia), 3 = HP, 4 = Prot, 5 = Stun
+    int alvo; // 0 = Inimigo, 1 = O propio
     int duracao; // Duração do buff em turnos
     float valor; // Valor do buff
 } BUFFHANDLER;
 
-typedef struct abilityHandler2{
+typedef struct abilityHandler2 {
     char nome[51];
     char descricao[201];
-    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Ataque Especial (Magia), 3 = Cura Fixa, 4 = Prot, 5 = Buff/Debuff
+    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Cura percentual, 3 = Cura Fixa, 4 = Prot, 5 = Buff/Debuff
+    int efeitoSecundario; // 0 = Nenhum, 1 = Queimar, 2 = Estunar, 3 = Envenenar, 4 = Paralizar, 5 = Desarmar
+    int chanceDeEfeito; // Chance de o efeito acontecer em uso
     BUFFHANDLER buff; // Buff que a habilidade pode causar
     float qtdmg; // Dano ou cura
     int custo; // Custo de mana
     int chance; // Chance de acerto da habilidade
-    int requisito[2][3]; // Requisitos para usar a habilidade (0 = Nenhum, 1 = Forca, 2 = Inteligencia, 3 = Carisma, 4 = Protecao, Agilidade) [tipo de requisito][quant. de requisito]
-
+    int status; // Status que a habilidade vai usar para o calculo
+    // 0 = Nenhum, 1 = Forca, 2 = Inteligencia, 3 = Protecao, 4 = Agilidade, 5 = Carisma
+    // Cura percentual nao importa o status e a fixa usa a inteligencia
 } ABILITYHANDLER;
 
 typedef struct itemHandler2{
@@ -43,6 +46,7 @@ typedef struct itemHandler2{
     int raridade;
     int bonus[2][3];
 } ITEMHANDLER;
+
 ITEMHANDLER item[MAX_ITEMS];
 
 typedef struct dados{
@@ -66,6 +70,7 @@ typedef struct dados{
 } DADOS;
 
 DADOS player;
+
 int sala = 0;
 
 
@@ -155,6 +160,7 @@ void tomadaDecisao()
     char txt[400];
     limparTerminal();
     int escolha;
+    
     if(sala == 0)
     {
         textoTela("Qual sera o seu primeiro passo?\n", 300);
@@ -177,7 +183,24 @@ void tomadaDecisao()
                 break;
         }
     }
-    else if(sala % 10 == 5)
+else 
+{
+    sprintf(txt, "Sala %d", sala);
+    int i;
+    for(i = 0; i < 70; i++) printf("-");
+    printf("\n");
+    int tamanho = strlen(txt);
+    int espacos = (70 - 4 - tamanho) / 2;
+    int resto = (70 - 4 - tamanho) % 2;
+    for(i = 0; i < espacos; i++) printf("-");
+    printf("  %s  ", txt);
+    for(i = 0; i < espacos + resto; i++) printf("-");
+    printf("\n");
+    for(i = 0; i < 70; i++) printf("-");
+    printf("\n\n");
+    cross_platform_sleep(3000);
+    limparTerminal();
+    if(sala % 10 == 5)
     {
         textoTela("Voce encontrou uma fogueira . . .\n", 400);
         textoTela("Deseja parar e descansar?\n", 200);
@@ -304,6 +327,7 @@ void tomadaDecisao()
         sala++;
         tomadaDecisao();
     }
+}
 }
 
 
@@ -1182,13 +1206,7 @@ int aleatorizaChance(int tamanho, float chance[tamanho])
         cross_platform_sleep(2000);
         return 0;
     }
-    if(total != 100)
-    {
-        printf("Erro: A soma das chances deve ser 100%%.\n");
-        cross_platform_sleep(2000);
-        return 0;
-    }	
-    int sorteio = numAle(101) - 1;
+    int sorteio = numAle(total + 1) - 1;
     for(i = 0; i < tamanho; i++)
     {
         if(sorteio > chance[i]) sorteio -= chance[i];
@@ -1651,7 +1669,7 @@ void verificaNomePlayer(char *nome) {
 
 void histInic(){
     char nome[101] = {0};
-    textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
+    /*textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
     textoTela("Quer dizer\n", 300);
     textoTela(". . .\n", 1000);
     textoTela("No limite, do possivel!", 200);
@@ -1722,9 +1740,9 @@ void histInic(){
     limparTerminal();
     textoTela("Mas todo destino grandioso comeca com passos pequenos.\n", 200);
     textoTela("E hoje . . .\n", 500);
-    textoTela("Errrn . . . Hoje! . . .\n", 500); 
+    textoTela("Errrn . . . Hoje! . . .\n", 500); */
     textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);
-    getchar();
+    limparBuffer();
     int OK = 1;
     while (OK) {  
         fgets(nome, 100, stdin);
