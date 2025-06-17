@@ -2,9 +2,14 @@
 dirceu
 =======
 aLEX
+<<<<<<< HEAD
+Sala: 101
+Level 1: 0/50
+=======
 >>>>>>> e28e9179838f24930a4f2d929489e17f8d142bcb
 Sala: 5
 Level 5: 17/252
+>>>>>>> 8338623c93fedfb86cb826ace53ff6315ae6049c
 Skill Points: 0
 <<<<<<< HEAD
 HP: 80/80
