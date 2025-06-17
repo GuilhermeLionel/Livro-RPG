@@ -1,0 +1,11 @@
+dialogo: svftyuadncga
+id: 0
+duracao: 400
+
+dialogo: asvcadkcjna
+id: 1
+duracao: 600
+
+dialogo: hdckjdnc
+id: 2
+duracao: 200
