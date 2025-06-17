@@ -1488,7 +1488,7 @@ void verificaNomePlayer(char *nome) {
 
 void histInic(){
     char nome[101] = {0};
-    /*textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
+    textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
     textoTela("Quer dizer\n", 300);
     textoTela(". . .\n", 1000);
     textoTela("No limite, do possivel!", 200);
@@ -1559,7 +1559,7 @@ void histInic(){
     limparTerminal();
     textoTela("Mas todo destino grandioso comeca com passos pequenos.\n", 200);
     textoTela("E hoje . . .\n", 500);
-    textoTela("Errrn . . . Hoje! . . .\n", 500); */
+    textoTela("Errrn . . . Hoje! . . .\n", 500); 
     textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);
     getchar();
     int OK = 1;
