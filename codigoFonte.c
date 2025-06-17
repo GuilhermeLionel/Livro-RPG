@@ -155,8 +155,6 @@ void tomadaDecisao()
                 break;
             case 3:
                 sala = 5;
-                free(loja0);
-                free(checkLoja0);
                 save(player);
                 tomadaDecisao();
                 break;
@@ -345,7 +343,10 @@ void mostrarStatus()
 
     sprintf(txt, "Forca: %d", player.forca);
     printf("%s", txt);
-    espacos = largura - strlen(txt);
+    espacos = largura - strlen(txt) - 3 - 15;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[1]");
+    espacos = largura - espacos - strlen(txt) - 3;
     for(i = 0; i < espacos; i++) printf(" ");
 
     sprintf(txt, "%s", item[player.equipado[1]].nome);
@@ -355,9 +356,12 @@ void mostrarStatus()
 
     printf("\n");
 
-    sprintf(txt, "Agilidade: %d", player.agilidade);
+    sprintf(txt, "Inteligencia: %d", player.inteligencia);
     printf("%s", txt);
-    espacos = largura - strlen(txt);
+    espacos = largura - strlen(txt) - 3 - 15;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[2]");
+    espacos = largura - espacos - strlen(txt) - 3;
     for(i = 0; i < espacos; i++) printf(" ");
 
     sprintf(txt, "%s", item[player.equipado[2]].nome);
@@ -367,9 +371,12 @@ void mostrarStatus()
 
     printf("\n");
 
-    sprintf(txt, "Inteligencia: %d", player.inteligencia);
+    sprintf(txt, "Protecao: %d", player.protecao);
     printf("%s", txt);
-    espacos = largura - strlen(txt);
+    espacos = largura - strlen(txt) - 3 - 15;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[3]");
+    espacos = largura - espacos - strlen(txt) - 3;
     for(i = 0; i < espacos; i++) printf(" ");
 
     sprintf(txt, "%s", item[player.equipado[0]].nome);
@@ -378,11 +385,23 @@ void mostrarStatus()
     printf("%s", txt);
 
     printf("\n");
-    printf("Carisma: %d\n", player.carisma);
 
-    sprintf(txt, "Protecao: %d", player.protecao);
+    sprintf(txt, "Agilidade: %d", player.agilidade);
+    espacos = largura - strlen(txt) - 3 - 15;
     printf("%s", txt);
-    espacos = largura - strlen(txt);
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[4]");
+    espacos = largura - espacos - strlen(txt) - 3;
+    for(i = 0; i < espacos; i++) printf(" ");
+
+    printf("\n");
+
+    sprintf(txt, "Carisma: %d", player.carisma);
+    printf("%s", txt);
+    espacos = largura - strlen(txt) - 3 - 15;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("[5]");
+    espacos = largura - espacos - strlen(txt) - 3;
     for(i = 0; i < espacos; i++) printf(" ");
 
     sprintf(txt, "Moedas: \033[33m%d\033[0m", player.moedas);
@@ -503,20 +522,23 @@ void usarItem(int espaco)
     int tipo = item[id].tipo; // Tipo do item a ser usado
     if(id == 0) 
     {
-        printf("Esse item nao pode ser usado.\n");
-        cross_platform_sleep(2000);
+        printf("Esse item nao pode ser usado.\n\n");
+        printf("Pressione [ENTER] para continuar");
         return;
     }
     lixo(espaco, 1); // Remove o item do inventário
     if(tipo >= 1 && tipo <= 4)
     {
+        printf("Voce usou %s\n\n", item[id].nome);
         tipo = tipo - 1; // Ajusta o tipo para o índice do vetor equipado
         if(player.equipado[tipo] != 0) 
         {
+            printf("Voce desequipou %s\n\n", item[player.equipado[tipo]].nome);
             addItem(player.equipado[tipo]); // Adiciona o item equipado de volta ao inventário
             ajustaBonus(player.equipado[tipo], -1); // Remove os bônus do item equipado
             player.equipado[tipo] = 0; // Remove o item equipado
         }
+        printf("\n");
         player.equipado[tipo] = id; // Equipa o novo item
         ajustaBonus(id, 1); // Adiciona os bônus do novo item equipado
     }
@@ -608,7 +630,7 @@ void descreverItem(int id)
         if(i < qtdBonus - 1) printf("  ");
     }
     for(i = 0; i < espaco + resto; i++) printf(" ");
-    printf("\n");
+    printf("\n\n");
     int local;
     local = localInv(id); // Verifica se o item está no inventário
     if(local >= 0)
@@ -619,7 +641,6 @@ void descreverItem(int id)
     {
         printf("Voce nao tem esse item.\n");
     }
-    printf("\n");
 }
 
 
@@ -713,14 +734,21 @@ void verInventario(int modo)
             else 
             {
                 limparTerminal();
-                getchar();
                 limparBuffer();
                 descreverItem(player.inventario[0][escolha - 1]); // Descreve o item escolhido
                 printf("\n");
-                for(i = 0; i < ((60 - 32) / 2); i++) printf(" ");
-                printf("Pressione [ENTER] para continuar\n\n");
-                getchar(); // Espera o ENTER do usuário
-                limparBuffer();
+                sprintf(txt, "[1] USAR ITEM [0] VOLTAR");
+                int t = strlen(txt);
+                for(i = 0; i < ((60 - t) / 2); i++) printf(" ");
+                printf("%s\n\n", txt);
+                checkInput(&escolha2, 0, 1);
+                if(escolha2 == 1) 
+                {
+                    limparTerminal();
+                    usarItem(escolha - 1);
+                    printf("Pressione [ENTER] para continuar\n");
+                    limparBuffer();
+                }
                 verInventario(1);
             }
             break;
