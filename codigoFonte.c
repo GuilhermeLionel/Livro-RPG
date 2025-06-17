@@ -207,7 +207,7 @@ void tomadaDecisao()
                     cross_platform_sleep(500);
                     textoTela("Voce se lembra depois de muito tempo . . .\n", 500);
                     cross_platform_sleep(500);
-                    textoTela("Do que e sentir de medo . . .\n", 400);
+                    textoTela("Do que e sentir medo . . .\n", 400);
                     cross_platform_sleep(500);
                     textoTela("Nao", 200);
                     cross_platform_sleep(1000);
@@ -230,9 +230,11 @@ void tomadaDecisao()
 void checkInput(int * n, int min, int max)
 {
     int erro = 0;
+    int a;
     while(1)
     {
-        if(scanf(" %d", n) != 1 || *n < min || *n > max)
+        a = scanf(" %d", n);
+        if(a != 1 || a == EOF || *n < min || *n > max)
         {
             limparLinhas(1);
             if(erro) limparLinhas(1);

@@ -1,14 +1,14 @@
 Alex
 Sala: 5
-Level 1: 0/50
+Level 3: 44/112
 Skill Points: 0
-HP: 30/30
-MP: 30/30
-Forca: 5
-Protecao: 6
-Agilidade: 5
-Inteligencia: 6
-Carisma: 8
+HP: 65/65
+MP: 45/45
+Forca: 16
+Protecao: 13
+Agilidade: 8
+Inteligencia: 9
+Carisma: 14
 Moedas: 1000
 Equipados: 0, 0, 0, 0
 0 0
