@@ -114,6 +114,7 @@ void aleatStatus(int pontos);
 void tomadaDecisao();
 void checkInput(int * n, int min, int max);
 void cura(int qtd);
+void ranking();
 
 void cura(int qtd)
 {
@@ -121,6 +122,62 @@ void cura(int qtd)
     if(player.hp > player.hpMax) player.hp = player.hpMax;
 }
 
+void ranking()
+{
+    int largura = 50;
+    int espacos, resto;
+    char txt[55], nome[51];
+    int i, j;
+    int numero;
+    FILE *fp;
+    fp = fopen("Dados-do-Jogo/pontuacao.txt", "rt");
+    if(fp == NULL)
+    {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+    printf("Ranking\n\n");
+    for(i = 0; i < largura; i++) printf(" ");
+
+    espacos = largura - 30 - strlen("Level:") / 2;
+    resto = largura - 30 - strlen("Level:") % 2;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("Level:");
+    for(i = 0; i < espacos + resto; i++) printf(" ");
+
+    espacos = largura - 20 - strlen("Pontos:") / 2;
+    resto = largura - 20 - strlen("Pontos:") % 2;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("Pontos:");
+    printf("\n");
+    for(i = 1; i <= 8; i++)
+    {
+        fscanf(fp, " %d - %s ", &numero, nome);
+        sprintf(txt, "%d - %s", numero, nome);
+        printf("%s", txt);
+        espacos = largura - strlen(txt);
+        for(j = 0; j < espacos; j++) printf(" ");
+
+
+        fscanf(fp, "- lvl: %d ", &numero);
+        sprintf(txt, "%d", numero);
+        espacos = largura - 30 - strlen(txt) / 2;
+        resto = largura - 30 - strlen(txt) % 2;
+        for(j = 0; j < espacos; j++) printf(" ");
+        printf("%s", txt);
+        for(j = 0; j < espacos + resto; j++) printf(" ");
+
+
+        fscanf(fp, "- %d\n", &numero);
+        sprintf(txt, "- = %d = -", numero);
+        espacos = largura - 20 - strlen(txt) / 2;
+        for(j = 0; j < espacos; j++) printf(" ");
+        printf("%s", txt);
+        printf("\n");
+    }
+    printf("\n");
+    fclose(fp);
+}
 
 int loja0[3], checkLoja0 = 1;
 void lojinhaInicial()
@@ -139,7 +196,8 @@ void lojinhaInicial()
     vitrine(loja0);
 }
 
-void imprimeDialogo(char *nomeArquivo, int min, int max) {
+void imprimeDialogo(char *nomeArquivo, int min, int max) 
+{
     FILE *arquivo = fopen(nomeArquivo, "rt");
     char texto[401];
     int idNum = 0, duracao;
@@ -1794,7 +1852,7 @@ void telaInicial(){
             break;
         case '3':
             limparTerminal();
-            cabecaTela("Ranking");
+            ranking();
             break;
         case '4':
 
