@@ -188,7 +188,7 @@ void ranking()
     fclose(fp);
 }
 
-void atualizaRanking(char *nomeArquivo, RANKING player) {
+void atualizaRanking(char *nomeArquivo, RANKING player) { // cria um novo arquivo de ranking (tentar sobrescrever o arquivo original depois)
     RANKING playerRanking[8]; // vetor de structs dos jogadores do ranking atual
     FILE *ranking = fopen(nomeArquivo, "r"), *novoRanking = fopen("novoRanking.txt", "w");
     int posicao, posicaoPlayer, colocacao, i = 0, OK = 1; // OK - verifica se o player já foi inserido no ranking
