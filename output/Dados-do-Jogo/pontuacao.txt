@@ -4,5 +4,5 @@
 4 - UmTresCinco - lvl: 12 - 8000
 5 - Austar - lvl: 11 - 7000
 6 - Lionel - lvl: 10 - 6000
-7 - Samuz - lvl: 9 - 5000
+7 - Samz - lvl: 9 - 5000
 8 - Somiles - lvl: 8 - 4000
