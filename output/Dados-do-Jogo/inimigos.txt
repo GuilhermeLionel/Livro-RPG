@@ -1,5 +1,5 @@
 id = 1
-NOME: Goblin Ladrão
+Goblin Ladrão
 DIFICULDADE: 1
 
 ATRIBUTOS:
@@ -15,7 +15,7 @@ MP: 25
 EXP: 10
 
 id = 2
-NOME: Rato Gigante Enraivecido
+Rato Gigante Enraivecido
 DIFICULDADE: 1
 
 ATRIBUTOS:
@@ -31,7 +31,7 @@ MP: 0
 EXP: 12
 
 id = 3
-NOME: Zumbi Arrastante
+Zumbi Arrastante
 DIFICULDADE: 1
 
 ATRIBUTOS:
@@ -47,7 +47,7 @@ MP: 0
 EXP: 15
 
 id = 4
-NOME: Esqueleto Patrulheiro
+Esqueleto Patrulheiro
 DIFICULDADE: 1
 
 ATRIBUTOS:
@@ -63,7 +63,7 @@ MP: 15
 EXP: 13
 
 id = 5
-NOME: Cultista Fanatico
+Cultista Fanatico
 DIFICULDADE: 1
 
 ATRIBUTOS:
@@ -79,7 +79,7 @@ MP: 90
 EXP: 18
 
 id = 6
-NOME: Aranha das Profundezas Menor
+Aranha das Profundezas Menor
 DIFICULDADE: 1
 
 ATRIBUTOS:
@@ -95,7 +95,7 @@ MP: 0
 EXP: 14
 
 id = 7
-NOME: Morcego Gigante
+Morcego Gigante
 DIFICULDADE: 1
 
 ATRIBUTOS:
@@ -111,7 +111,7 @@ MP: 0
 EXP: 11
 
 id = 8
-NOME: Orc Guerreiro
+Orc Guerreiro
 DIFICULDADE: 2
 
 ATRIBUTOS:
@@ -127,7 +127,7 @@ MP: 50
 EXP: 40
 
 id = 9
-NOME: Lobo Atroz
+Lobo Atroz
 DIFICULDADE: 2
 
 ATRIBUTOS:
@@ -143,7 +143,7 @@ MP: 25
 EXP: 38
 
 id = 10
-NOME: Elemental de Terra Pequeno
+Elemental de Terra Pequeno
 DIFICULDADE: 2
 
 ATRIBUTOS:
@@ -159,7 +159,7 @@ MP: 50
 EXP: 45
 
 id = 11
-NOME: Lich Iniciante
+Lich Iniciante
 DIFICULDADE: 2
 
 ATRIBUTOS:
@@ -175,7 +175,7 @@ MP: 250
 EXP: 50
 
 id = 12
-NOME: Minotauro Jovem
+Minotauro Jovem
 DIFICULDADE: 2
 
 ATRIBUTOS:
@@ -191,7 +191,7 @@ MP: 25
 EXP: 42
 
 id = 13
-NOME: Goblin Xama
+Goblin Xama
 DIFICULDADE: 2
 
 ATRIBUTOS:
@@ -207,7 +207,7 @@ MP: 275
 EXP: 55
 
 id = 14
-NOME: Guarda Espectral
+Guarda Espectral
 DIFICULDADE: 2
 
 ATRIBUTOS:
@@ -223,7 +223,7 @@ MP: 125
 EXP: 48
 
 id = 15
-NOME: Guerreiro Veterano
+Guerreiro Veterano
 DIFICULDADE: 3
 
 ATRIBUTOS:
@@ -239,7 +239,7 @@ MP: 100
 EXP: 80
 
 id = 16
-NOME: Mago Sombrio
+Mago Sombrio
 DIFICULDADE: 3
 
 ATRIBUTOS:
@@ -255,7 +255,7 @@ MP: 400
 EXP: 90
 
 id = 17
-NOME: Grifo Selvagem
+Grifo Selvagem
 DIFICULDADE: 3
 
 ATRIBUTOS:
@@ -271,7 +271,7 @@ MP: 25
 EXP: 85
 
 id = 18
-NOME: Golem de Ferro Defeituoso
+Golem de Ferro Defeituoso
 DIFICULDADE: 3
 
 ATRIBUTOS:
@@ -287,7 +287,7 @@ MP: 50
 EXP: 100
 
 id = 19
-NOME: Espectro Nefasto
+Espectro Nefasto
 DIFICULDADE: 3
 
 ATRIBUTOS:
@@ -303,7 +303,7 @@ MP: 200
 EXP: 95
 
 id = 20
-NOME: Draconato Renegado
+Draconato Renegado
 DIFICULDADE: 3
 
 ATRIBUTOS:
@@ -319,7 +319,7 @@ MP: 100
 EXP: 88
 
 id = 21
-NOME: Arauto do Caos
+Arauto do Caos
 DIFICULDADE: 3
 
 ATRIBUTOS:
@@ -333,4 +333,3 @@ HP: 125
 MP: 225
 
 EXP: 110
-

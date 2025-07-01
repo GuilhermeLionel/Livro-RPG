@@ -17,26 +17,29 @@
 int items = 0;
  
 typedef struct buffHandler2 {
-    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Ataque Especial (Inteligencia), 3 = HP, 4 = Prot, 5 = Stun
-    int alvo; // 0 = Inimigo, 1 = O propio
-    int duracao; // Duração do buff em turnos
-    float valor; // Valor do buff
+    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Ataque Especial (Inteligencia), 3 = Agilidade, 4 = Prot, 5 = Stun      qualquer outro alem é caso especial
+    int alvo; // 0 = Inimigo, 1 = O propio, 2 = Variavel
+    int duracao; // Duração do buff em turnos // 0 se for para sempre
+    int valor; // Valor do buff, aumenta em estados, se for 1, aumenta o status em uma porcentagem, se 2, aumenta em 2x porcentagem
+    //Utilizar o golpe mais vezes aumenta a porcentagem em quantidade (2 vezes uma habilidae de 1x porcentagem é igual a 2x porcentagem)
+    int chance; // Chance de o buff ser aplicado (entre 0 e 100)
 } BUFFHANDLER;
 
 typedef struct abilityHandler2 {
     char nome[51];
     char descricao[201];
-    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Cura percentual, 3 = Cura Fixa, 4 = Prot, 5 = Buff/Debuff
+    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Dano fixo, 3 = Cura percentual, 4 = Cura Fixa, 5 = Prot, 6 = Buff/Debuff
     int efeitoSecundario; // 0 = Nenhum, 1 = Queimar, 2 = Estunar, 3 = Envenenar, 4 = Paralizar, 5 = Desarmar
-    int chanceDeEfeito; // Chance de o efeito acontecer em uso
+    int chanceDeEfeito; // Chance de o efeito acontecer em uso (chance entre 0 e 100)
     BUFFHANDLER buff; // Buff que a habilidade pode causar
-    float qtdmg; // Dano ou cura
+    float qtdmg; // Dano ou cura (Para cura percentual, este valor é um float entre 0 e 1)
     int custo; // Custo de mana
     int chance; // Chance de acerto da habilidade
     int status; // Status que a habilidade vai usar para o calculo
     // 0 = Nenhum, 1 = Forca, 2 = Inteligencia, 3 = Protecao, 4 = Agilidade, 5 = Carisma
     // Cura percentual nao importa o status e a fixa usa a inteligencia
-} ABILITYHANDLER;
+    // Buffs e debuffs podem utilizar os status para aumentar as suas chances de acerto e de efeito secundario
+} HABILIDADE;
 
 typedef struct itemHandler2{
     char nome[51];
@@ -66,6 +69,9 @@ typedef struct dados{
     int level;
     int expMax;
     int skillPoints;
+    int habilidades[6]; // Habilidades que o jogador possui
+    int buffs[3][10]; // Buffs que o jogador possui    [0] = Id do buff, [1] = Turnos restantes, [2] = Qtd
+    int status; // 0 = Normal, 1 = Queimando, 2 = Envenenado, 3 = Estunado, 4 = Paralisado, 5 = Desarmado
 } DADOS;
 
 DADOS player;
@@ -76,7 +82,7 @@ typedef struct ranking2 {
     int pontuacao;
 } RANKING;
 
-RANKING player;
+RANKING jogador;
 
 int sala = 0;
 
@@ -89,6 +95,9 @@ int numAle(int range);
 int espacoInv(int id); // Retorna o espaco em que um item pode ser alocado no inventario
 int digitos(int n); // Retorna a quantidade de dígitos do número
 int salaAleatoria();
+int dificuldadeAleatoria();
+int raridadeAleatoria();
+int bonusAplicado(int n);
 
 void vitrine(int a[]);
 void cross_platform_sleep(int ms);
@@ -124,6 +133,199 @@ void checkInput(int * n, int min, int max);
 void cura(int qtd);
 void ranking();
 void atualizaRanking(char *nomeArquivo, RANKING player);
+void inimigoAleatorio(DADOS *inimigo, int dificuldade);
+void batalharInimigo(DADOS *inimigo, int qtd);
+void hpInimigo(DADOS inimigo, int modo, int num);
+void moveCursor(int x, int y);
+void ataque(DADOS *atacante, DADOS *defensor, int habilidade);
+//void getHabilidade(HABILIDADE *habilidade, int id);
+
+void getHabilidade(HABILIDADE *habilidade, int id)
+{
+
+}
+
+void ataque(DADOS *atacante, DADOS *defensor, int idHabilidade)
+{
+    HABILIDADE habilidade;
+    getHabilidade(&habilidade, idHabilidade);
+    
+}
+
+int bonusAplicado(int n)
+{
+    int id[4];
+    int i, j;
+    int result = 0;
+    for(i = 0; i < 4; i++) id[i] = player.equipado[i];
+    for(i = 0; i < 4; i++)
+    {
+        for(j = 0; j < 3; j++) if(item[id[i]].bonus[0][j] == n) result += item[id[i]].bonus[1][j];
+    }
+    return result;
+}
+
+int raridadeAleatoria()
+{
+    float chance[5] = {0.0, 0.0, 0.0, 0.0, 0.0}; // Vetor que guarda as chances de raridade de item ser escolhido
+    float peso1 = 0.05, peso2 = 0.15, peso3 = 0.5, peso4 = 2.0;
+    if(sala <= 10) // Se o sala for entre 0 e 10, a chance de um item de raridade 1 é 90% e 2 é 10%
+    {
+        chance[1] = 90.0 + player.carisma * peso1;
+        chance[2] = 10.0 + player.carisma * peso2;
+    }
+    if(sala >= 11 && sala <= 30) 
+    {
+        chance[1] = 80.0 + player.carisma * peso1;
+        chance[2] = 20.0 + player.carisma * peso2;
+    }
+    if(sala >= 31 && sala <= 40)
+    {
+        chance[1] = 60.0 + player.carisma * peso1;
+        chance[2] = 35.0 + player.carisma * peso2;
+        chance[3] = 5.0 + player.carisma * peso3;
+    }
+    if(sala >= 41 && sala <= 50) 
+    {
+        chance[1] = 50.0 + player.carisma * peso1;
+        chance[2] = 40.0 + player.carisma * peso2;
+        chance[3] = 10.0 + player.carisma * peso3;
+        chance[4] = 1.0 + player.carisma * peso4; // Chance de 1% de sair um item de raridade 4
+    }
+    if(sala >=51 && sala <= 60) 
+    {
+        chance[1] = 33.0 + player.carisma * peso1;
+        chance[2] = 45.0 + player.carisma * peso2;
+        chance[3] = 20.0 + player.carisma * peso3;
+        chance[4] = 2.0 + player.carisma * peso4;
+    }
+    if(sala >= 61 && sala <= 70) 
+    {
+        chance[1] = 17.0 + player.carisma * peso1;
+        chance[2] = 50.0 + player.carisma * peso2;
+        chance[3] = 30.0 + player.carisma * peso3;
+        chance[4] = 3.0 + player.carisma * peso4;
+    }
+    if(sala >= 71 && sala <= 80) 
+    {
+        chance[1] = 6.0 + player.carisma * peso1;
+        chance[2] = 50.0 + player.carisma * peso2;
+        chance[3] = 40.0 + player.carisma * peso3;
+        chance[4] = 4.0 + player.carisma * peso4;
+    }
+    if(sala >= 81 && sala <= 90) 
+    {
+        chance[1] = 5.0 + player.carisma * peso1;
+        chance[2] = 35.0 + player.carisma * peso2;
+        chance[3] = 55.0 + player.carisma * peso3;
+        chance[4] = 5.0 + player.carisma * peso4;
+    }
+    if(sala >= 91 && sala <= 100) 
+    {
+        chance[2] = 10.0;
+        chance[3] = 80.0;
+        chance[4] = 10.0;
+    }
+
+    return aleatorizaChance(5, chance);
+}
+
+void moveCursor(int x, int y) 
+{
+    #ifdef _WIN32
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        COORD coord = {x, y};
+        SetConsoleCursorPosition(hConsole, coord);
+    #else
+        printf("\033[%d;%dH", y, x);
+        fflush(stdout);
+    #endif
+}
+
+void hpInimigo(DADOS inimigo, int modo, int num)
+{
+    int largura = 30;
+    int espacos, resto;
+    int x, y;
+    x = (num - 1) * 30;
+    if(x != 0) x += 5 * (num - 1); // Ajusta a posição x para não colidir com o texto
+    y = (num - 1) * 2;
+    char txt[41];
+    int i;
+    moveCursor(x, y);
+    if(modo == 1) sprintf(txt, "%d - %s", num, inimigo.nome);
+    else sprintf(txt, "%s", inimigo.nome);
+    printf("%s", txt);
+    moveCursor(x, y + 1);
+
+    espacos = largura - 2;
+    printf("%c", 218);
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("%c", 191);
+    moveCursor(x, y + 2);
+
+    float media = (float)inimigo.hp / (float)inimigo.hpMax;
+    if(media > 1.0) media = 1.0;
+    espacos = media * (largura - 4);
+    if(espacos == 0 && media > 0.0) espacos = 1;
+    resto = largura - espacos - 4;
+    printf("  ");
+    for(i = 0; i < espacos; i++) printf("\033[31m=\033[0m");
+    for(i = 0; i < resto; i++) printf("-");
+    printf("  ");
+    moveCursor(x, y + 3);
+
+
+    printf("%c", 192);
+    sprintf(txt, "%d/%d  ", inimigo.hp, inimigo.hpMax);
+    espacos = largura - 2 - strlen(txt);
+    if(media <= 0.3) sprintf(txt, "\033[31m%d\033[0m/%d  ", inimigo.hp, inimigo.hpMax);
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("%s", txt);
+    printf("%c", 217);
+}
+
+void batalharInimigo(DADOS *inimigo, int qtd)
+{
+    limparTerminal();
+    int i;
+    for(i = 0; i < qtd; i++)
+    {
+        hpInimigo(inimigo[i], 0, i + 1);
+    }
+    printf("\n\n");
+    printf("O que voce deseja fazer?\n\n");
+    printf("[1] Atacar  [2] Habilidade  [3] Item  [4] Fugir  [5] Ver Status\n\n");
+    int escolha;
+    checkInput(&escolha, 1, 5);
+    switch(escolha)
+    {
+        case 1:
+            limparTerminal();
+            for(i = 0; i < 3; i++) hpInimigo(inimigo[i], 1, i + 1);
+            printf("\n\nQual o inimigo que deseja atacar?\n\n");
+            int inimigoEscolhido;
+            checkInput(&inimigoEscolhido, 1, qtd);
+            inimigo[inimigoEscolhido - 1].hp -= 40;
+            batalharInimigo(inimigo, qtd);
+            break;
+        case 2:
+            // Habilidade
+            break;
+        case 3:
+            verInventario(1);
+            batalharInimigo(inimigo, qtd);
+            break;
+        case 4:
+            // Fugir
+            break;
+        case 5:
+            mostrarStatus();
+            batalharInimigo(inimigo, qtd);
+            break;
+    }
+    
+}
 
 void cura(int qtd)
 {
@@ -266,7 +468,7 @@ void tomadaDecisao()
                 //Dialogo de conversa
                 break;
             case 3:
-                sala = 5;
+                sala = 3;
                 save(player);
                 tomadaDecisao();
                 break;
@@ -287,7 +489,7 @@ else
     printf("\n");
     for(i = 0; i < 70; i++) printf("-");
     printf("\n\n");
-    cross_platform_sleep(3000);
+    cross_platform_sleep(1000);
     limparTerminal();
     if(sala % 10 == 5)
     {
@@ -392,33 +594,113 @@ else
     }
     else
     {
-        int caso;
-        caso = salaAleatoria();
+        int caso, a[3];
+        //caso = salaAleatoria();
+        caso = 3;
+        DADOS inimigo[caso];
         switch(caso)
         {
             case 0:
-                printf("Alo");
-                break;
-            case 1:
-                break;
-            case 2:
                 break;
             case 3:
+                a[2] = dificuldadeAleatoria();
+            case 2:
+                a[1] = dificuldadeAleatoria();
+            case 1:
+                a[0] = dificuldadeAleatoria();
+                for(int i = 0; i < caso; i++) 
+                {
+                    inimigoAleatorio(&inimigo[i], a[i]);
+                }
+                if(caso > 1)
+                {
+                    sprintf(txt, "Voce encontrou %d inimigos!\n", caso);
+                    textoTela(txt, 200);
+                }
+                else
+                {
+                    textoTela("Voce encontrou um inimigo!\n", 200);
+                }
+                textoTela("Prepare-se para a batalha!\n", 200);
+                printf("Pressione [ENTER] para continuar");
+                limparBuffer();
+                
+                batalharInimigo(inimigo, caso);
                 break;
             case 4:
                 break;
             case 5:
                 break;
             default:
-                printf("Algo ta errado\n");
+                printf("Aviso de Bug\n");
+                getchar();
                 break;
         }
-        sala++;
-        tomadaDecisao();
+        //sala++;
     }
 }
 }
 
+int dificuldadeAleatoria()
+{
+    return 2;
+}
+
+void inimigoAleatorio(DADOS *inimigo, int objetivo)
+{
+
+    FILE *fp;
+    fp = fopen("Dados-do-Jogo/inimigos.txt", "rt");
+    int dificuldade;
+    int quantidade = 0;
+    int i;
+    char nome[51], txt[101];
+    while(!feof(fp))
+    {
+        fgets(txt, 100, fp);
+        fgets(txt, 100, fp);
+        fscanf(fp, "DIFICULDADE: %d\n", &dificuldade);
+        if(dificuldade == objetivo) quantidade++;
+        for(i = 0; i < 12; i++) fgets(txt, 100, fp);
+    }
+
+    int sorteio = numAle(quantidade);
+
+    rewind(fp);
+
+    while(!feof(fp))
+    {
+        fgets(txt, 100, fp);
+        fgets(nome, 51, fp);
+        nome[strcspn(nome, "\n")] = 0;
+
+
+        fscanf(fp, "DIFICULDADE: %d\n", &dificuldade);
+
+        if(dificuldade == objetivo) 
+        {
+            sorteio--;
+        }
+        if(sorteio != 0) 
+        {
+            for(i = 0; i < 12; i++) 
+            {
+                fgets(txt, 100, fp);
+            }
+        }
+        else 
+        {
+            strcpy(inimigo->nome, nome);
+            fscanf(fp, "\nATRIBUTOS:\nFORCA: %d\nPROTECAO: %d\nAGILIDADE: %d\nINTELIGENCIA: %d\nCARISMA: %d\n\nHP: %d\nMP: %d\n\nEXP: %d\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
+            break;
+        }
+    }
+    fclose(fp);
+    inimigo->hpMax = inimigo->protecao * 3;
+    inimigo->hpMax = inimigo->hp;
+    inimigo->manaMax = inimigo->inteligencia * 3;
+    inimigo->mp = inimigo->manaMax;
+}
 
 
 int salaAleatoria()
@@ -488,9 +770,9 @@ void mostrarStatus()
     limparTerminal();
 
     int largura = 50;
-    int espacos;
+    int espacos, bonus;
     int i;
-    char txt[71];
+    char txt[71], txt2[71];
 
     sprintf(txt, "%s Lvl %d", player.nome, player.level);
     printf("%s", txt);
@@ -524,6 +806,13 @@ void mostrarStatus()
     printf("\n");
 
     sprintf(txt, "Forca: %d", player.forca);
+    bonus = bonusAplicado(1);
+    if(bonus != 0) 
+    {
+        if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
+        else sprintf(txt2, " (%d)", bonus);
+        strcat(txt, txt2);
+    }
     printf("%s", txt);
     espacos = largura - strlen(txt) - 3 - 15;
     for(i = 0; i < espacos; i++) printf(" ");
@@ -539,6 +828,13 @@ void mostrarStatus()
     printf("\n");
 
     sprintf(txt, "Inteligencia: %d", player.inteligencia);
+    bonus = bonusAplicado(3);
+    if(bonus != 0) 
+    {
+        if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
+        else sprintf(txt2, " (%d)", bonus);
+        strcat(txt, txt2);
+    }
     printf("%s", txt);
     espacos = largura - strlen(txt) - 3 - 15;
     for(i = 0; i < espacos; i++) printf(" ");
@@ -554,6 +850,13 @@ void mostrarStatus()
     printf("\n");
 
     sprintf(txt, "Protecao: %d", player.protecao);
+    bonus = bonusAplicado(5);
+    if(bonus != 0) 
+    {
+        if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
+        else sprintf(txt2, " (%d)", bonus);
+        strcat(txt, txt2);
+    }
     printf("%s", txt);
     espacos = largura - strlen(txt) - 3 - 15;
     for(i = 0; i < espacos; i++) printf(" ");
@@ -569,6 +872,13 @@ void mostrarStatus()
     printf("\n");
 
     sprintf(txt, "Agilidade: %d", player.agilidade);
+    bonus = bonusAplicado(2);
+    if(bonus != 0) 
+    {
+        if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
+        else sprintf(txt2, " (%d)", bonus);
+        strcat(txt, txt2);
+    }
     espacos = largura - strlen(txt) - 3 - 15;
     printf("%s", txt);
     for(i = 0; i < espacos; i++) printf(" ");
@@ -579,6 +889,13 @@ void mostrarStatus()
     printf("\n");
 
     sprintf(txt, "Carisma: %d", player.carisma);
+    bonus = bonusAplicado(4);
+    if(bonus != 0) 
+    {
+        if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
+        else sprintf(txt2, " (%d)", bonus);
+        strcat(txt, txt2);
+    }
     printf("%s", txt);
     espacos = largura - strlen(txt) - 3 - 15;
     for(i = 0; i < espacos; i++) printf(" ");
@@ -606,7 +923,7 @@ void mostrarStatus()
     
     int escolha;
 
-    scanf("%d", &escolha);
+    checkInput(&escolha, 1, 10);
 
     if(escolha == 1) 
     {
@@ -1396,7 +1713,14 @@ void loja() // Sempre antes de boss. Boss a cada 10 fases
 
     if(sala >= 91 && sala <= 100) // Se o sala for entre 91 e 100
     {
-        a[1] = 4; // Força um item lendario
+        for(int i = 0; i < 3; i++)
+        {
+            if(a[i] != 4) 
+            {
+                a[i] = 4;
+                break;
+            }
+        }
     }
 
     id[0] = idAleatorio(a[0]);
@@ -1487,6 +1811,7 @@ void gerarPasta() {
 
 void save(DADOS player)
 {
+    int i, j;
     FILE *arq = fopen("Dados-do-Jogo/save.txt", "w");
     if (arq == NULL) {
         printf("Erro ao salvar.\n");
@@ -1508,15 +1833,27 @@ void save(DADOS player)
     fprintf(arq, "Moedas: %d\n", player.moedas);
     fprintf(arq, "Equipados: %d, %d, %d, %d\n", player.equipado[0], player.equipado[1], player.equipado[2], player.equipado[3]);
 
-    for (int i = 0; i < 20; i++) {
+    for (i = 0; i < 20; i++) {
         fprintf(arq, "%d %d\n", player.inventario[0][i], player.inventario[1][i]);
+    }
+
+    for (i = 0; i < 3; i++)
+    {
+        for(j = 0; j < 10; j++)
+        {
+            fprintf(arq, "%d ", player.buffs[i][j]);
+        }
+        fprintf(arq, "\n");
     }
 
     fclose(arq);
 }
 
 
-void load(DADOS *player, int *sala) {
+void load(DADOS *player, int *sala) 
+{
+    int i, j;
+
     FILE *arq = fopen("Dados-do-Jogo/save.txt", "rt");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo.\n");
@@ -1539,8 +1876,16 @@ void load(DADOS *player, int *sala) {
     fscanf(arq, "Moedas: %d\n", &player->moedas);
     fscanf(arq, "Equipados: %d, %d, %d, %d\n", &player->equipado[0], &player->equipado[1], &player->equipado[2], &player->equipado[3]);
 
-    for (int i = 0; i < 20; i++) {
+    for (i = 0; i < 20; i++) {
         fscanf(arq, "%d %d\n", &player->inventario[0][i], &player->inventario[1][i]);
+    }
+    for (i = 0; i < 3; i++)
+    {
+        for(j = 0; j < 10; j++)
+        {
+            fscanf(arq, "%d ", &player->buffs[i][j]);
+        }
+        fscanf(arq, "\n");
     }
 
     fclose(arq);
@@ -1556,7 +1901,7 @@ int numAle(int range){
 
 void calculoExp()
 {
-    while(player.exp >= player.expMax) //posteriormente esse if será tirado, vamos colocar ele na condição de ganhar uma batalha
+    while(player.exp >= player.expMax) 
     {
         player.exp -= player.expMax;
         player.expMax*=1.5;
