@@ -203,7 +203,7 @@ void ataque(DADOS *atacante, DADOS *defensor)
     if(defensor->hp < 0) defensor->hp = 0; // Se o HP do defensor ficar negativo, zera
 }
 
-void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
+/*void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
 {
     int statusAtk = 0, statusDef = 0;
     switch(habilidade.tipo)
@@ -224,7 +224,7 @@ void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
         default:
             break;
     }
-}
+}*/
 
 int bonusAplicado(int n)
 {
@@ -362,6 +362,11 @@ void hpInimigo(DADOS inimigo, int modo, int num)
 void batalharInimigo(DADOS *inimigo, int qtd)
 {
     limparTerminal();
+    if(qtd == 0)
+    {
+        sala++;
+        tomadaDecisao();
+    }
     int i;
     for(i = 0; i < qtd; i++)
     {
@@ -375,18 +380,19 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     switch(escolha)
     {
         case 1:
-            limparTerminal();
-            for(i = 0; i < 3; i++) hpInimigo(inimigo[i], 1, i + 1);
+            limparLinhas(3);
+            for(i = 0; i < qtd; i++) hpInimigo(inimigo[i], 1, i + 1);
             printf("\n\nQual o inimigo que deseja atacar?\n\n");
             int inimigoEscolhido;
             checkInput(&inimigoEscolhido, 1, qtd);
             ataque(&player, &inimigo[inimigoEscolhido - 1]);
             if(inimigo[inimigoEscolhido - 1].hp <= 0)
             {
+                limparTerminal();
                 printf("%s foi derrotado!\n\n", inimigo[inimigoEscolhido - 1].nome);
                 player.exp += inimigo[inimigoEscolhido - 1].exp;
                 printf("Voce ganhou %d de experiencia!\n\n", inimigo[inimigoEscolhido - 1].exp);
-                calculaExp();
+                calculoExp();
                 printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
                 if(qtd > 1)
@@ -713,8 +719,8 @@ else
                 {
                     textoTela("Voce encontrou um inimigo!\n", 200);
                 }
-                textoTela("Prepare-se para a batalha!\n", 200);
-                printf("Pressione [ENTER] para continuar");
+                textoTela("Prepare-se para a batalha!\n\n", 200);
+                printf("Pressione [ENTER] para continuar\n");
                 limparBuffer();
                 
                 batalharInimigo(inimigo, caso);
@@ -1443,7 +1449,7 @@ void tipoItem(char *tipo, int n)
     switch(n)
     {
         case 0:
-            strcpy(tipo, "Vazio");
+            strcpy(tipo, "");
             break;
         case 1:
             strcpy(tipo, "Arma Cortante");
@@ -1743,69 +1749,10 @@ int idAleatorio(int raridade)
 void loja() // Sempre antes de boss. Boss a cada 10 fases
 {
     int a[3], id[3]; // Vetor que guarda os ids dos itens
-    float chance[5] = {0.0, 0.0, 0.0, 0.0, 0.0}; // Vetor que guarda as chances de raridade de item ser escolhido
-    float peso1 = 0.05, peso2 = 0.15, peso3 = 0.5, peso4 = 2.0;
-    if(sala <= 10) // Se o sala for entre 0 e 10, a chance de um item de raridade 1 é 90% e 2 é 10%
-    {
-        chance[1] = 90.0 + player.carisma * peso1;
-        chance[2] = 10.0 + player.carisma * peso2;
-    }
-    if(sala >= 11 && sala <= 30) 
-    {
-        chance[1] = 80.0 + player.carisma * peso1;
-        chance[2] = 20.0 + player.carisma * peso2;
-    }
-    if(sala >= 31 && sala <= 40)
-    {
-        chance[1] = 60.0 + player.carisma * peso1;
-        chance[2] = 35.0 + player.carisma * peso2;
-        chance[3] = 5.0 + player.carisma * peso3;
-    }
-    if(sala >= 41 && sala <= 50) 
-    {
-        chance[1] = 50.0 + player.carisma * peso1;
-        chance[2] = 40.0 + player.carisma * peso2;
-        chance[3] = 10.0 + player.carisma * peso3;
-        chance[4] = 1.0 + player.carisma * peso4; // Chance de 1% de sair um item de raridade 4
-    }
-    if(sala >=51 && sala <= 60) 
-    {
-        chance[1] = 33.0 + player.carisma * peso1;
-        chance[2] = 45.0 + player.carisma * peso2;
-        chance[3] = 20.0 + player.carisma * peso3;
-        chance[4] = 2.0 + player.carisma * peso4;
-    }
-    if(sala >= 61 && sala <= 70) 
-    {
-        chance[1] = 17.0 + player.carisma * peso1;
-        chance[2] = 50.0 + player.carisma * peso2;
-        chance[3] = 30.0 + player.carisma * peso3;
-        chance[4] = 3.0 + player.carisma * peso4;
-    }
-    if(sala >= 71 && sala <= 80) 
-    {
-        chance[1] = 6.0 + player.carisma * peso1;
-        chance[2] = 50.0 + player.carisma * peso2;
-        chance[3] = 40.0 + player.carisma * peso3;
-        chance[4] = 4.0 + player.carisma * peso4;
-    }
-    if(sala >= 81 && sala <= 90) 
-    {
-        chance[1] = 5.0 + player.carisma * peso1;
-        chance[2] = 35.0 + player.carisma * peso2;
-        chance[3] = 55.0 + player.carisma * peso3;
-        chance[4] = 5.0 + player.carisma * peso4;
-    }
-    if(sala >= 91 && sala <= 100) 
-    {
-        chance[2] = 10.0;
-        chance[3] = 80.0;
-        chance[4] = 10.0;
-    }
-
-    a[0] = aleatorizaChance(5, chance);
-    a[1] = aleatorizaChance(5, chance);
-    a[2] = aleatorizaChance(5, chance);
+    
+    a[0] = raridadeAleatoria();
+    a[1] = raridadeAleatoria();
+    a[2] = raridadeAleatoria();
 
 
     if(sala >= 91 && sala <= 100) // Se o sala for entre 91 e 100
