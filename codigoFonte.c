@@ -99,7 +99,7 @@ int dificuldadeAleatoria();
 int raridadeAleatoria();
 int bonusAplicado(int n);
 int statusRequisitado(int status, DADOS usuario);
-int buffs(int sinal);
+int quantosBuffs(int sinal);
 
 void vitrine(int a[]);
 void cross_platform_sleep(int ms);
@@ -143,18 +143,18 @@ void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade);
 void getHabilidade(HABILIDADE *habilidade, int id);
 void mana(int qtd);
 
-int buffs(int sinal)
+int buffsquantosBuffs(int sinal)
 {   
     //retorna a quantidade de buff se sinal > 0 e debuffs se < 0
     int i = 0;
     int result = 0;
     if(sinal > 0) for(i = 0; i < 15; i ++)
         {
-            if(player.buffs[1][i] < 0) result += player.buffs[1][i];
+            if(player.buffs[1][i] > 0) result++;
         }
     else for(i = 0; i < 15; i ++)
         {
-            if(player.buffs[1][i] < 0) result -= player.buffs[1][i];
+            if(player.buffs[1][i] < 0) result++;
         }
     return result;
 }
@@ -384,6 +384,8 @@ void hpInimigo(DADOS inimigo, int modo, int num)
 void batalharInimigo(DADOS *inimigo, int qtd)
 {
     limparTerminal();
+    int b1 = quantosBuffs(1);
+    int b2 = quantosBuffs(-1);
     if(qtd == 0)
     {
         sala++;
@@ -396,10 +398,27 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     }
     printf("\n\n");
     printf("O que voce deseja fazer?\n\n");
-    printf("[1] Atacar  [2] Habilidade  [3] Item  [4] Fugir  [5] Ver Status\n\n");
+    printf("[1] Atacar  [2] Habilidade  [3] Item  [4] Fugir  ");
+    if(b1|| b1) 
+    {
+        printf("[5] ");
+        if(b1) printf("Buff");
+        if(b1 > 1) printf("s");
+        if(b1 && b2) printf(" / ");
+        if(b2) printf("Debuff");
+        if(b2 > 1) printf("s");
+        printf(" (");
+        if(b1 != 0) printf("\033[32m%d\033[0m", b1);
+        if(b1 != 0 && b2 != 0) printf(" / ");
+        if(b2 != 0) printf("\033[31m%d\033[0m", b2);
+        printf(")");
+    }
+    printf("\n\n");
     int escolha;
-    checkInput(&escolha, 1, 5);
-    printf("\033[1A");
+    if(b1 || b2) checkInput(&escolha, 1, 5);
+    else checkInput(&escolha, 1, 6);
+    limparLinhas(1);
+    moveCursor(0, 14);
     limparLinhas(3);
     switch(escolha)
     {
@@ -444,8 +463,13 @@ void batalharInimigo(DADOS *inimigo, int qtd)
             mostrarStatus();
             batalharInimigo(inimigo, qtd);
             break;
+        case 6:
+            player.buffs[0][0] = 1;
+            player.buffs[1][0] = 2;
+            player.buffs[2][0] = 0;
+            batalharInimigo(inimigo, qtd);
+            break;
     }
-    
 }
 
 void cura(int qtd)
@@ -679,7 +703,7 @@ else
                     cross_platform_sleep(500);
                     textoTela("Do que e sentir medo . . .\n", 400);
                     cross_platform_sleep(500);
-                    textoTela("Nao", 200);
+                    textoTela("Nao\n", 200);
                     cross_platform_sleep(1000);
                     textoTela("Voce nao sabe o que esta por vir\n\n", 600);
                 }
@@ -774,7 +798,7 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
     fp = fopen("Dados-do-Jogo/inimigos.txt", "rt");
     int dificuldade;
     int quantidade = 0;
-    int i;
+    int i, j;
     char nome[51], txt[101];
     while(!feof(fp))
     {
@@ -817,6 +841,13 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
         }
     }
     fclose(fp);
+    for(i = 0; i < 3; i++)
+    {
+        for(j = 0; j < 15; j++)
+        {
+            inimigo->buffs[i][j] = 0;
+        }
+    }
     inimigo->hpMax = inimigo->protecao * 3;
     inimigo->hpMax = inimigo->hp;
     inimigo->manaMax = inimigo->inteligencia * 3;
@@ -1887,7 +1918,7 @@ void save(DADOS player)
     player.nome[strcspn(player.nome, "\n")] = 0;
 
     fprintf(arq, "%s\n", player.nome);
-    fprintf(arq, "Sala: %d\n", sala);
+    fprintf(arq, "Sala %d\n", sala);
     fprintf(arq, "Level %d: %d/%d\n", player.level, player.exp, player.expMax);
     fprintf(arq, "Skill Points: %d\n", player.skillPoints);
     fprintf(arq, "HP: %d/%d\n", player.hp, player.hpMax);
@@ -1906,7 +1937,7 @@ void save(DADOS player)
 
     for (i = 0; i < 3; i++)
     {
-        for(j = 0; j < 10; j++)
+        for(j = 0; j < 15; j++)
         {
             fprintf(arq, "%d ", player.buffs[i][j]);
         }
@@ -1930,7 +1961,7 @@ void load(DADOS *player, int *sala)
     fgets(player->nome, sizeof(player->nome), arq);
     player->nome[strcspn(player->nome, "\n")] = 0; //Transforma caractere "\n" em "\0"
     
-    fscanf(arq, "Sala: %d\n", sala);
+    fscanf(arq, "Sala %d\n", sala);
     fscanf(arq, "Level %d: %d/%d\n", &player->level, &player->exp, &player->expMax);
     fscanf(arq, "Skill Points: %d\n", &player->skillPoints);
     fscanf(arq, "HP: %d/%d\n", &player->hp, &player->hpMax);
@@ -2027,14 +2058,24 @@ void aleatJogador(char *txt){
     player.moedas = 1000;
 
     // Adicione esta inicialização para o inventário:
-    for (i = 0; i < 2; i++) {
-        for(j = 0; j < 20; j++){
+    for (i = 0; i < 2; i++) 
+    {
+        for(j = 0; j < 20; j++)
+        {
             player.inventario[i][j] = 0; // Inicializa cada slot do inventário com 0
         }
     }
 
     for(i = 0; i < 4; i++) {
         player.equipado[i] = 0; // Inicializa os itens equipados com 0
+    }
+
+    for(i = 0; i < 3; i++)
+    {
+        for(j = 0; j < 15; j++)
+        {
+            player.buffs[i][j] = 0;
+        }
     }
     
     player.level = 1;

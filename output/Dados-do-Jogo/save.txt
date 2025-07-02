@@ -1,5 +1,5 @@
 Alex
-Sala: 3
+Sala 3
 Level 4: 36/168
 Skill Points: 0
 HP: 60/95
