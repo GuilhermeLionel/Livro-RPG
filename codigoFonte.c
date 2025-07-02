@@ -2312,7 +2312,7 @@ void histInic(){
     textoTela("Reis se ajoelharam. Imperios cairam.\n", 300);
     textoTela("Valdoran nao pedia permissao...\n", 400);
     textoTela("Eles queriam...\n", 400);
-    textoTela("Eles \[31mto033mavam...\033[0m\n", 600);
+    textoTela("\033[31mEles TOMAVAM...\033[0m\n", 600);
     printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
