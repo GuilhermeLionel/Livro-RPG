@@ -132,7 +132,7 @@ Postura Defensiva
 Aumenta sua propria protecao por 3 turnos.
 Tipo: 6
 Efeito: 0 0%
-Buff: 4 100%
+Buff: 3 100%
 Buff Alvo: 1
 Buff Duracao: 3
 Quant Buff: 1
@@ -145,7 +145,7 @@ Corrida Sombria
 Aumenta a propria agilidade por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
-Buff: 3 100%
+Buff: 4 100%
 Buff Alvo: 1
 Buff Duracao: 2
 Quant Buff: 1
@@ -158,7 +158,7 @@ Chicote de Espinhos
 Ataque fisico que reduz a protecao do inimigo.
 Tipo: 1
 Efeito: 0 0%
-Buff: 4 100%
+Buff: 3 100%
 Buff Alvo: 0
 Buff Duracao: 2
 Quant Buff: -1
@@ -197,13 +197,13 @@ Furia Selvagem
 Alto dano fisico com baixa chance de acerto.
 Tipo: 1
 Efeito: 0 0%
-Buff: 0 0%
-Buff Alvo: 0
-Buff Duracao: 0
+Buff: 1 60%
+Buff Alvo: 1
+Buff Duracao: -1
 Quant Buff: 0
 Qtd: 2.5
 Custo: 5
-Chance: 60
+Chance: 40
 Status: 1
 
 Sombras Envenenadas
@@ -220,12 +220,12 @@ Chance: 85
 Status: 4
 
 Escudo Mental
-Aumenta a propria resistencia magica (protecao) por 2 turnos.
+Aumenta a propria resistencia magica (protecao) por 5 turnos.
 Tipo: 6
 Efeito: 0 0%
-Buff: 4 100%
+Buff: 3 100%
 Buff Alvo: 1
-Buff Duracao: 2
+Buff Duracao: 5
 Quant Buff: 1
 Qtd: 0.0
 Custo: 4
@@ -233,12 +233,12 @@ Chance: 100
 Status: 2
 
 Rugido de Fera
-Diminui o carisma do inimigo por 2 turnos.
+Diminui a forca do inimigo por 5 turnos.
 Tipo: 6
 Efeito: 0 0%
-Buff: 5 100%
+Buff: 1 100%
 Buff Alvo: 0
-Buff Duracao: 2
+Buff Duracao: 5
 Quant Buff: -1
 Qtd: 0.0
 Custo: 3
@@ -259,14 +259,14 @@ Chance: 85
 Status: 1
 
 Dominio das Sombras
-Aumenta seu ataque e agilidade por 2 turnos.
+Ataque esguio que aumenta sua agilidade por 4 turnos.
 Tipo: 6
 Efeito: 0 0%
-Buff: 1 100%
+Buff: 4 100%
 Buff Alvo: 1
-Buff Duracao: 2
+Buff Duracao: 4
 Quant Buff: 1
-Qtd: 0.0
+Qtd: 1.0
 Custo: 6
 Chance: 100
 Status: 1
@@ -279,7 +279,7 @@ Buff: 0 0%
 Buff Alvo: 0
 Buff Duracao: 0
 Quant Buff: 0
-Qtd: 20.0
+Qtd: 14.0
 Custo: 12
 Chance: 90
 Status: 2
@@ -287,7 +287,7 @@ Status: 2
 Chicote de Raizes
 Dano fisico com chance de prender (paralisar) o inimigo.
 Tipo: 1
-Efeito: 4 40%
+Efeito: 4 50%
 Buff: 0 0%
 Buff Alvo: 0
 Buff Duracao: 0
@@ -311,12 +311,12 @@ Chance: 85
 Status: 1
 
 Sangue Frio
-Reduz o ataque do inimigo por 3 turnos.
+Reduz o ataque do inimigo atravez do medo.
 Tipo: 6
 Efeito: 0 0%
-Buff: 1 100%
+Buff: 1 70%
 Buff Alvo: 0
-Buff Duracao: 3
+Buff Duracao: -1
 Quant Buff: -1
 Qtd: 0.0
 Custo: 5
@@ -331,16 +331,16 @@ Buff: 0 0%
 Buff Alvo: 0
 Buff Duracao: 0
 Quant Buff: 0
-Qtd: 1.5
+Qtd: 3.5
 Custo: 7
 Chance: 90
 Status: 2
 
 Espinhos Crescentes
 Aplica debuff de protecao e causa dano continuo.
-Tipo: 6
+Tipo: 1
 Efeito: 0 0%
-Buff: 4 100%
+Buff: 7 100%
 Buff Alvo: 0
 Buff Duracao: 3
 Quant Buff: -1
@@ -349,18 +349,18 @@ Custo: 5
 Chance: 90
 Status: 2
 
-Sombra Agil
-Aumenta agilidade e aplica debuff de agilidade no inimigo.
-Tipo: 6
+Espinhos das Sombras
+Invoca sombras que atacam os pes do inimigo, diminuindo sua agilidade.
+Tipo: 2
 Efeito: 0 0%
-Buff: 3 100%
-Buff Alvo: 1
-Buff Duracao: 2
+Buff: 4 100%
+Buff Alvo: 0
+Buff Duracao: -1
 Quant Buff: 1
 Qtd: 0.0
 Custo: 5
 Chance: 100
-Status: 4
+Status: 
 
 Chicote Fantasmagorico
 Ataque magico que reduz a inteligencia do inimigo.
@@ -375,11 +375,11 @@ Custo: 7
 Chance: 90
 Status: 2
 
-Toque do Medo
-Ataque magico que pode causar paralisia e debuff de carisma.
+Encanto do Medo
+Ataque magico que diminuie protecao e pode causar paralisia. 
 Tipo: 2
 Efeito: 4 25%
-Buff: 5 100%
+Buff: 3 100%
 Buff Alvo: 0
 Buff Duracao: 2
 Quant Buff: -1
