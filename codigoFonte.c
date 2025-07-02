@@ -41,6 +41,8 @@ typedef struct abilityHandler2 {
     // Buffs e debuffs podem utilizar os status para aumentar as suas chances de acerto e de efeito secundario
 } HABILIDADE;
 
+HABILIDADE h[4]; // vetor de habilidades do personagem
+
 typedef struct itemHandler2{
     char nome[51];
     int tipo;
@@ -69,7 +71,7 @@ typedef struct dados{
     int level;
     int expMax;
     int skillPoints;
-    int habilidades[6]; // Habilidades que o jogador possui
+    int habilidades[4]; // Habilidades que o jogador possui
     int buffs[3][15]; // Buffs que o jogador possui    [0] = Id do buff, [1] = Turnos restantes, [2] = Qtd
     int status; // 0 = Normal, 1 = Queimando, 2 = Envenenado, 3 = Estunado, 4 = Paralisado, 5 = Desarmado
 } DADOS;
@@ -143,7 +145,7 @@ void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade);
 void getHabilidade(HABILIDADE *habilidade, int id);
 void mana(int qtd);
 
-int buffsquantosBuffs(int sinal)
+int quantosBuffs(int sinal)
 {   
     //retorna a quantidade de buff se sinal > 0 e debuffs se < 0
     int i = 0;
@@ -168,7 +170,7 @@ void mana(int qtd)
 void getHabilidade(HABILIDADE *habilidade, int id)
 {
     FILE *fp;
-    fp = fopen("Dados-do-Jogo/habilidades.txt", "rt");
+    fp = fopen("Dados-do-Jogo/habilidades.txt", "r");
     int i, j;
     for(i = 0; i < id; i++)
     {
@@ -225,15 +227,21 @@ void ataque(DADOS *atacante, DADOS *defensor)
     limparBuffer();
 }
 
-/*void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
+void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
 {
     int statusAtk = 0, statusDef = 0;
+    float dano;
+    limparLinhas(3);
     switch(habilidade.tipo)
     {
         case 1:
             statusAtk = statusRequisitado(habilidade.status, *atacante);
+            dano = habilidade.qtdmg * habilidade.chanceDeEfeito;
             break;
         case 2:
+            if (habilidade.qtdmg == 0) dano = 0;
+            else dano = habilidade.qtdmg - defensor->protecao;
+            defensor->hp -= dano;  
             break;
         case 3:
             break;
@@ -246,7 +254,7 @@ void ataque(DADOS *atacante, DADOS *defensor)
         default:
             break;
     }
-}*/
+}
 
 int bonusAplicado(int n)
 {
@@ -419,7 +427,7 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     else checkInput(&escolha, 1, 6);
     limparLinhas(1);
     moveCursor(0, 14);
-    limparLinhas(3);
+    limparLinhas(5);
     switch(escolha)
     {
         case 1:
@@ -449,8 +457,18 @@ void batalharInimigo(DADOS *inimigo, int qtd)
             }
             batalharInimigo(inimigo, qtd);
             break;
-        case 2:
-            // Habilidade
+        case 2: 
+            for (i = 0; i < 4; i++) {
+                getHabilidade(&h[i], player.habilidades[i]);
+                printf("Habilidade %d: %s\n", i + 1, h[i].nome);
+            }
+            printf("[1] Usar habilidade 1  [2] Usar habilidade 2  [3] Usar habilidade 3  [4] Usar habilidade 4  \n\n[0] Sair\n\n");
+            int escolha;
+            checkInput(&escolha, 0, 4);
+            if (escolha != 0) {
+                usarHabilidade(&player, inimigo, h[escolha]);
+            } 
+            else batalharInimigo(inimigo, qtd);
             break;
         case 3:
             verInventario(1);
