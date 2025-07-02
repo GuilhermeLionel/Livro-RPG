@@ -70,7 +70,7 @@ typedef struct dados{
     int expMax;
     int skillPoints;
     int habilidades[6]; // Habilidades que o jogador possui
-    int buffs[3][10]; // Buffs que o jogador possui    [0] = Id do buff, [1] = Turnos restantes, [2] = Qtd
+    int buffs[3][15]; // Buffs que o jogador possui    [0] = Id do buff, [1] = Turnos restantes, [2] = Qtd
     int status; // 0 = Normal, 1 = Queimando, 2 = Envenenado, 3 = Estunado, 4 = Paralisado, 5 = Desarmado
 } DADOS;
 
@@ -99,6 +99,7 @@ int dificuldadeAleatoria();
 int raridadeAleatoria();
 int bonusAplicado(int n);
 int statusRequisitado(int status, DADOS usuario);
+int buffs(int sinal);
 
 void vitrine(int a[]);
 void cross_platform_sleep(int ms);
@@ -141,6 +142,22 @@ void moveCursor(int x, int y);
 void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade);
 void getHabilidade(HABILIDADE *habilidade, int id);
 void mana(int qtd);
+
+int buffs(int sinal)
+{   
+    //retorna a quantidade de buff se sinal > 0 e debuffs se < 0
+    int i = 0;
+    int result = 0;
+    if(sinal > 0) for(i = 0; i < 15; i ++)
+        {
+            if(player.buffs[1][i] < 0) result += player.buffs[1][i];
+        }
+    else for(i = 0; i < 15; i ++)
+        {
+            if(player.buffs[1][i] < 0) result -= player.buffs[1][i];
+        }
+    return result;
+}
 
 void mana(int qtd)
 {
@@ -195,12 +212,17 @@ int statusRequisitado(int status, DADOS usuario)
 
 void ataque(DADOS *atacante, DADOS *defensor)
 {
+    limparTerminal();
     int dano;
-    dano = (atacante->forca - (numAle(atacante->forca / 2 + 1) - 1)) - (defensor->protecao - (numAle(defensor->protecao / 2 + 1) - 1));
+    dano = (atacante->forca - (numAle(atacante->forca * (3/4) + 1) - 1));
     if(atacante == &player) dano += bonusAplicado(8); // Adiciona o bônus de dano do jogador
+    printf("%s atacou %s e causou %d de dano!\n\n", atacante->nome, defensor->nome, dano);
     if(dano < 0) dano = 0; // Se o dano for negativo, não causa dano
+    dano -= (defensor->protecao - (numAle(defensor->protecao * (3/4) + 1) - 1));
     defensor->hp -= dano;
     if(defensor->hp < 0) defensor->hp = 0; // Se o HP do defensor ficar negativo, zera
+    printf("Pressione [ENTER] para continuar");
+    limparBuffer();
 }
 
 /*void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
@@ -377,10 +399,11 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     printf("[1] Atacar  [2] Habilidade  [3] Item  [4] Fugir  [5] Ver Status\n\n");
     int escolha;
     checkInput(&escolha, 1, 5);
+    printf("\033[1A");
+    limparLinhas(3);
     switch(escolha)
     {
         case 1:
-            limparLinhas(3);
             for(i = 0; i < qtd; i++) hpInimigo(inimigo[i], 1, i + 1);
             printf("\n\nQual o inimigo que deseja atacar?\n\n");
             int inimigoEscolhido;
