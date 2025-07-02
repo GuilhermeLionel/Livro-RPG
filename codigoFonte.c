@@ -98,6 +98,7 @@ int salaAleatoria();
 int dificuldadeAleatoria();
 int raridadeAleatoria();
 int bonusAplicado(int n);
+int statusRequisitado(int status, DADOS usuario);
 
 void vitrine(int a[]);
 void cross_platform_sleep(int ms);
@@ -137,19 +138,92 @@ void inimigoAleatorio(DADOS *inimigo, int dificuldade);
 void batalharInimigo(DADOS *inimigo, int qtd);
 void hpInimigo(DADOS inimigo, int modo, int num);
 void moveCursor(int x, int y);
-void ataque(DADOS *atacante, DADOS *defensor, int habilidade);
-//void getHabilidade(HABILIDADE *habilidade, int id);
+void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade);
+void getHabilidade(HABILIDADE *habilidade, int id);
+void mana(int qtd);
+
+void mana(int qtd)
+{
+    player.mp += qtd;
+    if(player.mp > player.manaMax) player.mp = player.manaMax;
+}
 
 void getHabilidade(HABILIDADE *habilidade, int id)
 {
-
+    FILE *fp;
+    fp = fopen("Dados-do-Jogo/habilidades.txt", "rt");
+    int i, j;
+    for(i = 0; i < id; i++)
+    {
+        for(j = 0; j < 13; j++) fgets(habilidade->descricao, 200, fp); // Pula as linhas até chegar na habilidade desejada
+    }
+    fgets(habilidade->nome, 50, fp);
+    fgets(habilidade->descricao, 200, fp);
+    fscanf(fp, "Tipo: %d\n", &habilidade->tipo);
+    fscanf(fp, "Efeito: %d %d%%\n", &habilidade->efeitoSecundario, &habilidade->chanceDeEfeito);
+    fscanf(fp, "Buff: %d %d%%\n", &habilidade->buff.tipo, &habilidade->buff.chance);
+    fscanf(fp, "Buff Alvo: %d\n", &habilidade->buff.alvo);
+    fscanf(fp, "Buff Duracao: %d\n", &habilidade->buff.duracao);
+    fscanf(fp, "Quant Buff: %d\n", &habilidade->buff.valor);
+    fscanf(fp, "Qtd: %f\n", &habilidade->qtdmg);
+    fscanf(fp, "Custo: %d\n", &habilidade->custo);
+    fscanf(fp, "Chance: %d\n", &habilidade->chance);
+    fscanf(fp, "Status: %d\n\n", &habilidade->status);
+    fclose(fp);
 }
 
-void ataque(DADOS *atacante, DADOS *defensor, int idHabilidade)
+int statusRequisitado(int status, DADOS usuario)
 {
-    HABILIDADE habilidade;
-    getHabilidade(&habilidade, idHabilidade);
-    
+    switch(status)
+    {
+        case 0: // Nenhum
+            return 0;
+        case 1: // Forca
+            return usuario.forca;
+        case 2: // Inteligencia
+            return usuario.inteligencia;
+        case 3: // Protecao
+            return usuario.protecao;
+        case 4: // Agilidade
+            return usuario.agilidade;
+        case 5: // Carisma
+            return usuario.carisma;
+        default:
+            return 0; // Caso não seja nenhum dos status válidos, retorna 0
+    }
+}
+
+void ataque(DADOS *atacante, DADOS *defensor)
+{
+    int dano;
+    dano = (atacante->forca - (numAle(atacante->forca / 2 + 1) - 1)) - (defensor->protecao - (numAle(defensor->protecao / 2 + 1) - 1));
+    if(atacante == &player) dano += bonusAplicado(8); // Adiciona o bônus de dano do jogador
+    if(dano < 0) dano = 0; // Se o dano for negativo, não causa dano
+    defensor->hp -= dano;
+    if(defensor->hp < 0) defensor->hp = 0; // Se o HP do defensor ficar negativo, zera
+}
+
+void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
+{
+    int statusAtk = 0, statusDef = 0;
+    switch(habilidade.tipo)
+    {
+        case 1:
+            statusAtk = statusRequisitado(habilidade.status, *atacante);
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        case 6:
+            break;
+        default:
+            break;
+    }
 }
 
 int bonusAplicado(int n)
@@ -306,7 +380,25 @@ void batalharInimigo(DADOS *inimigo, int qtd)
             printf("\n\nQual o inimigo que deseja atacar?\n\n");
             int inimigoEscolhido;
             checkInput(&inimigoEscolhido, 1, qtd);
-            inimigo[inimigoEscolhido - 1].hp -= 40;
+            ataque(&player, &inimigo[inimigoEscolhido - 1]);
+            if(inimigo[inimigoEscolhido - 1].hp <= 0)
+            {
+                printf("%s foi derrotado!\n\n", inimigo[inimigoEscolhido - 1].nome);
+                player.exp += inimigo[inimigoEscolhido - 1].exp;
+                printf("Voce ganhou %d de experiencia!\n\n", inimigo[inimigoEscolhido - 1].exp);
+                calculaExp();
+                printf("Pressione [ENTER] para continuar\n");
+                limparBuffer();
+                if(qtd > 1)
+                {
+                    inimigoEscolhido--;
+                    for(i = inimigoEscolhido; i < qtd - 1; i++)
+                    {
+                        inimigo[i] = inimigo[i + 1]; // Remove o inimigo derrotado do array
+                    }
+                    qtd--; // Decrementa a quantidade de inimigos
+                }
+            }
             batalharInimigo(inimigo, qtd);
             break;
         case 2:
@@ -809,6 +901,7 @@ void mostrarStatus()
     bonus = bonusAplicado(1);
     if(bonus != 0) 
     {
+        sprintf(txt, "Forca: %d", player.forca - bonus);
         if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
         else sprintf(txt2, " (%d)", bonus);
         strcat(txt, txt2);
@@ -831,6 +924,7 @@ void mostrarStatus()
     bonus = bonusAplicado(3);
     if(bonus != 0) 
     {
+        sprintf(txt, "Inteligencia: %d", player.inteligencia - bonus);
         if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
         else sprintf(txt2, " (%d)", bonus);
         strcat(txt, txt2);
@@ -853,6 +947,7 @@ void mostrarStatus()
     bonus = bonusAplicado(5);
     if(bonus != 0) 
     {
+        sprintf(txt, "Protecao: %d", player.protecao - bonus);
         if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
         else sprintf(txt2, " (%d)", bonus);
         strcat(txt, txt2);
@@ -875,6 +970,7 @@ void mostrarStatus()
     bonus = bonusAplicado(2);
     if(bonus != 0) 
     {
+        sprintf(txt, "Agilidade: %d", player.agilidade);
         if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
         else sprintf(txt2, " (%d)", bonus);
         strcat(txt, txt2);
@@ -892,6 +988,7 @@ void mostrarStatus()
     bonus = bonusAplicado(4);
     if(bonus != 0) 
     {
+        sprintf(txt, "Carisma: %d", player.carisma - bonus);
         if (bonus > 0) sprintf(txt2, " (+%d)", bonus); 
         else sprintf(txt2, " (%d)", bonus);
         strcat(txt, txt2);
