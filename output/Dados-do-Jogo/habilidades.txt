@@ -1,5 +1,5 @@
-Corte Rápido
-Um ataque físico veloz com boa chance de acerto.
+Corte Rapido
+Um ataque fisico veloz com boa chance de acerto.
 Tipo: 1
 Efeito: 0 0%
 Buff: 0 0%
@@ -12,7 +12,7 @@ Chance: 90
 Status: 1
 
 Toque Flamejante
-Ataque mágico com chance de queimar o inimigo.
+Ataque magico com chance de queimar o inimigo.
 Tipo: 2
 Efeito: 1 40%
 Buff: 0 0%
@@ -25,7 +25,7 @@ Chance: 85
 Status: 2
 
 Golpe Atordoante
-Ataque físico que pode estunar o Buff alvo.
+Ataque fisico que pode estunar o Buff alvo.
 Tipo: 1
 Efeito: 2 35%
 Buff: 0 0%
@@ -38,7 +38,7 @@ Chance: 80
 Status: 1
 
 Autoencorajamento
-Aumenta o próprio ataque por 3 turnos.
+Aumenta o proprio ataque por 3 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 1 100%
@@ -50,8 +50,8 @@ Custo: 4
 Chance: 100
 Status: 1
 
-Lâmina Sombria
-Ataque físico com pequena chance de aplicar desarme.
+Lamina Sombria
+Ataque fisico com pequena chance de aplicar desarme.
 Tipo: 1
 Efeito: 5 20%
 Buff: 0 0%
@@ -63,8 +63,8 @@ Custo: 6
 Chance: 80
 Status: 1
 
-Rajada Psíquica
-Dano mágico fixo com chance de paralisar.
+Rajada Psiquica
+Dano magico fixo com chance de paralisar.
 Tipo: 2
 Efeito: 4 30%
 Buff: 0 0%
@@ -76,8 +76,8 @@ Custo: 8
 Chance: 85
 Status: 2
 
-Concentração
-Aumenta a inteligência por 2 turnos.
+Concentracao
+Aumenta a inteligencia por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 2 100%
@@ -90,7 +90,7 @@ Chance: 100
 Status: 2
 
 Garras Afiadas
-Ataque físico contínuo com dano moderado.
+Ataque fisico continuo com dano moderado.
 Tipo: 1
 Efeito: 0 0%
 Buff: 0 0%
@@ -116,7 +116,7 @@ Chance: 100
 Status: 5
 
 Impacto Arcano
-Ataque mágico direto sem efeitos adicionais.
+Ataque magico direto sem efeitos adicionais.
 Tipo: 2
 Efeito: 0 0%
 Buff: 0 0%
@@ -129,7 +129,7 @@ Chance: 90
 Status: 2
 
 Postura Defensiva
-Aumenta sua própria proteção por 3 turnos.
+Aumenta sua propria protecao por 3 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 4 100%
@@ -142,7 +142,7 @@ Chance: 100
 Status: 3
 
 Corrida Sombria
-Aumenta a própria agilidade por 2 turnos.
+Aumenta a propria agilidade por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 3 100%
@@ -155,7 +155,7 @@ Chance: 100
 Status: 4
 
 Chicote de Espinhos
-Ataque físico que reduz a proteção do inimigo.
+Ataque fisico que reduz a protecao do inimigo.
 Tipo: 1
 Efeito: 0 0%
 Buff: 4 100%
@@ -168,7 +168,7 @@ Chance: 90
 Status: 1
 
 Olhar do Caos
-Dano mágico com chance de causar confusão (paralisar).
+Dano magico com chance de causar confusao (paralisar).
 Tipo: 2
 Efeito: 4 45%
 Buff: 0 0%
@@ -180,8 +180,8 @@ Custo: 8
 Chance: 85
 Status: 2
 
-Explosão Infernal
-Grande dano mágico com chance de queimar.
+Explosao Infernal
+Grande dano magico com chance de queimar.
 Tipo: 2
 Efeito: 1 60%
 Buff: 0 0%
@@ -193,8 +193,8 @@ Custo: 10
 Chance: 75
 Status: 2
 
-Fúria Selvagem
-Alto dano físico com baixa chance de acerto.
+Furia Selvagem
+Alto dano fisico com baixa chance de acerto.
 Tipo: 1
 Efeito: 0 0%
 Buff: 0 0%
@@ -207,7 +207,7 @@ Chance: 60
 Status: 1
 
 Sombras Envenenadas
-Ataque ágil com chance de envenenar.
+Ataque agil com chance de envenenar.
 Tipo: 1
 Efeito: 3 50%
 Buff: 0 0%
@@ -220,7 +220,7 @@ Chance: 85
 Status: 4
 
 Escudo Mental
-Aumenta a própria resistência mágica (proteção) por 2 turnos.
+Aumenta a propria resistencia magica (protecao) por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 4 100%
@@ -245,8 +245,8 @@ Custo: 3
 Chance: 100
 Status: 5
 
-Lâmina Elétrica
-Ataque com chance média de paralizar.
+Lamina Eletrica
+Ataque com chance media de paralizar.
 Tipo: 1
 Efeito: 4 45%
 Buff: 0 0%
@@ -258,8 +258,7 @@ Custo: 6
 Chance: 85
 Status: 1
 
-
-Domínio das Sombras
+Dominio das Sombras
 Aumenta seu ataque e agilidade por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
@@ -272,8 +271,8 @@ Custo: 6
 Chance: 100
 Status: 1
 
-Destruição Flamejante
-Ataque mágico fixo com 100% de chance de queimar.
+Destruicao Flamejante
+Ataque magico fixo com 100% de chance de queimar.
 Tipo: 2
 Efeito: 1 100%
 Buff: 0 0%
@@ -285,8 +284,8 @@ Custo: 12
 Chance: 90
 Status: 2
 
-Chicote de Raízes
-Dano físico com chance de prender (paralisar) o inimigo.
+Chicote de Raizes
+Dano fisico com chance de prender (paralisar) o inimigo.
 Tipo: 1
 Efeito: 4 40%
 Buff: 0 0%
@@ -324,8 +323,8 @@ Custo: 5
 Chance: 100
 Status: 5
 
-Surto Mágico
-Ataque mágico impulsionado pela inteligência.
+Surto Magico
+Ataque magico impulsionado pela inteligencia.
 Tipo: 2
 Efeito: 0 0%
 Buff: 0 0%
@@ -338,7 +337,7 @@ Chance: 90
 Status: 2
 
 Espinhos Crescentes
-Aplica debuff de proteção e causa dano contínuo.
+Aplica debuff de protecao e causa dano continuo.
 Tipo: 6
 Efeito: 0 0%
 Buff: 4 100%
@@ -350,7 +349,7 @@ Custo: 5
 Chance: 90
 Status: 2
 
-Sombra Ágil
+Sombra Agil
 Aumenta agilidade e aplica debuff de agilidade no inimigo.
 Tipo: 6
 Efeito: 0 0%
@@ -363,8 +362,8 @@ Custo: 5
 Chance: 100
 Status: 4
 
-Chicote Fantasmagórico
-Ataque mágico que reduz a inteligência do inimigo.
+Chicote Fantasmagorico
+Ataque magico que reduz a inteligencia do inimigo.
 Tipo: 2
 Efeito: 0 0%
 Buff: 2 100%
@@ -377,7 +376,7 @@ Chance: 90
 Status: 2
 
 Toque do Medo
-Ataque mágico que pode causar paralisia e debuff de carisma.
+Ataque magico que pode causar paralisia e debuff de carisma.
 Tipo: 2
 Efeito: 4 25%
 Buff: 5 100%
