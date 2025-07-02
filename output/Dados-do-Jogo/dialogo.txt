@@ -5,5 +5,5 @@ dialogo: jjfhh
 duracao: 400
 id: 1
 dialogo: udiuhdh
-duracao: 500
+duracao: 
 id: 2
