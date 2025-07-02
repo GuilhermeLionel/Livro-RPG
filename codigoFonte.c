@@ -389,6 +389,44 @@ void hpInimigo(DADOS inimigo, int modo, int num)
     printf("%c", 217);
 }
 
+void salaDoPanico(DADOS *inimigo, int qtd) {
+    limparTerminal();
+    textoTela("O que voce ira fazer?", 300);
+    printf("[1] Desistir  [2] Retornar a batalha  [3] Abrir inventario  [4] Correr para o proximo andar\n");
+    int escolha, OK = 1;
+    checkInput(&escolha, 1, 4);
+    switch(escolha) {
+        case 1:
+            limparTerminal();
+            textoTela("Voce resolve fugir de maneira covarde.", 400);
+            textoTela("Sua aventura termina aqui...", 500);
+            // cálculo da pontuação
+            break;
+        case 2:
+            batalharInimigo(inimigo, qtd);
+            break;
+        case 3:
+            verInventario(1);
+            salaDoPanico(inimigo, qtd);
+            break;
+        case 4:
+            limparTerminal();
+            for (int i = 0; i < qtd; i++) 
+                if (numAle(player.agilidade) <= numAle(inimigo[i].agilidade) * 1.3) OK = 0;
+            if (OK) {
+                sala++;
+                tomadaDecisao();
+            }
+            else {
+                printf("Os inimigos te alcancaram.\nResista e lute, seu covarde!\n\n");
+                printf("Pressione [ENTER] para continuar\n");
+                getchar();
+                batalharInimigo(inimigo, qtd);
+            }
+            break;
+    }
+}
+
 void batalharInimigo(DADOS *inimigo, int qtd)
 {
     limparTerminal();
@@ -422,7 +460,7 @@ void batalharInimigo(DADOS *inimigo, int qtd)
         printf(")");
     }
     printf("\n\n");
-    int escolha;
+    int escolha, OK = 1;
     if(b1 || b2) checkInput(&escolha, 1, 5);
     else checkInput(&escolha, 1, 6);
     limparLinhas(1);
@@ -460,9 +498,9 @@ void batalharInimigo(DADOS *inimigo, int qtd)
         case 2: 
             for (i = 0; i < 4; i++) {
                 getHabilidade(&h[i], player.habilidades[i]);
-                printf("Habilidade %d: %s\n", i + 1, h[i].nome);
+                printf("Habilidade %d: %s", i + 1, h[i].nome);
             }
-            printf("[1] Usar habilidade 1  [2] Usar habilidade 2  [3] Usar habilidade 3  [4] Usar habilidade 4  \n\n[0] Sair\n\n");
+            printf("\n[1] Usar habilidade 1  [2] Usar habilidade 2  [3] Usar habilidade 3  [4] Usar habilidade 4  \n\n[0] Sair\n\n");
             int escolha;
             checkInput(&escolha, 0, 4);
             if (escolha != 0) {
@@ -475,7 +513,21 @@ void batalharInimigo(DADOS *inimigo, int qtd)
             batalharInimigo(inimigo, qtd);
             break;
         case 4:
-            // Fugir
+            for (i = 0; i < qtd; i++) 
+                if (numAle(player.agilidade) <= numAle(inimigo[i].agilidade)) OK = 0;
+            if (OK) {
+                limparTerminal();
+                textoTela("...", 500);
+                textoTela("Voce conseguiu escapar...", 300);
+                textoTela("Por muito pouco...", 400);
+                salaDoPanico(inimigo, qtd);
+            }
+            else {
+                printf("Os inimigos te alcancaram.\nResista e lute!\n\n");
+                printf("Pressione [ENTER] para continuar\n");
+                getchar();
+                batalharInimigo(inimigo, qtd);
+            }
             break;
         case 5:
             mostrarStatus();
@@ -2239,7 +2291,6 @@ void histInic(){
     textoTela("No limite, do possivel!", 200);
     cross_platform_sleep(2000);
     printf("\n\n(Pressione ENTER para continuar...)\n");
-    getchar();
     fgets(nome, 100, stdin);
 
 
@@ -2261,7 +2312,7 @@ void histInic(){
     textoTela("Reis se ajoelharam. Imperios cairam.\n", 300);
     textoTela("Valdoran nao pedia permissao...\n", 400);
     textoTela("Eles queriam...\n", 400);
-    textoTela("\033[31mEles TOMAVAM...\033[0m\n", 600);
+    textoTela("Eles \[31mto033mavam...\033[0m\n", 600);
     printf("\n\n(Pressione ENTER para continuar...)\n");
     fgets(nome, 100, stdin);
 
