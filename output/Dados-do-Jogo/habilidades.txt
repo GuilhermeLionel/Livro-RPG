@@ -3,9 +3,9 @@ Um ataque físico veloz com boa chance de acerto.
 Tipo: 1
 Efeito: 0 0%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.0
 Custo: 3
 Chance: 90
@@ -16,22 +16,22 @@ Ataque mágico com chance de queimar o inimigo.
 Tipo: 2
 Efeito: 1 40%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.2
 Custo: 6
 Chance: 85
 Status: 2
 
 Golpe Atordoante
-Ataque físico que pode estunar o alvo.
+Ataque físico que pode estunar o Buff alvo.
 Tipo: 1
 Efeito: 2 35%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.1
 Custo: 5
 Chance: 80
@@ -42,9 +42,9 @@ Aumenta o próprio ataque por 3 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 1 100%
-Alvo: 1
-Duracao: 3
-Valor: 1
+Buff Alvo: 1
+Buff Duracao: 3
+Quant Buff: 1
 Qtd: 0.0
 Custo: 4
 Chance: 100
@@ -55,9 +55,9 @@ Ataque físico com pequena chance de aplicar desarme.
 Tipo: 1
 Efeito: 5 20%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.3
 Custo: 6
 Chance: 80
@@ -68,9 +68,9 @@ Dano mágico fixo com chance de paralisar.
 Tipo: 2
 Efeito: 4 30%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 15.0
 Custo: 8
 Chance: 85
@@ -81,9 +81,9 @@ Aumenta a inteligência por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 2 100%
-Alvo: 1
-Duracao: 2
-Valor: 1
+Buff Alvo: 1
+Buff Duracao: 2
+Quant Buff: 1
 Qtd: 0.0
 Custo: 3
 Chance: 100
@@ -94,9 +94,9 @@ Ataque físico contínuo com dano moderado.
 Tipo: 1
 Efeito: 0 0%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.4
 Custo: 5
 Chance: 85
@@ -107,9 +107,9 @@ Reduz o ataque do inimigo por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 1 100%
-Alvo: 0
-Duracao: 2
-Valor: -1
+Buff Alvo: 0
+Buff Duracao: 2
+Quant Buff: -1
 Qtd: 0.0
 Custo: 4
 Chance: 100
@@ -120,9 +120,9 @@ Ataque mágico direto sem efeitos adicionais.
 Tipo: 2
 Efeito: 0 0%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.6
 Custo: 7
 Chance: 90
@@ -133,9 +133,9 @@ Aumenta sua própria proteção por 3 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 4 100%
-Alvo: 1
-Duracao: 3
-Valor: 1
+Buff Alvo: 1
+Buff Duracao: 3
+Quant Buff: 1
 Qtd: 0.0
 Custo: 5
 Chance: 100
@@ -146,9 +146,9 @@ Aumenta a própria agilidade por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 3 100%
-Alvo: 1
-Duracao: 2
-Valor: 1
+Buff Alvo: 1
+Buff Duracao: 2
+Quant Buff: 1
 Qtd: 0.0
 Custo: 4
 Chance: 100
@@ -159,9 +159,9 @@ Ataque físico que reduz a proteção do inimigo.
 Tipo: 1
 Efeito: 0 0%
 Buff: 4 100%
-Alvo: 0
-Duracao: 2
-Valor: -1
+Buff Alvo: 0
+Buff Duracao: 2
+Quant Buff: -1
 Qtd: 1.2
 Custo: 6
 Chance: 90
@@ -172,9 +172,9 @@ Dano mágico com chance de causar confusão (paralisar).
 Tipo: 2
 Efeito: 4 45%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.3
 Custo: 8
 Chance: 85
@@ -185,9 +185,9 @@ Grande dano mágico com chance de queimar.
 Tipo: 2
 Efeito: 1 60%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.8
 Custo: 10
 Chance: 75
@@ -198,9 +198,9 @@ Alto dano físico com baixa chance de acerto.
 Tipo: 1
 Efeito: 0 0%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 2.5
 Custo: 5
 Chance: 60
@@ -211,9 +211,9 @@ Ataque ágil com chance de envenenar.
 Tipo: 1
 Efeito: 3 50%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.1
 Custo: 5
 Chance: 85
@@ -224,9 +224,9 @@ Aumenta a própria resistência mágica (proteção) por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 4 100%
-Alvo: 1
-Duracao: 2
-Valor: 1
+Buff Alvo: 1
+Buff Duracao: 2
+Quant Buff: 1
 Qtd: 0.0
 Custo: 4
 Chance: 100
@@ -237,9 +237,9 @@ Diminui o carisma do inimigo por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 5 100%
-Alvo: 0
-Duracao: 2
-Valor: -1
+Buff Alvo: 0
+Buff Duracao: 2
+Quant Buff: -1
 Qtd: 0.0
 Custo: 3
 Chance: 100
@@ -250,9 +250,9 @@ Ataque com chance média de paralizar.
 Tipo: 1
 Efeito: 4 45%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.2
 Custo: 6
 Chance: 85
@@ -264,9 +264,9 @@ Aumenta seu ataque e agilidade por 2 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 1 100%
-Alvo: 1
-Duracao: 2
-Valor: 1
+Buff Alvo: 1
+Buff Duracao: 2
+Quant Buff: 1
 Qtd: 0.0
 Custo: 6
 Chance: 100
@@ -277,9 +277,9 @@ Ataque mágico fixo com 100% de chance de queimar.
 Tipo: 2
 Efeito: 1 100%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 20.0
 Custo: 12
 Chance: 90
@@ -290,9 +290,9 @@ Dano físico com chance de prender (paralisar) o inimigo.
 Tipo: 1
 Efeito: 4 40%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.1
 Custo: 5
 Chance: 80
@@ -303,9 +303,9 @@ Ataque com chance de desarmar.
 Tipo: 1
 Efeito: 5 30%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.0
 Custo: 4
 Chance: 85
@@ -316,9 +316,9 @@ Reduz o ataque do inimigo por 3 turnos.
 Tipo: 6
 Efeito: 0 0%
 Buff: 1 100%
-Alvo: 0
-Duracao: 3
-Valor: -1
+Buff Alvo: 0
+Buff Duracao: 3
+Quant Buff: -1
 Qtd: 0.0
 Custo: 5
 Chance: 100
@@ -329,9 +329,9 @@ Ataque mágico impulsionado pela inteligência.
 Tipo: 2
 Efeito: 0 0%
 Buff: 0 0%
-Alvo: 0
-Duracao: 0
-Valor: 0
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
 Qtd: 1.5
 Custo: 7
 Chance: 90
@@ -342,9 +342,9 @@ Aplica debuff de proteção e causa dano contínuo.
 Tipo: 6
 Efeito: 0 0%
 Buff: 4 100%
-Alvo: 0
-Duracao: 3
-Valor: -1
+Buff Alvo: 0
+Buff Duracao: 3
+Quant Buff: -1
 Qtd: 0.5
 Custo: 5
 Chance: 90
@@ -355,9 +355,9 @@ Aumenta agilidade e aplica debuff de agilidade no inimigo.
 Tipo: 6
 Efeito: 0 0%
 Buff: 3 100%
-Alvo: 1
-Duracao: 2
-Valor: 1
+Buff Alvo: 1
+Buff Duracao: 2
+Quant Buff: 1
 Qtd: 0.0
 Custo: 5
 Chance: 100
@@ -368,9 +368,9 @@ Ataque mágico que reduz a inteligência do inimigo.
 Tipo: 2
 Efeito: 0 0%
 Buff: 2 100%
-Alvo: 0
-Duracao: 2
-Valor: -1
+Buff Alvo: 0
+Buff Duracao: 2
+Quant Buff: -1
 Qtd: 1.3
 Custo: 7
 Chance: 90
@@ -381,9 +381,9 @@ Ataque mágico que pode causar paralisia e debuff de carisma.
 Tipo: 2
 Efeito: 4 25%
 Buff: 5 100%
-Alvo: 0
-Duracao: 2
-Valor: -1
+Buff Alvo: 0
+Buff Duracao: 2
+Quant Buff: -1
 Qtd: 1.2
 Custo: 8
 Chance: 85
