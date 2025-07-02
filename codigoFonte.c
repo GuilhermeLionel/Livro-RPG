@@ -2151,7 +2151,7 @@ void verificaNomePlayer(char *nome) {
 
 void histInic(){
     char nome[101] = {0};
-    /*textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
+    textoTela("Anos no passado, nossos ancestrais viviam tranquilamente...\n", 200);
     textoTela("Quer dizer\n", 300);
     textoTela(". . .\n", 1000);
     textoTela("No limite, do possivel!", 200);
@@ -2222,7 +2222,7 @@ void histInic(){
     limparTerminal();
     textoTela("Mas todo destino grandioso comeca com passos pequenos.\n", 200);
     textoTela("E hoje . . .\n", 500);
-    textoTela("Errrn . . . Hoje! . . .\n", 500); */
+    textoTela("Errrn . . . Hoje! . . .\n", 500);
     textoTela("Desculpe, mas qual seu nome mesmo?\n\n", 300);
     limparBuffer();
     int OK = 1;
@@ -2278,7 +2278,7 @@ void telaInicial(){
         case '4':
 
             limparTerminal();
-            cabecaTela("Interantes");
+            cabecaTela("Integrantes");
             printf("\n\033[31mGuilherme Lionel de Souza\033[0m\n");
             printf("\n\033[34mAlexandre Gabriel Angelo de Souza Blandino\033[0m\n");
             printf("\n\033[32mSamuel Pereira da Silva\n\033[0m\n");
