@@ -1,0 +1,17 @@
+pontuação = 0.0018*XPTotal + 1.75*SumItens + BosesF + 20*Sala
+
+XPTTotal = 100*(1.5^(lvl-1)-1) + XPAtual
+
+SumItens = varredura de cada item do inventario
+---- comum = 1pts
+---- incomum = 15ps
+---- épico = 30pts
+---- lemdários = 50pts
+
+BosesF = (100, 200, 300, 400, ...)
+índice = sala do cara.
+sn = (a1+ai)*i/2
+sn = (2a1 + 100*(i-1))*i/2
+sn = (100 + 100*i)*i/2
+sn = (50 + 50*i)*i
+
