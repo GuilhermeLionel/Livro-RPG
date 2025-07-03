@@ -2191,7 +2191,6 @@ void usarItem(int espaco)
     if(id == 0) 
     {
         printf("Esse item nao pode ser usado.\n\n");
-        printf("(Pressione [ENTER] para continuar...)\n");
         return;
     }
     lixo(espaco, 1); // Remove o item do inventário
@@ -2217,7 +2216,64 @@ void usarItem(int espaco)
     }
     if(tipo == 8)
     {
-
+        int escolha;
+        printf("Voce deseja usar o item? \n\n [1] Sim [0] Nao \n\n");
+        checkInput(&escolha, 0, 1);
+        limparLinhas(6);
+        if(escolha == 1)
+        {
+            int i;
+            int ok = 0;
+            for(i = 0; i < 4; i++)
+            {
+                if(player.habilidades[i] == 0) ok = 1;
+            }
+            if(ok)
+            {
+                for(i = 0; i < 4; i++)
+                {
+                    if(player.habilidades[i] == 0) 
+                    {
+                        player.habilidades[i] = item[id].bonus[0][0];
+                        printf("Voce aprendeu %s!\n\n", item[id].nome);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                limparLinhas(6);
+                printf("Voce ja tem o maximo de habilidades, deseja trocar uma?\n\n [1] Sim [0] Nao\n\n");
+                checkInput(&escolha, 0, 1);
+                if(escolha ==  0)
+                {
+                    printf("Voce nao aprendeu nada\n\n");
+                    return;
+                }
+                else
+                {
+                    limparTerminal();
+                    int idHabilidade = item[id].bonus[0][0];
+                    int i;
+                    for(i = 0; i < 4; i++)
+                    {
+                        descreverHabilidade(player.habilidades[i], i+1);
+                    }
+                    printf("Qual habilidade deseja trocar?");
+                    checkInput(&escolha, 0, 4);
+                    if(escolha != 0)
+                    {
+                        printf("Voce aprendeu %s!\n\n", item[id].nome);
+                        player.habilidades[escolha - 1] = idHabilidade;
+                    }
+                    return;
+                }
+            }
+        }
+        else
+        {
+            printf("Uso do item cancelado.\n");
+        }
     }
 }
 
