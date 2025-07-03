@@ -37,8 +37,7 @@ O jogo utiliza uma estrutura `Personagem` que armazena:
 
 - Nome  
 - Local atual no jogo  
-- Pontuação  
-- Alinhamento (bondoso, neutro ou maldoso)  
+- Pontuação   
 - Atributos: Força, Inteligência, Sabedoria, Carisma, etc.  
 - Recursos: Vida, Magia
 - Itens e Quests (vetores de inteiros)
