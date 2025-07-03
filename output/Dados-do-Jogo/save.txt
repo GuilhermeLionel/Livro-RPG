@@ -1,16 +1,18 @@
 Alex
-Sala 5
-Level 4: 36/168
-Skill Points: 0
-HP: 95/95
-MP: 115/115
-Forca: 999
-Protecao: 19
-Agilidade: 999
-Inteligencia: 23
-Carisma: 14
+Sala 95
+Level 22: 462/248044
+Skill Points: 144
+HP: 195/195
+MP: 235/235
+Forca: 1016
+Protecao: 39
+Agilidade: 1036
+Inteligencia: 47
+Carisma: 42
 Moedas: 975
 Equipados: 0, 27, 47, 0
+4 1
+49 1
 0 0
 0 0
 0 0
@@ -29,8 +31,49 @@ Equipados: 0, 27, 47, 0
 0 0
 0 0
 0 0
-0 0
-0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0 0 0 0
