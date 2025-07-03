@@ -1,14 +1,14 @@
-Alex
-Sala 1
-Level 20: 28/110242
+lionel
+Sala 0
+Level 1: 0/50
 Skill Points: 0
-HP: 310/310
-MP: 275/275
-Forca: 62
-Protecao: 62
-Agilidade: 66
-Inteligencia: 55
-Carisma: 70
+HP: 35/35
+MP: 35/35
+Forca: 6
+Protecao: 7
+Agilidade: 4
+Inteligencia: 7
+Carisma: 6
 Moedas: 1000
 Equipados: 0, 0, 0, 0
 0 0

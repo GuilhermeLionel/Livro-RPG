@@ -1293,11 +1293,13 @@ else
                 break;
             case 4:
                 printf("kkkkkkkkkkkkk");
+                getchar();
                 break;
             case 5:
                 textoTela("Voce achou um pergaminho de habilidade\n", 300);
                 textoTela("Ao abrir voce ve uma mensagem escrita...\n", 300);
-                textoTela("KKKKKKKK vc caiu na pegadinha do Mario Games KKKKKKK\n", 300);               
+                textoTela("KKKKKKKK vc caiu na pegadinha do Mario Games KKKKKKK\n", 300);
+                getchar();             
                 break;
             default:
                 printf("Aviso de Bug\n");
@@ -1312,8 +1314,8 @@ else
 
 int dificuldadeAleatoria()
 {
-    float chance[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}; 
-    if(sala <= 10) 
+    float chance[5] = {0.0, 0.0, 0.0, 0.0, 0.0}; // Vetor que guarda as chances de raridade de item ser escolhido
+    if(sala <= 10) // Se o sala for entre 0 e 10, a chance de um item de raridade 1 é 90% e 2 é 10%
     {
         chance[1] = 65.0;
         chance[2] = 35.0;
