@@ -1427,7 +1427,6 @@ int dificuldadeAleatoria()
 
 void inimigoAleatorio(DADOS *inimigo, int objetivo)
 {
-    printf("Gerando inimigo de dificuldade %d\n", objetivo);
     FILE *fp;
     fp = fopen("Dados-do-Jogo/inimigos.txt", "rt");
     int dificuldade;
@@ -1437,17 +1436,20 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
     while(!feof(fp))
     {
         fgets(txt, 100, fp);
-        fgets(txt, 100, fp);
-        fscanf(fp, "DIFICULDADE: %d\n", &dificuldade);
-        if(dificuldade == objetivo) quantidade++;
-        for(i = 0; i < 12; i++) fgets(txt, 100, fp);
+        fgets(nome, 50, fp);
+        nome[strcspn(nome, "\n")] = 0;
+        fscanf(fp, "DIFICULDADE %d\n", &dificuldade);
+        if(dificuldade == objetivo) 
+        {
+            quantidade++;
+        }
+        fscanf(fp, "\nATRIBUTOS\nFORCA %d\nPROTECAO %d\nAGILIDADE %d\nINTELIGENCIA %d\nCARISMA %d\n\nHP %d\nMP %d\n\nEXP %d\n\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
     }
 
     rewind(fp);
 
     
-    int sorteio = 0; 
-    sorteio = numAle(quantidade) - 1; // sorteia um inimigo entre os de dificuldade objetivo
+    int sorteio = numAle(quantidade); // sorteia um inimigo aleatório entre os disponíveis
 
     while(!feof(fp))
     {
@@ -1456,7 +1458,7 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
         nome[strcspn(nome, "\n")] = 0;
 
 
-        fscanf(fp, "DIFICULDADE: %d\n", &dificuldade);
+        fscanf(fp, "DIFICULDADE %d\n", &dificuldade);
 
         if(dificuldade == objetivo) 
         {
@@ -1472,7 +1474,7 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
         else 
         {
             strcpy(inimigo->nome, nome);
-            fscanf(fp, "\nATRIBUTOS:\nFORCA: %d\nPROTECAO: %d\nAGILIDADE: %d\nINTELIGENCIA: %d\nCARISMA: %d\n\nHP: %d\nMP: %d\n\nEXP: %d\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
+            fscanf(fp, "\nATRIBUTOS\nFORCA %d\nPROTECAO %d\nAGILIDADE %d\nINTELIGENCIA %d\nCARISMA %d\n\nHP %d\nMP %d\n\nEXP %d\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
             break;
         }
     }
@@ -1752,6 +1754,7 @@ void mostrarStatus()
                 limparBuffer();
                 mostrarStatus();
             }
+            break;
         case 2:
             if(player.skillPoints)
             {
@@ -1776,6 +1779,7 @@ void mostrarStatus()
                 limparBuffer();
                 mostrarStatus();
             }
+            break;
         case 3:
             if(player.skillPoints)
             {
@@ -1800,6 +1804,7 @@ void mostrarStatus()
                 limparBuffer();
                 mostrarStatus();
             }
+            break;
         case 4:
             if(player.skillPoints)
             {
@@ -1824,6 +1829,7 @@ void mostrarStatus()
                 limparBuffer();
                 mostrarStatus();
             }
+            break;
         case 5:
             if(player.skillPoints)
             {
@@ -1848,6 +1854,7 @@ void mostrarStatus()
                 limparBuffer();
                 mostrarStatus();
             }
+            break;
         case 6:
             player.exp += (float)player.expMax /2.0;
             calculoExp();
