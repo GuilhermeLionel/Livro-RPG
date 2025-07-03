@@ -1060,7 +1060,7 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     passarTurno(&player);
     for(i = 0; i < qtd; i++)
     {
-        passarTurno(&inimigo[i], 1);
+        passarTurno(&inimigo[i]);
     }
     batalharInimigo(inimigo, qtd);
 }
