@@ -1000,9 +1000,16 @@ void tomadaDecisao()
                 break;
             case 2:
                 //Dialogo de conversa
+                limparTerminal();
+                textoTela("Eu sou o vendedor mais confiavel da regiao, inclusive sou o unico, meu proposito na vida sempre foi engana... ajudar bravos guerreiros.", 300);
+                textoTela("Existe uma grande torre onde voce pode provar seu valor como guerreiro e se morrer eu prometo valorizar seus itens pro proximo ota... digo, cliente", 300);
+                textoTela("Se quiser algo bom e de qualidade, venha na minha loja.", 300);
+                printf("(Pressione [ENTER] para continuar...)\n");
+                getchar();
+                tomadaDecisao();
                 break;
             case 3:
-                sala = 3;
+                sala++;
                 save(player);
                 tomadaDecisao();
                 break;
@@ -1129,7 +1136,7 @@ else
     else
     {
         int caso, a[3];
-        //caso = salaAleatoria();
+        caso = salaAleatoria();
         caso = 3;
         DADOS inimigo[caso];
         switch(caso)
@@ -1164,13 +1171,16 @@ else
             case 4:
                 break;
             case 5:
+                textoTela("Voce achou um pergaminho de habilidade\n", 300);
+                textoTela("Ao abrir voce ve uma mensagem escrita...\n", 300);
+                textoTela("KKKKKKKK vc caiu na pegadinha do Mario Games KKKKKKK\n", 300);               
                 break;
             default:
                 printf("Aviso de Bug\n");
                 getchar();
                 break;
         }
-        //sala++;
+        sala++;
     }
 }
 }
