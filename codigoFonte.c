@@ -1135,7 +1135,6 @@ void tomadaDecisao()
                 break;
             case 3:
                 sala++;
-                save(player);
                 tomadaDecisao();
                 break;
         }
@@ -1262,7 +1261,6 @@ else
     {
         int caso, a[3];
         caso = salaAleatoria();
-        caso = 3;
         DADOS inimigo[caso];
         switch(caso)
         {
@@ -1294,6 +1292,7 @@ else
                 batalharInimigo(inimigo, caso);
                 break;
             case 4:
+                printf("kkkkkkkkkkkkk");
                 break;
             case 5:
                 textoTela("Voce achou um pergaminho de habilidade\n", 300);
@@ -1306,6 +1305,7 @@ else
                 break;
         }
         sala++;
+        tomadaDecisao();
     }
 }
 }

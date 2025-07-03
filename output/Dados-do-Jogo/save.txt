@@ -1,14 +1,14 @@
 Alex
-Sala 0
-Level 1: 0/50
+Sala 1
+Level 20: 28/110242
 Skill Points: 0
-HP: 35/35
-MP: 30/30
-Forca: 4
-Protecao: 7
-Agilidade: 7
-Inteligencia: 6
-Carisma: 6
+HP: 310/310
+MP: 275/275
+Forca: 62
+Protecao: 62
+Agilidade: 66
+Inteligencia: 55
+Carisma: 70
 Moedas: 1000
 Equipados: 0, 0, 0, 0
 0 0
