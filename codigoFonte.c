@@ -13,7 +13,7 @@
 #include <sys/stat.h> // mkdir
 #endif
 
-#define MAX_ITEMS 100 // Define o número máximo de itens
+#define MAX_ITEMS 111 // Define o número máximo de itens
 
 int items = 0;
 
@@ -106,6 +106,7 @@ int dificuldadeAleatoria();
 int raridadeAleatoria();
 int bonusAplicado(int n);
 int statusRequisitado(int status, DADOS usuario);
+int somaItens(DADOS *player);
 int quantosBuffs(int sinal);
 float buffEfetivo(DADOS usuario, int status); // Retorna o percentual de alteração no status do usuário, considerando os buffs ativos
 
@@ -158,9 +159,9 @@ void salaDoPanico(DADOS *inimigo, int qtd);
 void aplicaBuff(DADOS *usuario, BUFFHANDLER buff);
 void aplicaEfeito(DADOS *alvo, int efeito);
 void calculaPontuacao(DADOS *player, RANKING jogador, int sala);
-int somaItens(DADOS *player);
 void limparAte(int q, int x);
 void telaInicial();
+void descreverHabilidade(int id, int num);
 
 int sumItens(DADOS *player) {
     int i, j, soma = 0;
@@ -440,10 +441,10 @@ int statusRequisitado(int status, DADOS usuario)
             return usuario.forca * buffEfetivo(usuario, 1);
         case 2: // Inteligencia
             return usuario.inteligencia * buffEfetivo(usuario, 2);
-        case 3: // Agilidade
-            return usuario.agilidade * buffEfetivo(usuario, 3);
-        case 4: // Protecao
-            return usuario.protecao * buffEfetivo(usuario, 4);
+        case 3: // Protecao
+            return usuario.protecao * buffEfetivo(usuario, 3);
+        case 4: // Agilidade
+            return usuario.agilidade * buffEfetivo(usuario, 4);
         case 5: // Carisma
             return usuario.carisma * buffEfetivo(usuario, 5);
         default:
@@ -863,8 +864,6 @@ void batalharInimigo(DADOS *inimigo, int qtd)
         }
         else sprintf(txt, "Nenhum item encontrado.\n\n");
         textoTela(txt, 200);
-        sala++;
-        tomadaDecisao();
         return;
     }
     int b1 = quantosBuffs(1);
@@ -949,7 +948,11 @@ void batalharInimigo(DADOS *inimigo, int qtd)
             break;
         case 4:
             for (i = 0; i < qtd; i++) 
-                if (numAle(player.agilidade) <= numAle(inimigo[i].agilidade)) OK = 0;
+            {
+                int a = statusRequisitado(4, player);
+                int b = statusRequisitado(4, inimigo[i]);
+                if (numAle(a) <= numAle(b)) OK = 0;
+            }
             if (OK) {
                 limparTerminal();
                 textoTela("...", 500);
@@ -1260,11 +1263,16 @@ else
     else
     {
         int caso, a[3];
-        caso = salaAleatoria();
+        caso = 3;
         DADOS inimigo[caso];
         switch(caso)
         {
             case 0:
+                textoTela("Voce se encontra em uma sala vazia. . .\n", 200);
+                textoTela("Nada acontece.\n\n", 200);
+
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
                 break;
             case 3:
                 a[2] = dificuldadeAleatoria();
@@ -1292,18 +1300,54 @@ else
                 batalharInimigo(inimigo, caso);
                 break;
             case 4:
-                printf("kkkkkkkkkkkkk");
-                getchar();
+                textoTela("Voce encontrou um baú . . .\n", 300);
+                textoTela("Ao abrir, ele revela um item . . .\n", 300);
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
+                int id = idAleatorio(raridadeAleatoria());
+                descreverItem(id);
+                printf("\n\n");
+                printf("Deseja pegar o item?\n\n");
+                printf("[1] Sim  [0] Nao\n\n");
+                checkInput(&escolha, 0, 1);
+                if(escolha == 1) addItem(id);
+                else
+                {
+                    printf("Voce decide deixar o item para tras.\n\n");
+                }
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
                 break;
             case 5:
                 textoTela("Voce achou um pergaminho de habilidade\n", 300);
-                textoTela("Ao abrir voce ve uma mensagem escrita...\n", 300);
-                textoTela("KKKKKKKK vc caiu na pegadinha do Mario Games KKKKKKK\n", 300);
-                getchar();             
+                textoTela("Ao abrir voce ve uma mensagem escrita...\n", 300);      
+                textoTela("A mensagem diz que voce deve escolher uma habilidade\n\n", 300);
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
+                int hab[3];
+                hab[0] = item[idAleatorio(10)].bonus[0][0];
+                hab[1] = item[idAleatorio(10)].bonus[0][0];
+                hab[2] = item[idAleatorio(10)].bonus[0][0];
+                while(hab[0] == hab[1] || hab[0] == hab[2] || hab[1] == hab[2])
+                {
+                    if(hab[0] == hab[1]) hab[1] = item[idAleatorio(10)].bonus[0][0];
+                    else if(hab[0] == hab[2]) hab[2] = item[idAleatorio(10)].bonus[0][0];
+                    else if(hab[1] == hab[2]) hab[2] = item[idAleatorio(10)].bonus[0][0];
+                }
+                printf("Escolha uma habilidade:\n\n");
+                for(i = 0; i < 3; i++)
+                {
+                    descreverHabilidade(hab[i], i);
+                    printf("\n");
+                }
+                checkInput(&escolha, 1, 3);
+                if(escolha == 1) addItem(69 + hab[0]);
+                else if(escolha == 2) addItem(69 + hab[1]);
+                else if(escolha == 3) addItem(69 + hab[2]);
                 break;
             default:
                 printf("Aviso de Bug\n");
-                getchar();
+                limparBuffer();
                 break;
         }
         sala++;
@@ -1377,13 +1421,12 @@ int dificuldadeAleatoria()
         chance[4] = 50.0;
         chance[5] = 35.0;
     }
-
-    return aleatorizaChance(6, chance);
+    int a = aleatorizaChance(6, chance);
+    return a;
 }
 
 void inimigoAleatorio(DADOS *inimigo, int objetivo)
 {
-
     FILE *fp;
     fp = fopen("Dados-do-Jogo/inimigos.txt", "rt");
     int dificuldade;
@@ -1393,15 +1436,20 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
     while(!feof(fp))
     {
         fgets(txt, 100, fp);
-        fgets(txt, 100, fp);
-        fscanf(fp, "DIFICULDADE: %d\n", &dificuldade);
-        if(dificuldade == objetivo) quantidade++;
-        for(i = 0; i < 12; i++) fgets(txt, 100, fp);
+        fgets(nome, 50, fp);
+        nome[strcspn(nome, "\n")] = 0;
+        fscanf(fp, "DIFICULDADE %d\n", &dificuldade);
+        if(dificuldade == objetivo) 
+        {
+            quantidade++;
+        }
+        fscanf(fp, "\nATRIBUTOS\nFORCA %d\nPROTECAO %d\nAGILIDADE %d\nINTELIGENCIA %d\nCARISMA %d\n\nHP %d\nMP %d\n\nEXP %d\n\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
     }
 
-    int sorteio = numAle(quantidade);
-
     rewind(fp);
+
+    
+    int sorteio = numAle(quantidade); // sorteia um inimigo aleatório entre os disponíveis
 
     while(!feof(fp))
     {
@@ -1410,7 +1458,7 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
         nome[strcspn(nome, "\n")] = 0;
 
 
-        fscanf(fp, "DIFICULDADE: %d\n", &dificuldade);
+        fscanf(fp, "DIFICULDADE %d\n", &dificuldade);
 
         if(dificuldade == objetivo) 
         {
@@ -1426,7 +1474,7 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
         else 
         {
             strcpy(inimigo->nome, nome);
-            fscanf(fp, "\nATRIBUTOS:\nFORCA: %d\nPROTECAO: %d\nAGILIDADE: %d\nINTELIGENCIA: %d\nCARISMA: %d\n\nHP: %d\nMP: %d\n\nEXP: %d\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
+            fscanf(fp, "\nATRIBUTOS\nFORCA %d\nPROTECAO %d\nAGILIDADE %d\nINTELIGENCIA %d\nCARISMA %d\n\nHP %d\nMP %d\n\nEXP %d\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
             break;
         }
     }
@@ -1668,22 +1716,157 @@ void mostrarStatus()
     for(i = 0; i < (barSize - media * barSize); i++) printf("-");
     printf("  %d/%d", player.exp, player.expMax);
     printf("\nEXP\n\n");
-    
+    printf("Escolha uma opcao:\n\n");
+    printf("[1] Aumentar Forca  ");
+    printf("[2] Aumentar Inteligencia  ");
+    printf("[3] Aumentar Protecao  ");
+    printf("[4] Aumentar Agilidade  ");
+    printf("[5] Aumentar Carisma  \n[0] Sair\n\n");
     int escolha;
 
-    checkInput(&escolha, 1, 10);
-
-    if(escolha == 1) 
+    checkInput(&escolha, 0, 7);
+    limparLinhas(2);
+    moveCursor(0, 19);
+    limparLinhas(6);
+    switch(escolha)
     {
-        player.exp += (float)player.expMax /2.0;
-        calculoExp();
-        mostrarStatus();
-    }
-    if(escolha == 2)
-    {
-        calculoExp();
-        save(player);
-        mostrarStatus();
+        case 1:
+            if(player.skillPoints)
+            {
+                printf("Voce deseja aumentar sua Forca?\n\n");
+                printf("[1] Sim [0] Nao\n\n\n");
+                checkInput(&escolha, 0, 1);
+                if(escolha == 1)
+                {
+                    player.forca++;
+                    player.skillPoints--;
+                    printf("Forca aumentada!\n\n\n");
+                }
+                else
+                {
+                    mostrarStatus();
+                }
+            }
+            else
+            {
+                printf("Voce nao tem Skill Points suficientes.\n\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
+                mostrarStatus();
+            }
+            break;
+        case 2:
+            if(player.skillPoints)
+            {
+                printf("Voce deseja aumentar sua Inteligencia?\n\n");
+                printf("[1] Sim [0] Nao\n\n\n");
+                checkInput(&escolha, 0, 1);
+                if(escolha == 1)
+                {
+                    player.inteligencia++;
+                    player.skillPoints--;
+                    printf("Inteligencia aumentada!\n\n");
+                }
+                else
+                {
+                    mostrarStatus();
+                }
+            }
+            else
+            {
+                printf("Voce nao tem Skill Points suficientes.\n\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
+                mostrarStatus();
+            }
+            break;
+        case 3:
+            if(player.skillPoints)
+            {
+                printf("Voce deseja aumentar sua Protecao?\n\n");
+                printf("[1] Sim [0] Nao\n\n\n");
+                checkInput(&escolha, 0, 1);
+                if(escolha == 1)
+                {
+                    player.protecao++;
+                    player.skillPoints--;
+                    printf("Protecao aumentada!\n\n");
+                }
+                else
+                {
+                    mostrarStatus();
+                }
+            }
+            else
+            {
+                printf("Voce nao tem Skill Points suficientes.\n\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
+                mostrarStatus();
+            }
+            break;
+        case 4:
+            if(player.skillPoints)
+            {
+                printf("Voce deseja aumentar sua Agilidade?\n\n");
+                printf("[1] Sim [0] Nao\n\n\n");
+                checkInput(&escolha, 0, 1);
+                if(escolha == 1)
+                {
+                    player.agilidade++;
+                    player.skillPoints--;
+                    printf("Agilidade aumentada!\n\n");
+                }
+                else
+                {
+                    mostrarStatus();
+                }
+            }
+            else
+            {
+                printf("Voce nao tem Skill Points suficientes.\n\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
+                mostrarStatus();
+            }
+            break;
+        case 5:
+            if(player.skillPoints)
+            {
+                printf("Voce deseja aumentar seu Carisma?\n\n");
+                printf("[1] Sim [0] Nao\n\n\n");
+                checkInput(&escolha, 0, 1);
+                if(escolha == 1)
+                {
+                    player.carisma++;
+                    player.skillPoints--;
+                    printf("Carisma aumentado!\n\n");
+                }
+                else
+                {
+                    mostrarStatus();
+                }
+            }
+            else
+            {
+                printf("Voce nao tem Skill Points suficientes.\n\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
+                mostrarStatus();
+            }
+            break;
+        case 6:
+            player.exp += (float)player.expMax /2.0;
+            calculoExp();
+            mostrarStatus();
+            break;
+        case 7:
+            calculoExp();
+            save(player);
+            mostrarStatus();
+            break;
+        default:
+            break;
     }
 }
 
@@ -2131,6 +2314,13 @@ void tipoItem(char *tipo, int n)
     }
 }
 
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * @brief Funcao que retorna o nome do bonus do item em funcao do seu codigo
+ * @param bonus string que sera preenchida com o nome do bonus
+ * @param n codigo do bonus
+ */
+/*******  1db3d6a9-ce17-4cf2-bbe9-44a10af6c616  *******/
 void bonusItem(char *bonus, int n)
 {
     switch(n)
@@ -2610,7 +2800,8 @@ void calculoExp()
         player.exp -= player.expMax;
         player.expMax*=1.5;
         player.level++;
-        aleatStatus(15);
+        player.skillPoints += 8;
+        aleatStatus(7);
     }
 }
 
@@ -2693,6 +2884,18 @@ void aleatJogador(char *txt){
 
     save(player);
     return;
+}
+
+void descreverHabilidade(int id, int lugar)
+{
+    if(lugar != 0)
+    {
+        printf("%d - ", lugar);
+    }
+    HABILIDADE habilidade;
+    getHabilidade(&habilidade, id);
+    puts(habilidade.nome);
+    puts(habilidade.descricao);
 }
 
 void limparTerminal(){

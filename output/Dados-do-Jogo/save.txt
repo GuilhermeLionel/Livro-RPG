@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 lionel
 Sala 0
 Level 1: 0/50
@@ -7,6 +8,17 @@ MP: 35/35
 Forca: 6
 Protecao: 7
 Agilidade: 4
+=======
+Alex
+Sala 3
+Level 1: 0/50
+Skill Points: 0
+HP: 30/30
+MP: 35/35
+Forca: 5
+Protecao: 6
+Agilidade: 6
+>>>>>>> 658e774460a21b55f72380f0cfa0e9931767c7a7
 Inteligencia: 7
 Carisma: 6
 Moedas: 1000

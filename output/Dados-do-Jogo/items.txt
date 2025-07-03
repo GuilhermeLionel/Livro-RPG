@@ -477,5 +477,287 @@ QuantB: 250, 0, 0
 Coca-Cola do Posner
 Tipo: 9
 Preco: 100
+Raridade: 5
 Bonus: 9, 10, 0
 QuantB: 100, 100, 0
+
+Corte Rapido
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 2, 0, 0
+QuantB: 0, 0, 0
+
+Toque Flamejante
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 3, 0, 0
+QuantB: 0, 0, 0
+
+Golpe Atordoante
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 4, 0, 0
+QuantB: 0, 0, 0
+
+Autoencorajamento
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 5, 0, 0
+QuantB: 0, 0, 0
+
+Lamina Sombria
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 6, 0, 0
+QuantB: 0, 0, 0
+
+Rajada Psiquica
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 7, 0, 0
+QuantB: 0, 0, 0
+
+Concentracao
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 8, 0, 0
+QuantB: 0, 0, 0
+
+Garras Afiadas
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 9, 0, 0
+QuantB: 0, 0, 0
+
+Grito Intimidador
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 10, 0, 0
+QuantB: 0, 0, 0
+
+Impacto Arcano
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 11, 0, 0
+QuantB: 0, 0, 0
+
+Postura Defensiva
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 12, 0, 0
+QuantB: 0, 0, 0
+
+Corrida Sombria
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 13, 0, 0
+QuantB: 0, 0, 0
+
+Chicote de Espinhos
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 14, 0, 0
+QuantB: 0, 0, 0
+
+Olhar do Caos
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 15, 0, 0
+QuantB: 0, 0, 0
+
+Explosao Infernal
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 16, 0, 0
+QuantB: 0, 0, 0
+
+Furia Selvagem
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 17, 0, 0
+QuantB: 0, 0, 0
+
+Sombras Envenenadas
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 18, 0, 0
+QuantB: 0, 0, 0
+
+Escudo Mental
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 19, 0, 0
+QuantB: 0, 0, 0
+
+Rugido de Fera
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 20, 0, 0
+QuantB: 0, 0, 0
+
+Lamina Eletrica
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 21, 0, 0
+QuantB: 0, 0, 0
+
+Dominio das Sombras
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 22, 0, 0
+QuantB: 0, 0, 0
+
+Destruicao Flamejante
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 23, 0, 0
+QuantB: 0, 0, 0
+
+Chicote de Raizes
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 24, 0, 0
+QuantB: 0, 0, 0
+
+Finta Enganosa
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 25, 0, 0
+QuantB: 0, 0, 0
+
+Sangue Frio
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 26, 0, 0
+QuantB: 0, 0, 0
+
+Surto Magico
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 27, 0, 0
+QuantB: 0, 0, 0
+
+Espinhos Crescentes
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 28, 0, 0
+QuantB: 0, 0, 0
+
+Espinhos das Sombras
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 29, 0, 0
+QuantB: 0, 0, 0
+
+Chicote Fantasmagorico
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 30, 0, 0
+QuantB: 0, 0, 0
+
+Encanto do Medo
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 31, 0, 0
+QuantB: 0, 0, 0
+
+Pulso Vital
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 32, 0, 0
+QuantB: 0, 0, 0
+
+Regeneração Espiritual
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 33, 0, 0
+QuantB: 0, 0, 0
+
+Foco Interior
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 34, 0, 0
+QuantB: 0, 0, 0
+
+Círculo de Vida
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 35, 0, 0
+QuantB: 0, 0, 0
+
+Recompor Corpo
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 36, 0, 0
+QuantB: 0, 0, 0
+
+Renovação Arcana
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 37, 0, 0
+QuantB: 0, 0, 0
+
+Raio Restaurador
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 38, 0, 0
+QuantB: 0, 0, 0
+
+Essência Renovadora
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 39, 0, 0
+QuantB: 0, 0, 0
+
+Sangue Ancestral
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 40, 0, 0
+QuantB: 0, 0, 0
+
+Vitalidade Profunda
+Tipo: 8
+Preco: 0
+Raridade: 10
+Bonus: 41, 0, 0
+QuantB: 0, 0, 0
+
