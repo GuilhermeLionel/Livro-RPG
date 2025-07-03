@@ -106,7 +106,6 @@ int quantosBuffs(int sinal);
 float buffEfetivo(DADOS usuario, int status); // Retorna o percentual de alteração no status do usuário, considerando os buffs ativos
 
 
-
 void vitrine(int a[]);
 void cross_platform_sleep(int ms);
 void limparTerminal();
@@ -155,6 +154,8 @@ void aplicaBuff(DADOS *usuario, BUFFHANDLER buff);
 void aplicaEfeito(DADOS *alvo, int efeito);
 void calculaPontuacao(DADOS *player, RANKING jogador, int sala);
 int somaItens(DADOS *player);
+void limparAte(int q, int x);
+void telaInicial();
 
 int somaItens(DADOS *player) {
     int i, j, soma = 0;
@@ -191,6 +192,16 @@ void calculaPontuacao(DADOS *player, RANKING jogador, int sala) {
     atualizaRanking("Dados-do-Jogo/pontuacao.txt", jogador); 
     printf("Pressione [ENTER] para sair\n");
     if (getchar()) telaInicial();
+}
+
+void limparAte(int q, int x)
+{
+    int i, j;
+    for(i = 0; i <= x; i++)
+    {
+        printf("\033[1A");
+        printf("\033[%dX", q);
+    }
 }
 
 void aplicaEfeito(DADOS *alvo, int efeito)
@@ -266,6 +277,46 @@ void aplicaBuff(DADOS *usuario, BUFFHANDLER buff)
     if(i == 15) printf("%s atingiu o limite maximo de buffs!\n", usuario->nome);
 }
 
+void hpPlayer()
+{
+    int espacos, resto;
+    int largura = 50;
+    int barsize = 30;
+    int i;
+    char txt[41];
+    moveCursor(65, 11);
+    printf("%c", 218);
+    sprintf(txt, "%s  ", player.nome);
+    espacos = largura - strlen(txt) - 2;
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("%s%c", txt, 191);
+    moveCursor(65, 12);
+    printf("  ");
+    sprintf(txt, "HP: %d / %d", player.hp, player.hpMax);
+    espacos = ((float)player.hp / (float)player.hpMax) * barsize;
+    if(espacos == 0 && player.hp != 0) espacos = 1;
+    resto = barsize - espacos;
+    for(i = 0; i < espacos; i++) printf("\033[31m=\033[0m");
+    for(i = 0; i < resto; i++) printf("-");
+    espacos = largura - barsize - 4 - strlen(txt);
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("%s  ", txt);
+    moveCursor(65, 13);
+    printf("  ");
+    sprintf(txt, "MP: %d / %d", player.mp, player.manaMax);
+    espacos = ((float)player.mp / (float)player.manaMax) * barsize;
+    if(espacos == 0 && player.mp != 0) espacos = 1;
+    resto = barsize - espacos;
+    for(i = 0; i < espacos; i++) printf("\033[34m=\033[0m");
+    for(i = 0; i < resto; i++) printf("-");
+    espacos = largura - barsize - 4 - strlen(txt);
+    for(i = 0; i < espacos; i++) printf(" ");
+    printf("%s  ", txt);
+    moveCursor(65, 14);
+    printf("%c", 192);
+    for(i = 0; i < largura - 2; i++) printf(" ");
+    printf("%c", 217);
+}
 
 float buffEfetivo(DADOS usuario, int status)
 {
@@ -705,9 +756,10 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     {
         hpInimigo(inimigo[i], 0, i + 1);
     }
+    hpPlayer();
     moveCursor(0, 9);
     for(i = 0; i < 5 + 35 * qtd; i++) printf("=");
-    printf("\nO que voce deseja fazer?\n\n");
+    printf("\n\nO que voce deseja fazer?\n\n");
     printf("[1] Atacar  [2] Habilidade  [3] Item  [4] Fugir  ");
     if(b1 || b2) 
     {
@@ -727,14 +779,16 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     int escolha, OK = 1;
     if(b1 || b2) checkInput(&escolha, 1, 7);
     else checkInput(&escolha, 1, 7);
-    limparLinhas(3);
-    moveCursor(0, 14);
-    limparLinhas(5);
+    limparAte(60, 3);
+    moveCursor(0, 16);
+    limparAte(60, 5);
+    moveCursor(0, 11);
     switch(escolha)
     {
         case 1:
             for(i = 0; i < qtd; i++) hpInimigo(inimigo[i], 1, i + 1);
-            printf("\n\nQual o inimigo que deseja atacar?\n\n");
+            moveCursor(0, 11);
+            printf("Qual o inimigo que deseja atacar?\n\n");
             int inimigoEscolhido;
             checkInput(&inimigoEscolhido, 1, qtd);
             ataque(&player, &inimigo[inimigoEscolhido - 1]);
@@ -1245,6 +1299,7 @@ void limparLinhas(int qtd)
         printf("\033[2K");
     }
 }
+
 
 void limparBuffer()
 {
