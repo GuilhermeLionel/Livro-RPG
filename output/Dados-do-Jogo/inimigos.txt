@@ -367,7 +367,7 @@ MP 50
 EXP 135
 
 id = 24
-Necromante do Véu Negro
+Necromante do Veu Negro
 DIFICULDADE 4
 
 ATRIBUTOS
@@ -383,7 +383,7 @@ MP 450
 EXP 150
 
 id = 25
-Hidra Jovem de Duas Cabeças
+Hidra Jovem de Duas Cabecas
 DIFICULDADE 4
 
 ATRIBUTOS
@@ -431,7 +431,7 @@ MP 400
 EXP 200
 
 id = 28
-Dragão de Gelo Jovem
+Dragao de Gelo Jovem
 DIFICULDADE 5
 
 ATRIBUTOS
@@ -479,7 +479,7 @@ MP 50
 EXP 250
 
 id = 31
-Demônio do Abismo Menor
+Demonio do Abismo Menor
 DIFICULDADE 5
 
 ATRIBUTOS
@@ -493,4 +493,3 @@ HP 225
 MP 300
 
 EXP 215
-

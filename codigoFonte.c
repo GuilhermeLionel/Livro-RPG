@@ -148,7 +148,7 @@ void ranking();
 void atualizaRanking(char *nomeArquivo, RANKING player);
 void inimigoAleatorio(DADOS *inimigo, int dificuldade);
 void batalharInimigo(DADOS *inimigo, int qtd);
-void batalharPlayer(DADOS *inimigo, int qtd);
+void batalharPlayer(DADOS *inimigo);
 void hpInimigo(DADOS inimigo, int modo, int num);
 void moveCursor(int x, int y);
 void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade);
@@ -857,17 +857,17 @@ void salaDoPanico(DADOS *inimigo, int qtd) {
     }
 }
 
-void batalharPlayer(DADOS *inimigo, int qtd){
+void batalharPlayer(DADOS *inimigo){
     int n = numAle(100);
     if (n<=60)
     {
-        ataque(&inimigo, &player);
+        ataque(inimigo, &player);
     }
     else 
     {
         HABILIDADE skill;
         getHabilidade(&skill, numAle(40));
-        usarHabilidade(&inimigo, &player, skill);
+        usarHabilidade(inimigo, &player, skill);
     }
 }
 
@@ -1329,7 +1329,7 @@ else
                 batalharInimigo(inimigo, caso);
                 break;
             case 4:
-                textoTela("Voce encontrou um baú . . .\n", 300);
+                textoTela("Voce encontrou um bau . . .\n", 300);
                 textoTela("Ao abrir, ele revela um item . . .\n", 300);
                 printf("(Pressione [ENTER] para continuar...)\n");
                 limparBuffer();
