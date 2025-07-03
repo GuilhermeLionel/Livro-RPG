@@ -431,7 +431,7 @@ MP 400
 EXP 200
 
 id = 28
-Dragão de Gelo Jovem
+Dragao de Gelo Jovem
 DIFICULDADE 5
 
 ATRIBUTOS

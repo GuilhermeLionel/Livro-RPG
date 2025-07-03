@@ -1,16 +1,16 @@
-Alex
-Sala 5
-Level 4: 36/168
+lionel
+Sala 0
+Level 1: 0/50
 Skill Points: 0
-HP: 95/95
-MP: 115/115
-Forca: 999
-Protecao: 19
-Agilidade: 999
-Inteligencia: 23
-Carisma: 14
-Moedas: 975
-Equipados: 0, 27, 47, 0
+HP: 20/20
+MP: 30/30
+Forca: 9
+Protecao: 4
+Agilidade: 7
+Inteligencia: 6
+Carisma: 4
+Moedas: 1000
+Equipados: 0, 0, 0, 0
 0 0
 0 0
 0 0
@@ -31,6 +31,49 @@ Equipados: 0, 27, 47, 0
 0 0
 0 0
 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0 0 0 0

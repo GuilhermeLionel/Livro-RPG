@@ -7,7 +7,7 @@ Buff Alvo: 0
 Buff Duracao: 0
 Quant Buff: 0
 Qtd: 0.0
-Custo: 0
+This
 Chance: 0
 Status: 0
 
@@ -401,27 +401,27 @@ Custo: 8
 Chance: 85
 Status: 2
 
-Pulso Vital  
-Recupera 10% do HP total instantaneamente.  
-Tipo: 3  
-Efeito: 0 0%  
-Buff: 0 100%  
-Alvo: 1  
-Duracao: 0  
-Valor: 0  
-Qtd: 0.1  
-Custo: 3  
-Chance: 100  
-Status: 0  
+Pulso Vital
+Recupera 10% do HP total instantaneamente.
+Tipo: 3
+Efeito: 0 0%
+Buff: 0 100%
+Buff Alvo: 1
+Buff Duracao: 0
+Quant Buff: 0
+Qtd: 0.1
+Custo: 3
+Chance: 100
+Status: 0
 
 Regeneração Espiritual  
 Cura 25% do HP ao longo de 2 turnos.  
 Tipo: 6  
 Efeito: 0 0%  
 Buff: 6 100%  
-Alvo: 1  
-Duracao: 2  
-Valor: 1  
+Buff Alvo: 1  
+Buff Duracao: 2  
+Quant Buff: 1  
 Qtd: 0.0  
 Custo: 6  
 Chance: 100  
@@ -432,9 +432,9 @@ Recupera 20% do HP total.
 Tipo: 3  
 Efeito: 0 0%  
 Buff: 0 100%  
-Alvo: 1  
-Duracao: 0  
-Valor: 0  
+Buff Alvo: 1  
+Buff Duracao: 0  
+Quant Buff: 0  
 Qtd: 0.2  
 Custo: 5  
 Chance: 100  
@@ -445,9 +445,9 @@ Recupera 35% do HP total.
 Tipo: 3  
 Efeito: 0 0%  
 Buff: 0 100%  
-Alvo: 1  
-Duracao: 0  
-Valor: 0  
+Buff Alvo: 1  
+Buff Duracao: 0  
+Quant Buff: 0  
 Qtd: 0.35  
 Custo: 8  
 Chance: 100  
@@ -458,9 +458,9 @@ Cura fixa baseada em inteligência.
 Tipo: 4  
 Efeito: 0 0%  
 Buff: 0 0%  
-Alvo: 0  
-Duracao: 0  
-Valor: 0  
+Buff Alvo: 0  
+Buff Duracao: 0  
+Quant Buff: 0  
 Qtd: 15.0  
 Custo: 4  
 Chance: 100  
@@ -471,9 +471,9 @@ Cura moderada fixa com base na inteligência.
 Tipo: 4  
 Efeito: 0 0%  
 Buff: 0 0%  
-Alvo: 0  
-Duracao: 0  
-Valor: 0  
+Buff Alvo: 0  
+Buff Duracao: 0  
+Quant Buff: 0  
 Qtd: 25.0  
 Custo: 6  
 Chance: 100  
@@ -484,9 +484,9 @@ Cura intensa fixa baseada em inteligência.
 Tipo: 4  
 Efeito: 0 0%  
 Buff: 0 0%  
-Alvo: 0  
-Duracao: 0  
-Valor: 0  
+Buff Alvo: 0  
+Buff Duracao: 0  
+Quant Buff: 0  
 Qtd: 40.0  
 Custo: 10  
 Chance: 100  
@@ -497,9 +497,9 @@ Cura 15% do HP e aumenta proteção por 2 turnos.
 Tipo: 3  
 Efeito: 0 0%  
 Buff: 4 100%  
-Alvo: 1  
-Duracao: 2  
-Valor: 1  
+Buff Alvo: 1  
+Buff Duracao: 2  
+Quant Buff: 1  
 Qtd: 0.15  
 Custo: 5  
 Chance: 100  
@@ -510,9 +510,9 @@ Recupera 20% do HP e aumenta inteligência por 2 turnos.
 Tipo: 3  
 Efeito: 0 0%  
 Buff: 2 100%  
-Alvo: 1  
-Duracao: 2  
-Valor: 1  
+Buff Alvo: 1  
+Buff Duracao: 2  
+Quant Buff: 1  
 Qtd: 0.2  
 Custo: 7  
 Chance: 100  
@@ -523,10 +523,24 @@ Cura fixa e chance de remover efeitos negativos.
 Tipo: 4  
 Efeito: 0 40%  
 Buff: 0 0%  
-Alvo: 0  
-Duracao: 0  
-Valor: 0  
+Buff Alvo: 0  
+Buff Duracao: 0  
+Quant Buff: 0  
 Qtd: 30.0  
 Custo: 8  
 Chance: 100  
 Status: 2  
+
+Barreira
+Materializa uma barreira protetora que te protege de tudo, mas nao podera usa-la por 3 turnos apos o uso
+Tipo: 5
+Efeito: 0 0%
+Alvo: 0
+Buff: 9 100%
+Buff Alvo: 1
+Buff Duracao: -1
+Quant Buff: 1
+Qtd: 0.0
+Custo: 15
+Chance: 100
+Status: 0
