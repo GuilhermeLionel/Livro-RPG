@@ -4,7 +4,7 @@ Level 4: 36/168
 Skill Points: 0
 HP: 60/95
 MP: 115/115
-Forca: 18
+Forca: 999
 Protecao: 19
 Agilidade: 15
 Inteligencia: 23
