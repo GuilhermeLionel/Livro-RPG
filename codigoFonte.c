@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 #include <stdlib.h>
 
 #ifdef _WIN32
@@ -152,6 +153,45 @@ void inimigoMorreu(DADOS * inimigo, int n, int *qtd);
 void salaDoPanico(DADOS *inimigo, int qtd);
 void aplicaBuff(DADOS *usuario, BUFFHANDLER buff);
 void aplicaEfeito(DADOS *alvo, int efeito);
+void calculaPontuacao(DADOS *player, RANKING jogador, int sala);
+int somaItens(DADOS *player);
+
+int somaItens(DADOS *player) {
+    int i, j, soma = 0;
+    for (i = 0; i < 2; i++) {
+        for (j = 0; j < 20; j++) {
+            switch(item[player->inventario[i][j]].raridade) {
+                case 1:
+                    soma++;
+                    break;
+                case 2:
+                    soma += 15;
+                    break;                    
+                case 3:
+                    soma += 30;
+                    break;                    
+                case 4:
+                    soma += 50;
+                    break;
+            }
+        }
+    }
+    return soma;
+}
+
+void calculaPontuacao(DADOS *player, RANKING jogador, int sala) {
+    strcpy(jogador.nome, player->nome);
+    jogador.level = player->level;
+    jogador.pontuacao = 100 * (((int) pow(1.5, player->level - 1)) - 1) + player->exp;
+
+    /* CALCULO: somaItens + bosses derrotados + salas
+
+    jogador.pontuacao = player->exp + somaItens(player) + sala; */
+    printf("\nPontuacao final: %d\n", jogador.pontuacao); 
+    atualizaRanking("Dados-do-Jogo/pontuacao.txt", jogador); 
+    printf("Pressione [ENTER] para sair\n");
+    if (getchar()) telaInicial();
+}
 
 void aplicaEfeito(DADOS *alvo, int efeito)
 {
@@ -614,8 +654,8 @@ void hpInimigo(DADOS inimigo, int modo, int num)
 
 void salaDoPanico(DADOS *inimigo, int qtd) {
     limparTerminal();
-    textoTela("O que voce ira fazer?", 300);
-    printf("[1] Desistir  [2] Retornar a batalha  [3] Abrir inventario  [4] Correr para o proximo andar\n");
+    textoTela("O que voce ira fazer?\n", 300);
+    printf("[1] Desistir  [2] Retornar a batalha  [3] Abrir inventario  [4] Correr para o proximo andar\n\n");
     int escolha, OK = 1;
     checkInput(&escolha, 1, 4);
     switch(escolha) {
@@ -623,7 +663,7 @@ void salaDoPanico(DADOS *inimigo, int qtd) {
             limparTerminal();
             textoTela("Voce resolve fugir de maneira covarde.", 400);
             textoTela("Sua aventura termina aqui...", 500);
-            // cálculo da pontuação
+            calculaPontuacao(&player, jogador, sala);
             break;
         case 2:
             batalharInimigo(inimigo, qtd);
