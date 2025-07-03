@@ -76,4 +76,3 @@ Acesse a pasta onde está o código-fonte do projeto.
 
 ```bash
 gcc main.c -o livrojogo
-
