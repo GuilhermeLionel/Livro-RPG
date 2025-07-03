@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -148,6 +147,7 @@ void cura(DADOS *usuario, int qtd);
 void ranking();
 void atualizaRanking(char *nomeArquivo, RANKING player);
 void inimigoAleatorio(DADOS *inimigo, int dificuldade);
+void bossAleatorio(DADOS *inimigo, int dificuldade);
 void batalharInimigo(DADOS *inimigo, int qtd);
 void batalharPlayer(DADOS *inimigo, int qtd);
 void hpInimigo(DADOS inimigo, int modo, int num);
@@ -1389,9 +1389,9 @@ int dificuldadeAleatoria()
     }
     if(sala >= 31 && sala <= 40)
     {
-        chance[1] = 40.0;
+        chance[1] = 30.0;
         chance[2] = 45.0;
-        chance[3] = 10.0;
+        chance[3] = 20.0;
         chance[4] = 5.0;
     }
     if(sala >= 41 && sala <= 50) 
@@ -1403,24 +1403,24 @@ int dificuldadeAleatoria()
     }
     if(sala >=51 && sala <= 60) 
     {
-        chance[2] = 30.0;
-        chance[3] = 35.0;
-        chance[4] = 30.0;
+        chance[2] = 40.0;
+        chance[3] = 40.0;
+        chance[4] = 15.0;
         chance[5] = 5.0;
     }
     if(sala >= 61 && sala <= 70) 
     {
-        chance[2] = 25.0;
-        chance[3] = 30.0;
-        chance[4] = 35.0;
+        chance[2] = 20.0;
+        chance[3] = 50.0;
+        chance[4] = 20.0;
         chance[5] = 10.0;
     }
     if(sala >= 71 && sala <= 80) 
     {
         chance[2] = 5.0;
         chance[3] = 30.0;
-        chance[4] = 55.0;
-        chance[5] = 10.0;
+        chance[4] = 40.0;
+        chance[5] = 25.0;
     }
     if(sala >= 81 && sala <= 90) 
     {
@@ -1572,7 +1572,6 @@ void bossAleatorio(DADOS *inimigo, int objetivo)
     inimigo->manaMax = inimigo->inteligencia * 3;
     inimigo->mp = inimigo->manaMax;
 }
-
 
 int salaAleatoria()
 {
