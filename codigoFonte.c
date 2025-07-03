@@ -147,7 +147,6 @@ void cura(DADOS *usuario, int qtd);
 void ranking();
 void atualizaRanking(char *nomeArquivo, RANKING player);
 void inimigoAleatorio(DADOS *inimigo, int dificuldade);
-void bossAleatorio(DADOS *inimigo, int dificuldade);
 void batalharInimigo(DADOS *inimigo, int qtd);
 void batalharPlayer(DADOS *inimigo, int qtd);
 void hpInimigo(DADOS inimigo, int modo, int num);
@@ -164,6 +163,19 @@ void calculaPontuacao(DADOS *player, RANKING jogador, int sala);
 void limparAte(int q, int x);
 void telaInicial();
 void descreverHabilidade(int id, int num);
+void morreu();
+
+void morreu(){
+    textoTela("Voce morreu...",400);
+    textoTela("Sua aventura termina aqui.\n\n", 300);
+    printf("Pressione [ENTER] para sair\n");
+    getchar();
+
+    remove("Dados-do-Jogo/save.txt");
+    calculaPontuacao(&player, jogador, sala);
+
+    //função criada
+}
 
 int sumItens(DADOS *player) {
     int i, j, soma = 0;
@@ -1385,35 +1397,38 @@ int dificuldadeAleatoria()
     {
         chance[1] = 50.0;
         chance[2] = 40.0;
-        chance[3] = 10.0;
+        chance[3] = 8.0;
+        chance[4] = 2.0;
     }
     if(sala >= 31 && sala <= 40)
     {
         chance[1] = 30.0;
         chance[2] = 45.0;
-        chance[3] = 20.0;
+        chance[3] = 19.0;
         chance[4] = 5.0;
+        chance[5] = 1.0;
     }
     if(sala >= 41 && sala <= 50) 
     {
         chance[1] = 25.0;
         chance[2] = 35.0;
-        chance[3] = 30.0;
+        chance[3] = 25.0;
         chance[4] = 10.0;
+        chance[5] = 5.0;
     }
     if(sala >=51 && sala <= 60) 
     {
-        chance[2] = 40.0;
+        chance[2] = 30.0;
         chance[3] = 40.0;
-        chance[4] = 15.0;
-        chance[5] = 5.0;
+        chance[4] = 20.0;
+        chance[5] = 10.0;
     }
     if(sala >= 61 && sala <= 70) 
     {
         chance[2] = 20.0;
-        chance[3] = 50.0;
-        chance[4] = 20.0;
-        chance[5] = 10.0;
+        chance[3] = 40.0;
+        chance[4] = 30.0;
+        chance[5] = 20.0;
     }
     if(sala >= 71 && sala <= 80) 
     {
@@ -1506,72 +1521,6 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
     inimigo->mp = inimigo->manaMax;
 }
 
-void bossAleatorio(DADOS *inimigo, int objetivo)
-{
-    FILE *fp;
-    fp = fopen("Dados-do-Jogo/inimigos.txt", "rt");
-    int dificuldade;
-    int quantidade = 0;
-    int i, j;
-    char nome[51], txt[101];
-    while(!feof(fp))
-    {
-        fgets(txt, 100, fp);
-        fgets(nome, 50, fp);
-        nome[strcspn(nome, "\n")] = 0;
-        fscanf(fp, "DIFICULDADE %d\n", &dificuldade);
-        if(dificuldade == objetivo) 
-        {
-            quantidade++;
-        }
-        fscanf(fp, "\nATRIBUTOS\nFORCA %d\nPROTECAO %d\nAGILIDADE %d\nINTELIGENCIA %d\nCARISMA %d\n\nHP %d\nMP %d\n\nEXP %d\n\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
-    }
-
-    rewind(fp);
-
-    
-    int sorteio = numAle(quantidade); // sorteia um inimigo aleatório entre os disponíveis
-
-    while(!feof(fp))
-    {
-        fgets(txt, 100, fp);
-        fgets(nome, 51, fp);
-        nome[strcspn(nome, "\n")] = 0;
-
-
-        fscanf(fp, "DIFICULDADE %d\n", &dificuldade);
-
-        if(dificuldade == objetivo) 
-        {
-            sorteio--;
-        }
-        if(sorteio != 0) 
-        {
-            for(i = 0; i < 12; i++) 
-            {
-                fgets(txt, 100, fp);
-            }
-        }
-        else 
-        {
-            strcpy(inimigo->nome, nome);
-            fscanf(fp, "\nATRIBUTOS\nFORCA %d\nPROTECAO %d\nAGILIDADE %d\nINTELIGENCIA %d\nCARISMA %d\n\nHP %d\nMP %d\n\nEXP %d\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
-            break;
-        }
-    }
-    fclose(fp);
-    for(i = 0; i < 3; i++)
-    {
-        for(j = 0; j < 15; j++)
-        {
-            inimigo->buffs[i][j] = 0;
-        }
-    }
-    inimigo->hpMax = inimigo->protecao * 5;
-    inimigo->hpMax = inimigo->hp;
-    inimigo->manaMax = inimigo->inteligencia * 3;
-    inimigo->mp = inimigo->manaMax;
-}
 
 int salaAleatoria()
 {
