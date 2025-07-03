@@ -894,7 +894,7 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     limparTerminal();
     if(player.hp <= 0)
     {
-        //morreu();
+        morreu();
         return;
     }
     if(inimigo[0].hp <= 0) // Se o primeiro inimigo já estiver morto, remove ele da lista
@@ -1041,7 +1041,12 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     }
     for(i = 0; i < qtd; i++)
     {
-        //batalhaPlayer(inimigo, qtd);
+        batalhaPlayer(inimigo, qtd);
+    }
+    passarTurno(&player);
+    for(i = 0; i < qtd; i++)
+    {
+        passarTurno(&inimigo[i], 1);
     }
     batalharInimigo(inimigo, qtd);
 }
@@ -1107,6 +1112,8 @@ void passarTurno(DADOS * alvo)
         default:
             break;
     }
+    printf("(Pressione [ENTER] para continuar...)\n");
+    limparBuffer();
 }
 
 void ranking()
