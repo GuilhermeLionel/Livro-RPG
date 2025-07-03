@@ -863,8 +863,6 @@ void batalharInimigo(DADOS *inimigo, int qtd)
         }
         else sprintf(txt, "Nenhum item encontrado.\n\n");
         textoTela(txt, 200);
-        sala++;
-        tomadaDecisao();
         return;
     }
     int b1 = quantosBuffs(1);
@@ -1261,10 +1259,16 @@ else
     {
         int caso, a[3];
         caso = salaAleatoria();
+        printf("caso %d\n", caso);
         DADOS inimigo[caso];
         switch(caso)
         {
             case 0:
+                textoTela("Voce se encontra em uma sala vazia. . .\n", 200);
+                textoTela("Nada acontece.\n\n", 200);
+
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
                 break;
             case 3:
                 a[2] = dificuldadeAleatoria();
@@ -1293,15 +1297,20 @@ else
                 break;
             case 4:
                 printf("kkkkkkkkkkkkk");
+                checkInput(&escolha, 1, 2);
                 break;
             case 5:
                 textoTela("Voce achou um pergaminho de habilidade\n", 300);
                 textoTela("Ao abrir voce ve uma mensagem escrita...\n", 300);
-                textoTela("KKKKKKKK vc caiu na pegadinha do Mario Games KKKKKKK\n", 300);               
+                textoTela("KKKKKKKK vc caiu na pegadinha do Mario Games KKKKKKK\n", 300);        
+                textoTela("A mensagem diz que voce deve escolher uma habilidade\n", 300);
+                printf("Escolha uma habilidade:\n\n");
+                checkInput(&escolha, 1, 3);
+
                 break;
             default:
                 printf("Aviso de Bug\n");
-                getchar();
+                limparBuffer();
                 break;
         }
         sala++;
@@ -1375,8 +1384,9 @@ int dificuldadeAleatoria()
         chance[4] = 50.0;
         chance[5] = 35.0;
     }
-
-    return aleatorizaChance(6, chance);
+    int a = aleatorizaChance(6, chance);
+    printf("dificuldade %d", a);
+    return a;
 }
 
 void inimigoAleatorio(DADOS *inimigo, int objetivo)
@@ -2691,6 +2701,15 @@ void aleatJogador(char *txt){
 
     save(player);
     return;
+}
+
+void descreverHabilidade(int id, int lugar)
+{
+    int x, y;
+    HABILIDADE habilidade;
+    getHabilidade(&habilidade, id);
+    puts(habilidade.nome);
+    puts(habilidade.descricao);
 }
 
 void limparTerminal(){
