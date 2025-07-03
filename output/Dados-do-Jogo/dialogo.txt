@@ -1,4 +1,4 @@
-dialogo: uwhdiuhe
+dialogo: Eu sou o vendedor, meu propósito na vida sempre foi engana... ajudar bravos guerreiros
 duracao: 300
 id: 0
 dialogo: jjfhh
