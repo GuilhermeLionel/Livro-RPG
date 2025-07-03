@@ -1,3 +1,16 @@
+--------------------
+
+Tipo: 0
+Efeito: 0 0%
+Buff: 0 0%
+Buff Alvo: 0
+Buff Duracao: 0
+Quant Buff: 0
+Qtd: 0.0
+Custo: 0
+Chance: 0
+Status: 0
+
 Corte Rapido
 Um ataque fisico veloz com boa chance de acerto.
 Tipo: 1
@@ -317,7 +330,7 @@ Efeito: 0 0%
 Buff: 1 70%
 Buff Alvo: 0
 Buff Duracao: -1
-Quant Buff: -1
+Quant Buff: -2
 Qtd: 0.0
 Custo: 5
 Chance: 100
@@ -337,10 +350,10 @@ Chance: 90
 Status: 2
 
 Espinhos Crescentes
-Aplica debuff de protecao e causa dano continuo.
+Aplica debuff de protecao e pode causar sangramento.
 Tipo: 1
-Efeito: 0 0%
-Buff: 7 100%
+Efeito: 6 80%
+Buff: 3 100%
 Buff Alvo: 0
 Buff Duracao: 3
 Quant Buff: -1
@@ -387,3 +400,133 @@ Qtd: 1.2
 Custo: 8
 Chance: 85
 Status: 2
+
+Pulso Vital  
+Recupera 10% do HP total instantaneamente.  
+Tipo: 3  
+Efeito: 0 0%  
+Buff: 0 100%  
+Alvo: 1  
+Duracao: 0  
+Valor: 0  
+Qtd: 0.1  
+Custo: 3  
+Chance: 100  
+Status: 0  
+
+Regeneração Espiritual  
+Cura 25% do HP ao longo de 2 turnos.  
+Tipo: 6  
+Efeito: 0 0%  
+Buff: 6 100%  
+Alvo: 1  
+Duracao: 2  
+Valor: 1  
+Qtd: 0.0  
+Custo: 6  
+Chance: 100  
+Status: 2  
+
+Foco Interior  
+Recupera 20% do HP total.  
+Tipo: 3  
+Efeito: 0 0%  
+Buff: 0 100%  
+Alvo: 1  
+Duracao: 0  
+Valor: 0  
+Qtd: 0.2  
+Custo: 5  
+Chance: 100  
+Status: 0  
+
+Círculo de Vida  
+Recupera 35% do HP total.  
+Tipo: 3  
+Efeito: 0 0%  
+Buff: 0 100%  
+Alvo: 1  
+Duracao: 0  
+Valor: 0  
+Qtd: 0.35  
+Custo: 8  
+Chance: 100  
+Status: 0  
+
+Recompor Corpo  
+Cura fixa baseada em inteligência.  
+Tipo: 4  
+Efeito: 0 0%  
+Buff: 0 0%  
+Alvo: 0  
+Duracao: 0  
+Valor: 0  
+Qtd: 15.0  
+Custo: 4  
+Chance: 100  
+Status: 2  
+
+Renovação Arcana  
+Cura moderada fixa com base na inteligência.  
+Tipo: 4  
+Efeito: 0 0%  
+Buff: 0 0%  
+Alvo: 0  
+Duracao: 0  
+Valor: 0  
+Qtd: 25.0  
+Custo: 6  
+Chance: 100  
+Status: 2  
+
+Raio Restaurador  
+Cura intensa fixa baseada em inteligência.  
+Tipo: 4  
+Efeito: 0 0%  
+Buff: 0 0%  
+Alvo: 0  
+Duracao: 0  
+Valor: 0  
+Qtd: 40.0  
+Custo: 10  
+Chance: 100  
+Status: 2  
+
+Essência Renovadora  
+Cura 15% do HP e aumenta proteção por 2 turnos.  
+Tipo: 3  
+Efeito: 0 0%  
+Buff: 4 100%  
+Alvo: 1  
+Duracao: 2  
+Valor: 1  
+Qtd: 0.15  
+Custo: 5  
+Chance: 100  
+Status: 0  
+
+Sangue Ancestral  
+Recupera 20% do HP e aumenta inteligência por 2 turnos.  
+Tipo: 3  
+Efeito: 0 0%  
+Buff: 2 100%  
+Alvo: 1  
+Duracao: 2  
+Valor: 1  
+Qtd: 0.2  
+Custo: 7  
+Chance: 100  
+Status: 0  
+
+Vitalidade Profunda  
+Cura fixa e chance de remover efeitos negativos.  
+Tipo: 4  
+Efeito: 0 40%  
+Buff: 0 0%  
+Alvo: 0  
+Duracao: 0  
+Valor: 0  
+Qtd: 30.0  
+Custo: 8  
+Chance: 100  
+Status: 2  

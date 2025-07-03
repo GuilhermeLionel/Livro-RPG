@@ -17,7 +17,7 @@
 int items = 0;
  
 typedef struct buffHandler2 {
-    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Inteligencia, 3 = Protecao, 4 = Agilidade    qualquer outro alem é caso especial
+    int tipo; // 0 = Vazio, 1 = Ataque, 2 = Inteligencia, 3 = Protecao, 4 = Agilidade, 5 - Dano por turno, 6 - Cura por turno    qualquer outro alem é caso especial
     int alvo; // 0 = Inimigo, 1 = O propio, 2 = Variavel
     int duracao; // Duração do buff em turnos // 0 se for para sempre
     int valor; // Valor do buff, aumenta em estados, se for 1, aumenta o status em uma porcentagem, se 2, aumenta em 2x porcentagem
@@ -29,7 +29,7 @@ typedef struct abilityHandler2 {
     char nome[51];
     char descricao[201];
     int tipo; // 0 = Vazio, 1 = Ataque, 2 = Dano fixo, 3 = Cura percentual, 4 = Cura Fixa, 5 = Prot, 6 = Buff/Debuff
-    int efeitoSecundario; // 0 = Nenhum, 1 = Queimar, 2 = Estunar, 3 = Envenenar, 4 = Paralizar, 5 = Desarmar
+    int efeitoSecundario; // 0 = Nenhum, 1 = Queimar, 2 = Estunar, 3 = Envenenar, 4 = Paralizar, 5 = Desarmar, 6 = Dano continuo (vai funcionar como status (status 5))
     int chanceDeEfeito; // Chance de o efeito acontecer em uso (chance entre 0 e 100)
     BUFFHANDLER buff; // Buff que a habilidade pode causar
     float qtdmg; // Dano ou cura (Para cura percentual, este valor é um float entre 0 e 1)
@@ -73,7 +73,7 @@ typedef struct dados{
     int skillPoints;
     int habilidades[4]; // Habilidades que o jogador possui
     int buffs[3][15]; // Buffs que o jogador possui    [0] = Id do buff, [1] = Qtd, [2] = Turnos restantes
-    int status; // 0 = Normal, 1 = Queimando, 2 = Envenenado, 3 = Estunado, 4 = Paralisado, 5 = Desarmado
+    int efeito; // 0 = Normal, 1 = Queimando, 2 = Envenenado, 3 = Atordoado, 4 = Paralisado, 5 = Desarmado
 } DADOS;
 
 DADOS player;
@@ -102,7 +102,9 @@ int raridadeAleatoria();
 int bonusAplicado(int n);
 int statusRequisitado(int status, DADOS usuario);
 int quantosBuffs(int sinal);
-int aplicaBuff(DADOS usuario, int status); // Retorna o percentual de alteração no status do usuário, considerando os buffs ativos
+float buffEfetivo(DADOS usuario, int status); // Retorna o percentual de alteração no status do usuário, considerando os buffs ativos
+
+
 
 void vitrine(int a[]);
 void cross_platform_sleep(int ms);
@@ -135,7 +137,7 @@ void calculoExp();
 void aleatStatus(int pontos);
 void tomadaDecisao();
 void checkInput(int * n, int min, int max);
-void cura(int qtd);
+void cura(DADOS *usuario, int qtd);
 void ranking();
 void atualizaRanking(char *nomeArquivo, RANKING player);
 void inimigoAleatorio(DADOS *inimigo, int dificuldade);
@@ -146,12 +148,90 @@ void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade);
 void getHabilidade(HABILIDADE *habilidade, int id);
 void mana(int qtd);
 void mostrarBuffs();
+void inimigoMorreu(DADOS * inimigo, int n, int *qtd);
+void salaDoPanico(DADOS *inimigo, int qtd);
+void aplicaBuff(DADOS *usuario, BUFFHANDLER buff);
+void aplicaEfeito(DADOS *alvo, int efeito);
 
-int aplicaBuff(DADOS usuario, int status)
+void aplicaEfeito(DADOS *alvo, int efeito)
+{
+    if(alvo->efeito == 0)
+    {
+        alvo->efeito = efeito; // Aplica o efeito no usuário
+        printf("%s ", alvo->nome);
+        switch(efeito)
+        {
+            case 1:
+                printf("esta queimando!");
+                break;
+            case 2:
+                printf("foi envenenado!");
+                break;
+            case 3:
+                printf("foi atordoado!");
+                break;
+            case 4:
+                printf("esta paralisado!");
+                break;
+            case 5:
+                printf("foi desarmado!");
+                break;
+            case 6:
+                printf("esta sangrando!");
+                break;
+        }
+        printf("\n\n");
+        printf("(Pressione [ENTER] para continuar...)\n");
+        limparBuffer();
+    }
+}
+
+void aplicaBuff(DADOS *usuario, BUFFHANDLER buff)
+{
+    // Aplica o buff no usuário / alvo
+    int i;
+    for(i = 0; i < 15; i++)
+    {
+        if(usuario->buffs[0][i] == 0) // Se o buff estiver vazio
+        {
+            printf("A ");
+            switch(buff.tipo)
+            {
+                case 1:
+                    printf("Forca");
+                    break;
+                case 2:
+                    printf("Inteligencia");
+                    break;
+                case 3:
+                    printf("Protecao");
+                    break;
+                case 4:
+                    printf("Agilidade");
+                    break;
+                default:
+                    printf("buff desconhecido");
+                    return; // Se o tipo do buff for inválido, não aplica
+            }
+            printf(" de %s foi ", usuario->nome);
+            if(buff.valor > 0) printf("aumentada!");
+            else if(buff.valor < 0) printf("diminuida!");
+
+            usuario->buffs[0][i] = buff.tipo; // Tipo do buff
+            usuario->buffs[1][i] = buff.valor; // Valor do buff
+            usuario->buffs[2][i] = buff.duracao; // Duração do buff
+            return;
+        }
+    }
+    if(i == 15) printf("%s atingiu o limite maximo de buffs!\n", usuario->nome);
+}
+
+
+float buffEfetivo(DADOS usuario, int status)
 {
     // Retorna o percentual de alteração no status do usuário, considerando os buffs ativos
     int i;
-    float result;
+    float result, a = 2, b = 2;
     int total = 0;
     for(i = 0; i < 15; i++)
     {
@@ -160,7 +240,9 @@ int aplicaBuff(DADOS usuario, int status)
             total += usuario.buffs[1][i];
         }
     }
-    result = (100 + total * 30) / 100;
+    if(total > 0) a += total;
+    else if(total < 0) b += total; // Se for negativo, diminui o valor de b
+    result = a/b;
     return result;
 }
 
@@ -208,6 +290,7 @@ void getHabilidade(HABILIDADE *habilidade, int id)
     fscanf(fp, "Chance: %d\n", &habilidade->chance);
     fscanf(fp, "Status: %d\n\n", &habilidade->status);
     fclose(fp);
+    habilidade->nome[strcspn(habilidade->nome, "\n")] = 0; // Remove o '\n' do final da string
 }
 
 int statusRequisitado(int status, DADOS usuario)
@@ -217,15 +300,15 @@ int statusRequisitado(int status, DADOS usuario)
         case 0: // Nenhum
             return 0;
         case 1: // Forca
-            return usuario.forca * aplicaBuff(usuario, 1);
+            return usuario.forca * buffEfetivo(usuario, 1);
         case 2: // Inteligencia
-            return usuario.inteligencia * aplicaBuff(usuario, 2);
+            return usuario.inteligencia * buffEfetivo(usuario, 2);
         case 3: // Agilidade
-            return usuario.agilidade * aplicaBuff(usuario, 3);
+            return usuario.agilidade * buffEfetivo(usuario, 3);
         case 4: // Protecao
-            return usuario.protecao * aplicaBuff(usuario, 4);
+            return usuario.protecao * buffEfetivo(usuario, 4);
         case 5: // Carisma
-            return usuario.carisma * aplicaBuff(usuario, 5);
+            return usuario.carisma * buffEfetivo(usuario, 5);
         default:
             return 0; // Caso não seja nenhum dos status válidos, retorna 0
     }
@@ -235,16 +318,22 @@ void ataque(DADOS *atacante, DADOS *defensor)
 {
     limparTerminal();
     int dano;
-    dano = (atacante->forca - (numAle(atacante->forca * (3/4) + 1) - 1));
+    int a;
+    a = (float) (statusRequisitado(1, *atacante) * (3.0/4.0) + 1.0);
+    dano = statusRequisitado(1, *atacante) - (numAle(a) - 1);
     if(atacante == &player) dano += bonusAplicado(8); // Adiciona o bônus de dano do jogador
-    printf("%s atacou %s e causou %d de dano!\n\n", atacante->nome, defensor->nome, dano);
+    printf("%s atacou %s e desferiu %d de dano!\n\n", atacante->nome, defensor->nome, dano);
+    a = (float) (statusRequisitado(3, *defensor) * (3.0/4.0) + 1.0);
+    dano -= (statusRequisitado(3, *defensor) - (numAle(a) - 1));
     if(dano < 0) dano = 0; // Se o dano for negativo, não causa dano
-    dano -= (defensor->protecao - (numAle(defensor->protecao * (3/4) + 1) - 1));
-    defensor->hp -= dano;
+    if(atacante == &player) dano += 2; // Se o atacante for o jogador, ele recebe 2 de dano fixo
+    else dano += 1; // Se o atacante for um inimigo, recebe 1 de dano fixo
+    defensor->hp -= dano; // Adiciona 2 de dano fixo
     if(defensor->hp < 0) defensor->hp = 0; // Se o HP do defensor ficar negativo, zera
-    printf("Pressione [ENTER] para continuar");
+    printf("(Pressione [ENTER] para continuar...)\n");
     limparBuffer();
 }
+
 
 void mostrarBuffs()
 {
@@ -267,10 +356,10 @@ void mostrarBuffs()
                     printf("Inteligencia");
                     break;
                 case 3:
-                    printf("Agilidade");
+                    printf("Protecao");
                     break;
                 case 4:
-                    printf("Protecao");
+                    printf("Agilidade");
                     break;
                 default:
                     break;
@@ -287,15 +376,46 @@ void mostrarBuffs()
     }
     if(qtd <= 8) moveCursor(0, qtd * 2 + 3);
     else moveCursor(0, 19);
-    printf("Pressione [ENTER] para continuar\n");
+    printf("Total:");
+    float buff[5];
+    buff[0] = buffEfetivo(player, 1);
+    buff[1] = buffEfetivo(player, 2);
+    buff[2] = buffEfetivo(player, 3);
+    buff[3] = buffEfetivo(player, 4);
+    buff[4] = buffEfetivo(player, 5);
+
+    printf("Forca: %.1f X | Inteligencia: %.1f X | Protecao: %.1f X | Agilidade: %.1f X | Carisma: %.1f X\n\n", buff[0], buff[1], buff[2], buff[3], buff[4]);
+
+    printf("(Pressione [ENTER] para continuar...)\n");
     limparBuffer();
+}
+
+void inimigoMorreu(DADOS * inimigo, int n, int *qtd)
+{
+    int i;
+    limparTerminal();
+    printf("%s foi derrotado!\n\n", inimigo[n].nome);
+    player.exp += inimigo[n].exp;
+    printf("Voce ganhou %d de experiencia!\n\n", inimigo[n].exp);
+    calculoExp();
+    printf("(Pressione [ENTER] para continuar...)\n");
+    limparBuffer();
+    if(*qtd > 1)
+    {
+        for(i = n; i < *qtd - 1; i++)
+        {
+            inimigo[i] = inimigo[i + 1]; // Remove o inimigo derrotado do array
+        }
+        (*qtd)--; // Decrementa a quantidade de inimigos
+    }
 }
 
 void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
 {
-    int statusAtk = 0, statusDefesa;
+    int statusAtk = 0, statusDefesa = 0;
     int hit1 = 0, hit2 = 0, hit3 = 0;
     int dado;
+    DADOS *a;
     dado = numAle(101) - 1;
     if(dado <= habilidade.chance) hit1 = 1; // Verifica se a habilidade acerta
     if(hit1 == 1)
@@ -305,30 +425,58 @@ void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
         dado = numAle(101) - 1;
         if(dado <= habilidade.buff.chance) hit3 = 1;
     }
-    float dano;
-    limparLinhas(3);
-    switch(habilidade.tipo)
+    else
     {
-        case 1:
+        printf("%s tentou usar %s. . . \n\n Mas errou!\n\n", atacante->nome, habilidade.nome);
+        printf("(Pressione [ENTER] para continuar...)\n");
+        limparBuffer();
+        return; // Se a habilidade não acerta, não faz nada
+    }
+    float dano;
+    int qtd = 0;
+    switch(habilidade.tipo)  // Para o efeito principal da habilidade
+    {
+        case 1: // Ataque
             statusAtk = statusRequisitado(habilidade.status, *atacante);
             statusDefesa = statusRequisitado(4, *defensor);
-            dano = (habilidade.qtdmg) * (statusAtk / statusDefesa);
+            dano = (habilidade.qtdmg) * (statusAtk / statusDefesa) + 2.0;
             break;
-        case 2:
+        case 2: // Dano fixo
             if (habilidade.qtdmg == 0) dano = 0;
             else dano = habilidade.qtdmg - defensor->protecao;
             defensor->hp -= dano;  
             break;
-        case 3:
+        case 3: // Cura percentual
+            dano = (float) (habilidade.qtdmg * atacante->hpMax);
+            qtd = dano;
+            cura(atacante, qtd);
             break;
-        case 4:
+        case 4: // Cura fixa
+            dano = habilidade.qtdmg * atacante->inteligencia / 40.0;
+            cura(atacante, dano);
             break;
-        case 5:
+        case 5: // Protecao
             break;
-        case 6:
+        case 6: // Buff / Debuff
+            if(habilidade.buff.alvo == 0) a = defensor; // Se o alvo for o inimigo, aplica o buff no inimigo
+            else if(habilidade.buff.alvo == 1) a = atacante; // Se o alvo for o atacante, aplica o buff no atacante
+            dado = numAle(101) - 1;
+            statusAtk = statusRequisitado(habilidade.status, *atacante) * (1.0 / 5.0);
+            if(dado <= habilidade.buff.chance + statusAtk) hit3 = 1; // Verifica se o buff é aplicado
             break;
         default:
             break;
+    }
+    if(hit2)
+    {
+        aplicaEfeito(defensor, habilidade.efeitoSecundario);
+        if(hit3 && habilidade.tipo != 6) limparTerminal();
+    }
+    if(hit3 && habilidade.tipo != 6)
+    {
+        if(habilidade.buff.alvo == 0) a = defensor; // Se o alvo for o inimigo, aplica o buff no inimigo
+        else if(habilidade.buff.alvo == 1) a = atacante; // Se o alvo for o atacante, aplica o buff no atacante
+        aplicaBuff(a, habilidade.buff);
     }
 }
 
@@ -427,8 +575,7 @@ void hpInimigo(DADOS inimigo, int modo, int num)
     int largura = 30;
     int espacos, resto;
     int x, y;
-    x = (num - 1) * 30;
-    if(x != 0) x += 5 * (num - 1); // Ajusta a posição x para não colidir com o texto
+    x = (num - 1) * 30 + 5 * num;
     y = (num - 1) * 2;
     char txt[41];
     int i;
@@ -495,7 +642,7 @@ void salaDoPanico(DADOS *inimigo, int qtd) {
             }
             else {
                 printf("Os inimigos te alcancaram.\nResista e lute, seu covarde!\n\n");
-                printf("Pressione [ENTER] para continuar\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
                 getchar();
                 batalharInimigo(inimigo, qtd);
             }
@@ -518,8 +665,9 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     {
         hpInimigo(inimigo[i], 0, i + 1);
     }
-    printf("\n\n");
-    printf("O que voce deseja fazer?\n\n");
+    moveCursor(0, 9);
+    for(i = 0; i < 5 + 35 * qtd; i++) printf("=");
+    printf("\nO que voce deseja fazer?\n\n");
     printf("[1] Atacar  [2] Habilidade  [3] Item  [4] Fugir  ");
     if(b1 || b2) 
     {
@@ -539,7 +687,7 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     int escolha, OK = 1;
     if(b1 || b2) checkInput(&escolha, 1, 7);
     else checkInput(&escolha, 1, 7);
-    limparLinhas(1);
+    limparLinhas(3);
     moveCursor(0, 14);
     limparLinhas(5);
     switch(escolha)
@@ -550,42 +698,34 @@ void batalharInimigo(DADOS *inimigo, int qtd)
             int inimigoEscolhido;
             checkInput(&inimigoEscolhido, 1, qtd);
             ataque(&player, &inimigo[inimigoEscolhido - 1]);
-            if(inimigo[inimigoEscolhido - 1].hp <= 0)
-            {
-                limparTerminal();
-                printf("%s foi derrotado!\n\n", inimigo[inimigoEscolhido - 1].nome);
-                player.exp += inimigo[inimigoEscolhido - 1].exp;
-                printf("Voce ganhou %d de experiencia!\n\n", inimigo[inimigoEscolhido - 1].exp);
-                calculoExp();
-                printf("Pressione [ENTER] para continuar\n");
-                limparBuffer();
-                if(qtd > 1)
-                {
-                    inimigoEscolhido--;
-                    for(i = inimigoEscolhido; i < qtd - 1; i++)
-                    {
-                        inimigo[i] = inimigo[i + 1]; // Remove o inimigo derrotado do array
-                    }
-                    qtd--; // Decrementa a quantidade de inimigos
-                }
-            }
+            if(inimigo[inimigoEscolhido - 1].hp <= 0) inimigoMorreu(inimigo, inimigoEscolhido - 1, &qtd);
             batalharInimigo(inimigo, qtd);
             break;
         case 2: 
             for (i = 0; i < 4; i++) {
                 getHabilidade(&h[i], player.habilidades[i]);
-                printf("Habilidade %d: %s", i + 1, h[i].nome);
+                printf("Habilidade %d: %s\n\n", i + 1, h[i].nome);
             }
             printf("[1] Usar 1  [2] Usar 2  [3] Usar 3  [4] Usar 4  \n\n[0] Sair\n\n\n");
             int escolha;
             checkInput(&escolha, 0, 4);
-            if (escolha != 0) {
+            while(h[escolha].tipo == 0 && escolha != 0)
+            {
+                limparLinhas(1);
+                moveCursor(0, 23);
+                limparLinhas(2);
+                moveCursor(0, 21);
+                printf("Habilidade invalida, escolha outra.\n\n");
+                checkInput(&escolha, 0, 4);
+            }
+            if (escolha != 0) 
+            {
                 usarHabilidade(&player, inimigo, h[escolha]);
             } 
             else batalharInimigo(inimigo, qtd);
             break;
         case 3:
-            verInventario(1);
+            verInventario(3);
             batalharInimigo(inimigo, qtd);
             break;
         case 4:
@@ -600,13 +740,13 @@ void batalharInimigo(DADOS *inimigo, int qtd)
             }
             else {
                 printf("Os inimigos te alcancaram.\nResista e lute!\n\n");
-                printf("Pressione [ENTER] para continuar\n");
-                getchar();
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
                 batalharInimigo(inimigo, qtd);
             }
             break;
         case 5:
-            limparBuffs();
+            limparTerminal();
             mostrarBuffs();
             batalharInimigo(inimigo, qtd);
             break;
@@ -627,10 +767,10 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     }
 }
 
-void cura(int qtd)
+void cura(DADOS *usuario, int qtd)
 {
-    player.hp += qtd;
-    if(player.hp > player.hpMax) player.hp = player.hpMax;
+    usuario->hp += qtd;
+    if(usuario->hp > usuario->hpMax) usuario->hp = usuario->hpMax;
 }
 
 void ranking()
@@ -804,16 +944,16 @@ else
                 textoTela("Voce decide parar para descansar . . .\n", 400);
                 float a = numAle(26) + 4.0;
                 int b = a / 100.0 * (float) player.hpMax, c = a;
-                cura(b);
+                cura(&player, b);
                 sprintf(txt, "Voce recuperou %d%% de HP\n", c);
                 textoTela(txt, 200);
-                printf("Pressione [ENTER] para continuar\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
                 limparBuffer();
             case 0:
                 limparTerminal();
                 textoTela("Voce segue o seu caminho . . .\n\n", 400);
                 sala=99;
-                printf("Pressione [ENTER] para continuar\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
                 limparBuffer();
                 tomadaDecisao();
                 break;
@@ -834,7 +974,7 @@ else
                 textoTela("O mesmo vendedor do inicio . . .\n", 200);
                 if(sala < 60) textoTela("Voce se pergunta como ele chegou aqui\n\n", 200);
                 else textoTela("Voce ja aceitou que ele e onipresente\n\n", 300);
-                printf("Pressione [ENTER] para continuar\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
                 limparBuffer();
                 loja();
                 limparBuffer();
@@ -849,7 +989,7 @@ else
                     textoTela("Ao mesmo tempo voce sente um peso no seu peito\n", 300);
                     cross_platform_sleep(500);
                     textoTela("Essa vez e diferente . . .\n\n", 500);
-                    printf("Pressione [ENTER] para continuar\n");
+                    printf("(Pressione [ENTER] para continuar...)\n");
                     limparBuffer();
                     limparTerminal();
                     textoTela(". . .\n", 500);
@@ -862,13 +1002,13 @@ else
                     cross_platform_sleep(1000);
                     textoTela("Voce nao sabe o que esta por vir\n\n", 600);
                 }
-                printf("Pressione [ENTER] para continuar\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
                 limparBuffer();
             case 0:
                 limparTerminal();
                 textoTela("Voce segue o seu caminho . . .\n\n", 400);
                 sala++;
-                printf("Pressione [ENTER] para continuar\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
                 limparBuffer();
                 tomadaDecisao();
                 break;
@@ -882,13 +1022,13 @@ else
         //apos vitoria
         limparTerminal();
         textoTela("Voce se levanta e segue o seu caminho . . .\n\n", 400);
-        printf("Pressione [ENTER] para continuar\n");
+        printf("(Pressione [ENTER] para continuar...)\n");
         limparBuffer();
         sala++;
         save(player);
         limparTerminal();
         printf("Seu jogo foi salvo automaticamente\n\n");
-        printf("Pressione [ENTER] para continuar\n");
+        printf("(Pressione [ENTER] para continuar...)\n");
         limparBuffer();
         tomadaDecisao();
     }
@@ -922,7 +1062,7 @@ else
                     textoTela("Voce encontrou um inimigo!\n", 200);
                 }
                 textoTela("Prepare-se para a batalha!\n\n", 200);
-                printf("Pressione [ENTER] para continuar\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
                 limparBuffer();
                 
                 batalharInimigo(inimigo, caso);
@@ -1334,7 +1474,7 @@ void usarItem(int espaco)
     if(id == 0) 
     {
         printf("Esse item nao pode ser usado.\n\n");
-        printf("Pressione [ENTER] para continuar");
+        printf("(Pressione [ENTER] para continuar...)\n");
         return;
     }
     lixo(espaco, 1); // Remove o item do inventário
@@ -1527,9 +1667,10 @@ void verInventario(int modo)
     }
     switch(modo)
     {
-        case 1: // Inventario no modo ver inventario na loja
+        case 3:
+        case 1:
             printf("\n[0] SAIR\n");
-            printf("\nDigite o numero do item para ver informacoes:\n");
+            printf("\nDigite o numero do item para ver informacoes:\n\n");
             scanf("%d", &escolha);
             if(escolha == 0) {
                 // Sai imediatamente
@@ -1555,9 +1696,17 @@ void verInventario(int modo)
                 checkInput(&escolha2, 0, 1);
                 if(escolha2 == 1) 
                 {
+                    if (modo == 3 && item[player.inventario[0][escolha - 1]].tipo == 6) 
+                    {
+                        printf("Esse item nao pode ser usado durante uma batalha!\n\n");
+                        printf("(Pressione [ENTER] para continuar...)\n");
+                        limparBuffer();
+                        verInventario(3);
+                        return;
+                    }
                     limparTerminal();
                     usarItem(escolha - 1);
-                    printf("Pressione [ENTER] para continuar\n");
+                    printf("(Pressione [ENTER] para continuar...)\n");
                     limparBuffer();
                 }
                 verInventario(1);
