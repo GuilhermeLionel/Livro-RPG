@@ -24,7 +24,7 @@ O jogo simula um capítulo de um livro-jogo, no qual o jogador pode tomar decis�
 
 - Sistema de combate com:
   - Informações do jogador e inimigo
-  - Ações como lutar, fugir ou interagir
+  - Ações como lutar ou fugir
 
 - Finais possíveis com:
   - Encerramento do jogo
@@ -40,7 +40,7 @@ O jogo utiliza uma estrutura `Personagem` que armazena:
 - Pontuação  
 - Alinhamento (bondoso, neutro ou maldoso)  
 - Atributos: Força, Inteligência, Sabedoria, Carisma, etc.  
-- Recursos: Vida, Magia, Energia  
+- Recursos: Vida, Magia
 - Itens e Quests (vetores de inteiros)
 
 ## 🔧 Funções principais
@@ -75,4 +75,4 @@ Siga os passos abaixo para rodar o jogo no terminal (Bash):
 Acesse a pasta onde está o código-fonte do projeto.
 
 ```bash
-gcc main.c -o livrojogo
+gcc codigoFonte.c -o livrojogo
