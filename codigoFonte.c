@@ -146,6 +146,7 @@ void checkInput(int * n, int min, int max);
 void cura(DADOS *usuario, int qtd);
 void ranking();
 void atualizaRanking(char *nomeArquivo, RANKING player);
+void bossAleatorio(DADOS *inimigo, int dificuldade);
 void inimigoAleatorio(DADOS *inimigo, int dificuldade);
 void batalharInimigo(DADOS *inimigo, int qtd);
 void batalharPlayer(DADOS *inimigo, int qtd);
@@ -374,6 +375,20 @@ void hpPlayer()
     printf("%c", 217);
 }
 
+void atualizarBuff(int quant, DADOS usuario) {
+    int i, j;
+    if (quant < 0) 
+        for (i = 0; i < 3; i++)
+            for (j = 0; j < 15; j++)
+                usuario.buffs[i][j] = 0;
+    for (i = 0; i < 15; i++)
+        if (usuario.buffs[2][i] != 0)  usuario.buffs[2][i]--;
+        else {
+            for (j = 0; j < 3; j++) 
+                usuario.buffs[j][i] = 0;
+            }
+}
+
 float buffEfetivo(DADOS usuario, int status)
 {
     // Retorna o percentual de alteração no status do usuário, considerando os buffs ativos
@@ -485,7 +500,6 @@ void ataque(DADOS *atacante, DADOS *defensor)
     printf("(Pressione [ENTER] para continuar...)\n");
     limparBuffer();
 }
-
 
 void mostrarBuffs()
 {
@@ -1273,10 +1287,10 @@ else
     }
     else if(sala % 10 == 0)
     {
-        //codigo bosss
-        
-
-        //apos vitoria
+        DADOS boss;
+        int bossDificuldade = dificuldadeAleatoria();
+        bossAleatorio(&boss, bossDificuldade);
+        batalharInimigo(&boss, 1);
         limparTerminal();
         textoTela("Voce se levanta e segue o seu caminho . . .\n\n", 400);
         printf("(Pressione [ENTER] para continuar...)\n");
@@ -1388,67 +1402,84 @@ else
 int dificuldadeAleatoria()
 {
     float chance[5] = {0.0, 0.0, 0.0, 0.0, 0.0}; // Vetor que guarda as chances de raridade de item ser escolhido
-    if(sala <= 10) // Se o sala for entre 0 e 10, a chance de um item de raridade 1 é 90% e 2 é 10%
-    {
-        chance[1] = 65.0;
-        chance[2] = 35.0;
+    if(sala <= 10){
+        if (sala % 10 == 0) chance[3] = 100.0; 
+        else {
+                chance[1] = 65.0;
+                chance[2] = 35.0;
+        }
     }
-    if(sala >= 11 && sala <= 30) 
-    {
-        chance[1] = 50.0;
-        chance[2] = 40.0;
-        chance[3] = 8.0;
-        chance[4] = 2.0;
+    if(sala >= 11 && sala <= 30) {
+        if (sala % 10 == 0) chance[3] = 100.0;
+        else {
+            chance[1] = 50.0;
+            chance[2] = 40.0;
+            chance[3] = 8.0;
+            chance[4] = 2.0;
+        }
     }
-    if(sala >= 31 && sala <= 40)
-    {
-        chance[1] = 30.0;
-        chance[2] = 45.0;
-        chance[3] = 19.0;
-        chance[4] = 5.0;
+    if(sala >= 31 && sala <= 40){
+        if (sala % 10 == 0) chance[4] = 100.0;
+        else {
+            chance[1] = 30.0;
+            chance[2] = 45.0;
+            chance[3] = 19.0;
+            chance[4] = 5.0;
         chance[5] = 1.0;
+        }
     }
-    if(sala >= 41 && sala <= 50) 
-    {
-        chance[1] = 25.0;
-        chance[2] = 35.0;
-        chance[3] = 25.0;
-        chance[4] = 10.0;
-        chance[5] = 5.0;
+    if(sala >= 41 && sala <= 50) {
+        if (sala % 10 == 0) chance[5] = 100.0;
+        else {
+            chance[1] = 25.0;
+            chance[2] = 35.0;
+            chance[3] = 25.0;
+            chance[4] = 10.0;
+            chance[5] = 5.0;
+        }
     }
-    if(sala >=51 && sala <= 60) 
-    {
-        chance[2] = 30.0;
-        chance[3] = 40.0;
-        chance[4] = 20.0;
-        chance[5] = 10.0;
+    if(sala >=51 && sala <= 60) {
+        if (sala % 10 == 0) chance[5] = 100.0;
+        else {
+            chance[2] = 30.0;
+            chance[3] = 40.0;
+            chance[4] = 20.0;
+            chance[5] = 10.0;
+        }
     }
-    if(sala >= 61 && sala <= 70) 
-    {
-        chance[2] = 20.0;
-        chance[3] = 40.0;
-        chance[4] = 30.0;
-        chance[5] = 20.0;
+    if(sala >= 61 && sala <= 70) {
+        if (sala % 10 == 0) chance[5] = 100.0;
+        else {
+            chance[2] = 20.0;
+            chance[3] = 40.0;
+            chance[4] = 30.0;
+            chance[5] = 20.0;
+        }
     }
-    if(sala >= 71 && sala <= 80) 
-    {
-        chance[2] = 5.0;
-        chance[3] = 30.0;
-        chance[4] = 40.0;
-        chance[5] = 25.0;
+    if(sala >= 71 && sala <= 80) {
+        if (sala % 10 == 0) chance[5] = 100.0;
+        else {
+            chance[2] = 5.0;
+            chance[3] = 30.0;
+            chance[4] = 40.0;
+            chance[5] = 25.0;
+        }
     }
-    if(sala >= 81 && sala <= 90) 
-    {
-        chance[3] = 20.0;
-        chance[4] = 70.0;
-        chance[5] = 10.0;
-
+    if(sala >= 81 && sala <= 90) {
+        if (sala % 10 == 0) chance[5] = 100.0;
+        else {
+            chance[3] = 20.0;
+            chance[4] = 70.0;
+            chance[5] = 10.0;
+        }
     }
-    if(sala >= 91 && sala <= 100) 
-    {
-        chance[3] = 15.0;
-        chance[4] = 50.0;
-        chance[5] = 35.0;
+    if(sala >= 91 && sala <= 100){ 
+        if (sala % 10 == 0) chance[5] = 100.0;
+        else {
+            chance[3] = 15.0;
+            chance[4] = 50.0;
+            chance[5] = 35.0;
+        }
     }
     int a = aleatorizaChance(6, chance);
     return a;
@@ -1521,6 +1552,72 @@ void inimigoAleatorio(DADOS *inimigo, int objetivo)
     inimigo->mp = inimigo->manaMax;
 }
 
+void bossAleatorio(DADOS *inimigo, int objetivo)
+{
+    FILE *fp;
+    fp = fopen("Dados-do-Jogo/inimigos.txt", "rt");
+    int dificuldade;
+    int quantidade = 0;
+    int i, j;
+    char nome[51], txt[101];
+    while(!feof(fp))
+    {
+        fgets(txt, 100, fp);
+        fgets(nome, 50, fp);
+        nome[strcspn(nome, "\n")] = 0;
+        fscanf(fp, "DIFICULDADE %d\n", &dificuldade);
+        if(dificuldade == objetivo) 
+        {
+            quantidade++;
+        }
+        fscanf(fp, "\nATRIBUTOS\nFORCA %d\nPROTECAO %d\nAGILIDADE %d\nINTELIGENCIA %d\nCARISMA %d\n\nHP %d\nMP %d\n\nEXP %d\n\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
+    }
+
+    rewind(fp);
+
+    
+    int sorteio = numAle(quantidade); // sorteia um inimigo aleatório entre os disponíveis
+
+    while(!feof(fp))
+    {
+        fgets(txt, 100, fp);
+        fgets(nome, 51, fp);
+        nome[strcspn(nome, "\n")] = 0;
+
+
+        fscanf(fp, "DIFICULDADE %d\n", &dificuldade);
+
+        if(dificuldade == objetivo) 
+        {
+            sorteio--;
+        }
+        if(sorteio != 0) 
+        {
+            for(i = 0; i < 12; i++) 
+            {
+                fgets(txt, 100, fp);
+            }
+        }
+        else 
+        {
+            strcpy(inimigo->nome, nome);
+            fscanf(fp, "\nATRIBUTOS\nFORCA %d\nPROTECAO %d\nAGILIDADE %d\nINTELIGENCIA %d\nCARISMA %d\n\nHP %d\nMP %d\n\nEXP %d\n", &inimigo->forca, &inimigo->protecao, &inimigo->agilidade, &inimigo->inteligencia, &inimigo->carisma, &inimigo->hp, &inimigo->mp, &inimigo->exp);
+            break;
+        }
+    }
+    fclose(fp);
+    for(i = 0; i < 3; i++)
+    {
+        for(j = 0; j < 15; j++)
+        {
+            inimigo->buffs[i][j] = 0;
+        }
+    }
+    inimigo->hpMax = inimigo->protecao * 5;
+    inimigo->hpMax = inimigo->hp;
+    inimigo->manaMax = inimigo->inteligencia * 3;
+    inimigo->mp = inimigo->manaMax;
+}
 
 int salaAleatoria()
 {
