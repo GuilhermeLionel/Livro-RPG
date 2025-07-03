@@ -164,6 +164,7 @@ void limparAte(int q, int x);
 void telaInicial();
 void descreverHabilidade(int id, int num);
 void morreu();
+void azualizaBuff(DADOS * alvo, int qtd);
 
 void morreu(){
     textoTela("Voce morreu...",400);
@@ -1051,9 +1052,38 @@ void cura(DADOS *usuario, int qtd)
     if(usuario->hp > usuario->hpMax) usuario->hp = usuario->hpMax;
 }
 
+void atualizaBuff(DADOS * alvo, int qtd)
+{
+    int i;
+    if(qtd < 0)
+    {
+        for(i = 0; i < 15; i++)
+        {
+            alvo->buffs[0][i] = 0; // Zera os buffs
+            alvo->buffs[1][i] = 0; // Zera os valores
+            alvo->buffs[2][i] = 0; // Zera as durações
+        }
+    }
+    else
+    for(i = 0; i < 15; i++)
+    {
+        if(alvo->buffs[0][i] != 0) // Se o buff for diferente de 0
+        {
+            alvo->buffs[2][i] -= qtd; // Diminui a duração do buff
+            if(alvo->buffs[2][i] <= 0) // Se a duração do buff for menor ou igual a 0
+            {
+                alvo->buffs[0][i] = 0; // Zera o buff
+                alvo->buffs[1][i] = 0; // Zera o valor do buff
+                alvo->buffs[2][i] = 0; // Zera a duração do buff
+            }
+        }
+    }
+}
+
 void passarTurno(DADOS * alvo)
 {
     int i;
+    BUFFHANDLER buff;
     atualizaBuff(alvo, 1);
     switch(alvo->efeito)
     {
@@ -1068,7 +1098,6 @@ void passarTurno(DADOS * alvo)
             printf("%s sofreu dano por estar envenenado!\n\n", alvo->nome);
             break;
         case 4:
-            BUFFHANDLER buff;
             buff.tipo = 4;
             buff.duracao = -1; 
             buff.valor = -1;
