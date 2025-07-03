@@ -1312,9 +1312,8 @@ else
 
 int dificuldadeAleatoria()
 {
-    float chance[5] = {0.0, 0.0, 0.0, 0.0, 0.0}; // Vetor que guarda as chances de raridade de item ser escolhido
-    float peso1 = 0.05, peso2 = 0.15, peso3 = 0.5, peso4 = 2.0;
-    if(sala <= 10) // Se o sala for entre 0 e 10, a chance de um item de raridade 1 é 90% e 2 é 10%
+    float chance[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}; 
+    if(sala <= 10) 
     {
         chance[1] = 65.0;
         chance[2] = 35.0;
