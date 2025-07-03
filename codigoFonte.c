@@ -106,7 +106,7 @@ int dificuldadeAleatoria();
 int raridadeAleatoria();
 int bonusAplicado(int n);
 int statusRequisitado(int status, DADOS usuario);
-int somaItens(DADOS *player);
+int sumItens(DADOS *player);
 int quantosBuffs(int sinal);
 float buffEfetivo(DADOS usuario, int status); // Retorna o percentual de alteração no status do usuário, considerando os buffs ativos
 
@@ -380,6 +380,21 @@ float buffEfetivo(DADOS usuario, int status)
     int i;
     float result, a = 2, b = 2;
     int total = 0;
+    switch(usuario.efeito)
+    {
+        case 1:
+            if(status = 1) total--;
+            return;
+        case 2:
+            if(status == 2) total--;
+            return;
+        case 5:
+            if(status == 1) total -= 2;
+            return;
+        default:
+            break;
+    }
+    
     for(i = 0; i < 15; i++)
     {
         if(usuario.buffs[0][i] == status) // Se o buff for do tipo requisitado
@@ -606,6 +621,7 @@ void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
     int hit1 = 0, hit2 = 0, hit3 = 0;
     int dado;
     int ok = 0;
+    if(atacante == &player) mana(-habilidade.custo);
     DADOS *a;
     dado = numAle(101) - 1;
     if(dado <= habilidade.chance) hit1 = 1; // Verifica se a habilidade acerta
@@ -875,6 +891,11 @@ void batalharPlayer(DADOS *inimigo, int qtd){
 void batalharInimigo(DADOS *inimigo, int qtd)
 {
     limparTerminal();
+    if(player.hp <= 0)
+    {
+        //morreu();
+        return;
+    }
     if(inimigo[0].hp <= 0) // Se o primeiro inimigo já estiver morto, remove ele da lista
     {
         textoTela("Voce derrotou todos os inimigos\n", 200);
@@ -901,6 +922,7 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     {
         sala++;
         tomadaDecisao();
+        return;
     }
     int i;
     for(i = 0; i < qtd; i++)
@@ -1016,12 +1038,46 @@ void batalharInimigo(DADOS *inimigo, int qtd)
             batalharInimigo(inimigo, qtd);
             break;
     }
+    for(i = 0; i < qtd; i++)
+    {
+        //batalhaPlayer(inimigo, qtd);
+    }
+    batalharInimigo(inimigo, qtd);
 }
 
 void cura(DADOS *usuario, int qtd)
 {
     usuario->hp += qtd;
     if(usuario->hp > usuario->hpMax) usuario->hp = usuario->hpMax;
+}
+
+void passarTurno(DADOS * alvo)
+{
+    int i;
+    atualizaBuff(alvo, 1);
+    switch(alvo->efeito)
+    {
+        case 1:
+            alvo->hp -= alvo->hpMax / 20; // Perde 10% do HP por turno
+            if(alvo->hp < 0) alvo->hp = 0; // Se o HP ficar negativo, zera
+            printf("%s sofreu dano por estar queimando!\n\n", alvo->nome);
+            break;
+        case 2:
+            alvo->hp -= alvo->hpMax / 12; // Perde 5% do HP por turno
+            if(alvo->hp < 0) alvo->hp = 0; // Se o HP ficar negativo, zera
+            printf("%s sofreu dano por estar envenenado!\n\n", alvo->nome);
+            break;
+        case 4:
+            BUFFHANDLER buff;
+            buff.tipo = 4;
+            buff.duracao = -1; 
+            buff.valor = -1;
+            aplicaBuff(alvo, buff);
+            printf("%s esta paralisado e perdeu agilidade\n\n", alvo->nome);
+            break;
+        default:
+            break;
+    }
 }
 
 void ranking()
@@ -1173,6 +1229,26 @@ void tomadaDecisao()
     }
 else 
 {
+    escolha = 10;
+    while(escolha != 0)
+    {
+        printf("Antes de prosseguir, o que deseja fazer?\n\n");
+        printf("[0] Continuar [1] Ver inventario [2] Ver Status\n\n");
+        checkInput(&escolha, 0, 2);
+        switch(escolha)
+        {
+            case 1:
+                verInventario(1);
+                limparTerminal();
+                break;
+            case 2:
+                mostrarStatus();
+                limparTerminal();
+                break;
+
+        }
+    }
+    limparTerminal();
     sprintf(txt, "Sala %d", sala);
     int i;
     for(i = 0; i < 70; i++) printf("-");
@@ -1366,7 +1442,7 @@ else
                 printf("Escolha uma habilidade:\n\n");
                 for(i = 0; i < 3; i++)
                 {
-                    descreverHabilidade(hab[i], i);
+                    descreverHabilidade(hab[i], i+1);
                     printf("\n");
                 }
                 checkInput(&escolha, 1, 3);
@@ -2005,6 +2081,10 @@ void usarItem(int espaco)
     {
         consumivel(id);
         lixo(espaco, 1);
+    }
+    if(tipo == 8)
+    {
+
     }
 }
 
