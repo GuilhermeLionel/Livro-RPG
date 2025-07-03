@@ -16,6 +16,8 @@
 #define MAX_ITEMS 100 // Define o número máximo de itens
 
 int items = 0;
+
+int hack = 0;
  
 typedef struct buffHandler2 {
     int tipo; // 0 = Vazio, 1 = Ataque, 2 = Inteligencia, 3 = Protecao, 4 = Agilidade, 5 - Dano por turno, 6 - Cura por turno    qualquer outro alem é caso especial
@@ -43,6 +45,7 @@ typedef struct abilityHandler2 {
 } HABILIDADE;
 
 HABILIDADE h[4]; // vetor de habilidades do personagem
+
 
 typedef struct itemHandler2{
     char nome[51];
@@ -88,6 +91,7 @@ typedef struct ranking2 {
 RANKING jogador;
 
 int sala = 0;
+
 
 
 int idAleatorio(int raridade); // Gera um id aleatorio dado a raridade do item
@@ -215,13 +219,15 @@ void calculaPontuacao(DADOS *player, RANKING jogador, int sala) {
     printf("\nPontuacao final: %d\n", jogador.pontuacao); 
     atualizaRanking("Dados-do-Jogo/pontuacao.txt", jogador); 
     printf("Pressione [ENTER] para sair\n");
+    limparBuffer();
+    telaInicial();
     getchar();
     telaInicial();
 }
 
 void limparAte(int q, int x)
 {
-    int i, j;
+    int i;
     for(i = 0; i <= x; i++)
     {
         printf("\033[1A");
@@ -256,7 +262,7 @@ void aplicaEfeito(DADOS *alvo, int efeito)
                 printf("esta sangrando!");
                 break;
         }
-        printf("\n\n");
+        printf("\n\n\n");
         printf("(Pressione [ENTER] para continuar...)\n");
         limparBuffer();
     }
@@ -270,36 +276,46 @@ void aplicaBuff(DADOS *usuario, BUFFHANDLER buff)
     {
         if(usuario->buffs[0][i] == 0) // Se o buff estiver vazio
         {
-            printf("A ");
-            switch(buff.tipo)
+            if(buff.tipo != 10)
             {
-                case 1:
-                    printf("Forca");
-                    break;
-                case 2:
-                    printf("Inteligencia");
-                    break;
-                case 3:
-                    printf("Protecao");
-                    break;
-                case 4:
-                    printf("Agilidade");
-                    break;
-                default:
-                    printf("buff desconhecido");
-                    return; // Se o tipo do buff for inválido, não aplica
+                printf("A ");
+                switch(buff.tipo)
+                {
+                    case 1:
+                        printf("Forca");
+                        break;
+                    case 2:
+                        printf("Inteligencia");
+                        break;
+                    case 3:
+                        printf("Protecao");
+                        break;
+                    case 4:
+                        printf("Agilidade");
+                        break;
+                    default:
+                        printf("buff desconhecido");
+                        return; // Se o tipo do buff for inválido, não aplica
+                }
+                printf(" de %s foi ", usuario->nome);
+                if(buff.valor > 0) printf("aumentada!");
+                else if(buff.valor < 0) printf("diminuida!");
+                printf("\n\n\n");
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
             }
-            printf(" de %s foi ", usuario->nome);
-            if(buff.valor > 0) printf("aumentada!");
-            else if(buff.valor < 0) printf("diminuida!");
-
             usuario->buffs[0][i] = buff.tipo; // Tipo do buff
             usuario->buffs[1][i] = buff.valor; // Valor do buff
             usuario->buffs[2][i] = buff.duracao; // Duração do buff
-            return;
+            break;
         }
     }
-    if(i == 15) printf("%s atingiu o limite maximo de buffs!\n", usuario->nome);
+    if(i == 15) 
+    {
+        printf("%s atingiu o limite maximo de buffs!\n\n\n", usuario->nome);
+        printf("(Pressione [ENTER] para continuar...)\n");
+        limparBuffer();
+    }
 }
 
 void hpPlayer()
@@ -371,10 +387,14 @@ int quantosBuffs(int sinal)
         {
             if(player.buffs[1][i] > 0) result++;
         }
-    else for(i = 0; i < 15; i ++)
+    else
+    { 
+        if(player.efeito) result++;
+        for(i = 0; i < 15; i ++)
         {
             if(player.buffs[1][i] < 0) result++;
         }
+    }
     return result;
 }
 
@@ -387,26 +407,27 @@ void mana(int qtd)
 void getHabilidade(HABILIDADE *habilidade, int id)
 {
     FILE *fp;
-    fp = fopen("Dados-do-Jogo/habilidades.txt", "r");
-    int i, j;
-    for(i = 0; i < id; i++)
+    fp = fopen("Dados-do-Jogo/habilidades.txt", "rt");
+    if ((fp = fopen("Dados-do-Jogo/habilidades.txt", "rt")) == NULL) { printf("Error opening file\n"); return; }
+    int i;
+    for (i = 0; i <= id; i++) 
     {
-        for(j = 0; j < 13; j++) fgets(habilidade->descricao, 200, fp); // Pula as linhas até chegar na habilidade desejada
+        fgets(habilidade->nome, 50, fp);
+        fgets(habilidade->descricao, 50, fp);
+        fscanf(fp, "Tipo: %d\n", &habilidade->tipo);
+        fscanf(fp, "Efeito: %d %d%%\n", &habilidade->efeitoSecundario, &habilidade->chanceDeEfeito);
+        fscanf(fp, "Buff: %d %d%%\n", &habilidade->buff.tipo, &habilidade->buff.chance);
+        fscanf(fp, "Buff Alvo: %d\n", &habilidade->buff.alvo);
+        fscanf(fp, "Buff Duracao: %d\n", &habilidade->buff.duracao);
+        fscanf(fp, "Quant Buff: %d\n", &habilidade->buff.valor);
+        fscanf(fp, "Qtd: %f\n", &habilidade->qtdmg);
+        fscanf(fp, "Custo: %d\n", &habilidade->custo);
+        fscanf(fp, "Chance: %d\n", &habilidade->chance);
+        fscanf(fp, "Status: %d\n\n", &habilidade->status);
     }
-    fgets(habilidade->nome, 50, fp);
-    fgets(habilidade->descricao, 200, fp);
-    fscanf(fp, "Tipo: %d\n", &habilidade->tipo);
-    fscanf(fp, "Efeito: %d %d%%\n", &habilidade->efeitoSecundario, &habilidade->chanceDeEfeito);
-    fscanf(fp, "Buff: %d %d%%\n", &habilidade->buff.tipo, &habilidade->buff.chance);
-    fscanf(fp, "Buff Alvo: %d\n", &habilidade->buff.alvo);
-    fscanf(fp, "Buff Duracao: %d\n", &habilidade->buff.duracao);
-    fscanf(fp, "Quant Buff: %d\n", &habilidade->buff.valor);
-    fscanf(fp, "Qtd: %f\n", &habilidade->qtdmg);
-    fscanf(fp, "Custo: %d\n", &habilidade->custo);
-    fscanf(fp, "Chance: %d\n", &habilidade->chance);
-    fscanf(fp, "Status: %d\n\n", &habilidade->status);
-    fclose(fp);
     habilidade->nome[strcspn(habilidade->nome, "\n")] = 0; // Remove o '\n' do final da string
+
+    fclose(fp);
 }
 
 int statusRequisitado(int status, DADOS usuario)
@@ -458,32 +479,69 @@ void mostrarBuffs()
     int qtd = 0;
     for(i = 0; i < 15; i++) 
     {
-        if(player.buffs[0][i] != 0)
+        if(i == 0)
+        {
+            if(player.efeito != 0)
+            {
+                printf("Voce esta ");
+                switch(player.efeito)
+                {
+                    case 1:
+                        printf("queimando");
+                        break;
+                    case 2:
+                        printf("envenenado");
+                        break;
+                    case 3:
+                        printf("atordoado");
+                        break;
+                    case 4:
+                        printf("paralisado");
+                        break;
+                    case 5:
+                        printf("desarmado");
+                        break;
+                    case 6:
+                        printf("sangrando");
+                        break;
+                }
+                printf("\n\n");
+                qtd++;
+            }
+        }
+        if(player.buffs[0][i] != 0 && player.buffs[0][i] != 10)
         {
             qtd++;
-            if(player.buffs[1][i] > 0 && player.buffs[0][i] < 6)printf("+ %d ", player.buffs[1][i]);
-            else if(player.buffs[1][i] < 0) printf("- %d ", -player.buffs[1][i]);
-            switch(player.buffs[0][i])
+            if(player.buffs[0][i] == 10) 
             {
-                case 1:
-                    printf("Forca");
-                    break;
-                case 2:
-                    printf("Inteligencia");
-                    break;
-                case 3:
-                    printf("Protecao");
-                    break;
-                case 4:
-                    printf("Agilidade");
-                    break;
-                default:
-                    break;
+            printf("Incapaz de proteger por %d turnos", player.buffs[2][i]);
+            } 
+            else 
+            {
+                if(player.buffs[1][i] > 0 && player.buffs[0][i] < 6)printf("+ %d ", player.buffs[1][i]);
+                else if(player.buffs[1][i] < 0) printf("- %d ", -player.buffs[1][i]);
+                switch(player.buffs[0][i])
+                {
+                    case 1:
+                        printf("Forca");
+                        break;
+                    case 2:
+                        printf("Inteligencia");
+                        break;
+                    case 3:
+                        printf("Protecao");
+                        break;
+                    case 4:
+                        printf("Agilidade");
+                        break;
+                    default:
+                        break;
+                }
+                if(player.buffs[2][i] < 0) printf(" | - ");
+                else printf(" | %d turnos restantes", player.buffs[2][i]);
             }
-            if(player.buffs[2][i] < 0) printf(" | - ");
-            else printf(" | %d turnos restantes", player.buffs[2][i]);
-            if(qtd <= 8)printf("\n\n");
-            if(qtd > 8)
+            if(qtd < 8)printf("\n\n");
+            if(qtd >= 8)
             {
                 moveCursor(x, y);
                 y += 2;
@@ -492,7 +550,7 @@ void mostrarBuffs()
     }
     if(qtd <= 8) moveCursor(0, qtd * 2 + 3);
     else moveCursor(0, 19);
-    printf("Total:");
+    printf("Total:\n");
     float buff[5];
     buff[0] = buffEfetivo(player, 1);
     buff[1] = buffEfetivo(player, 2);
@@ -528,9 +586,11 @@ void inimigoMorreu(DADOS * inimigo, int n, int *qtd)
 
 void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
 {
+    int i;
     int statusAtk = 0, statusDefesa = 0;
     int hit1 = 0, hit2 = 0, hit3 = 0;
     int dado;
+    int ok = 0;
     DADOS *a;
     dado = numAle(101) - 1;
     if(dado <= habilidade.chance) hit1 = 1; // Verifica se a habilidade acerta
@@ -572,6 +632,21 @@ void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
             cura(atacante, dano);
             break;
         case 5: // Protecao
+            for(i = 0; i < 15; i++) if(atacante->buffs[0][i] == 10) ok = 1; // Verifica se o jogador já tem um buff de proteção ativo
+            if(!ok)
+            {
+                aplicaBuff(atacante, habilidade.buff);
+                printf("%s se protegeu!\n\n", atacante->nome);
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
+            }
+            else
+            {
+                printf("%s tentou se proteger. . .\n\n Mas falhou!\n\n", atacante->nome);
+                printf("(Pressione [ENTER] para continuar...)\n");
+                limparBuffer();
+                return; // Se o jogador já tem um buff de proteção ativo, não faz nada
+            }
             break;
         case 6: // Buff / Debuff
             if(habilidade.buff.alvo == 0) a = defensor; // Se o alvo for o inimigo, aplica o buff no inimigo
@@ -588,7 +663,7 @@ void usarHabilidade(DADOS *atacante, DADOS *defensor, HABILIDADE habilidade)
         aplicaEfeito(defensor, habilidade.efeitoSecundario);
         if(hit3 && habilidade.tipo != 6) limparTerminal();
     }
-    if(hit3 && habilidade.tipo != 6)
+    if(hit3 && habilidade.tipo != 6 && habilidade.tipo != 5)
     {
         if(habilidade.buff.alvo == 0) a = defensor; // Se o alvo for o inimigo, aplica o buff no inimigo
         else if(habilidade.buff.alvo == 1) a = atacante; // Se o alvo for o atacante, aplica o buff no atacante
@@ -673,6 +748,7 @@ int raridadeAleatoria()
 
     return aleatorizaChance(5, chance);
 }
+
 
 void moveCursor(int x, int y) 
 {
@@ -769,6 +845,28 @@ void salaDoPanico(DADOS *inimigo, int qtd) {
 void batalharInimigo(DADOS *inimigo, int qtd)
 {
     limparTerminal();
+    if(inimigo[0].hp <= 0) // Se o primeiro inimigo já estiver morto, remove ele da lista
+    {
+        textoTela("Voce derrotou todos os inimigos\n", 200);
+        int dado = numAle(101) - 1;
+        char txt[400];
+        if(dado <= 50) // 50% de chance de ganhar um item
+        {
+            int raridade = raridadeAleatoria();
+            int id = numAle(20) - 1; // Escolhe um item aleatório
+            if(item[id].raridade == raridade)
+            {
+                sprintf(txt, "Voce encontrou um item: %s\n\n", item[id].nome);
+                addItem(id);
+            }
+            else sprintf(txt, "Nenhum item encontrado.\n\n");
+        }
+        else sprintf(txt, "Nenhum item encontrado.\n\n");
+        textoTela(txt, 200);
+        sala++;
+        tomadaDecisao();
+        return;
+    }
     int b1 = quantosBuffs(1);
     int b2 = quantosBuffs(-1);
     if(qtd == 0)
@@ -802,6 +900,7 @@ void batalharInimigo(DADOS *inimigo, int qtd)
     }
     printf("\n\n");
     int escolha, OK = 1;
+    HABILIDADE j;
     if(b1 || b2) checkInput(&escolha, 1, 7);
     else checkInput(&escolha, 1, 7);
     limparAte(60, 3);
@@ -821,9 +920,10 @@ void batalharInimigo(DADOS *inimigo, int qtd)
             batalharInimigo(inimigo, qtd);
             break;
         case 2: 
-            for (i = 0; i < 4; i++) {
-                getHabilidade(&h[i], player.habilidades[i]);
-                printf("Habilidade %d: %s\n\n", i + 1, h[i].nome);
+            for (i = 0; i < 4; i++) 
+            {
+                getHabilidade(&j, 3);
+                printf("Habilidade %d: %s\n\n", player.habilidades[i], j.nome);
             }
             printf("[1] Usar 1  [2] Usar 2  [3] Usar 3  [4] Usar 4  \n\n[0] Sair\n\n\n");
             int escolha;
@@ -2438,10 +2538,12 @@ void save(DADOS player)
     {
         for(j = 0; j < 15; j++)
         {
-            fprintf(arq, "%d ", player.buffs[i][j]);
+            fprintf(arq, "%d\n", player.buffs[i][j]);
         }
-        fprintf(arq, "\n");
     }
+
+    fprintf(arq, "%d %d %d %d\n", player.habilidades[0], player.habilidades[1], player.habilidades[2], player.habilidades[3]);
+    
 
     fclose(arq);
 }
@@ -2476,14 +2578,18 @@ void load(DADOS *player, int *sala)
     for (i = 0; i < 20; i++) {
         fscanf(arq, "%d %d\n", &player->inventario[0][i], &player->inventario[1][i]);
     }
+
     for (i = 0; i < 3; i++)
     {
-        for(j = 0; j < 10; j++)
+        for(j = 0; j < 15; j++)
         {
-            fscanf(arq, "%d ", &player->buffs[i][j]);
+            fscanf(arq, "%d\n", &player->buffs[i][j]);
         }
-        fscanf(arq, "\n");
     }
+
+    fscanf(arq, "%d %d %d %d\n", &player->habilidades[0], &player->habilidades[1], &player->habilidades[2], &player->habilidades[3]);
+
+    fscanf(arq, "\n");
 
     fclose(arq);
 }
@@ -2567,6 +2673,7 @@ void aleatJogador(char *txt){
 
     for(i = 0; i < 4; i++) {
         player.equipado[i] = 0; // Inicializa os itens equipados com 0
+        player.habilidades[i] = 0; // Inicializa as habilidades com 0
     }
 
     for(i = 0; i < 3; i++)
@@ -2596,6 +2703,7 @@ void limparTerminal(){
 }
 
 void cross_platform_sleep(int ms) {
+    if(hack) return; // Se o hack estiver ativo, não espera
 #ifdef _WIN32
     Sleep(ms);
 #else
@@ -2618,6 +2726,8 @@ void txtTela(char * mensagem, int seg)
 void textoTela(const char *texto, int seg) {
     char menssagem[256];
     strcpy(menssagem, texto);
+
+    if(hack) seg = 0; // Se o hack estiver ativo, não espera
 
     char *palavra = strtok(menssagem, " ");
     while (palavra != NULL) {
@@ -2856,6 +2966,8 @@ void telaInicial(){
             break;
         case '5':
             break;
+        case '6':
+            hack = 1;
         default:
             cabecaTela("Resposta invalida. Digite novamente.");
             cross_platform_sleep(1500);
