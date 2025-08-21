@@ -2206,6 +2206,7 @@ void ajustaBonus(int id, int sinal)
 void consumivel(int id, int *check)
 {
     int i;
+    int d;
     float x;
     for(i = 0; i < 3; i++)
     {
@@ -2217,8 +2218,10 @@ void consumivel(int id, int *check)
                     if(player.hp < player.hpMax) 
                     {
                         x = (player.hpMax - player.hp) < item[id].bonus[1][i] ? (player.hpMax - player.hp) : item[id].bonus[1][i];
-                        cura(&player, x);
-                        printf("%s recuperou %d de HP!\n\n", player.nome, x);
+                        d = (int)x;
+                        if(d < 0) d = 0; // Evita valores negativos
+                        cura(&player, d);
+                        printf("%s recuperou %d de HP!\n\n", player.nome, d);
                         *check = 1; // Marca que o item foi consumido
                     }
                     else
@@ -2230,8 +2233,10 @@ void consumivel(int id, int *check)
                     if(player.mp < player.manaMax) 
                     {
                         x = (player.manaMax - player.mp) < item[id].bonus[1][i] ? (player.manaMax - player.mp) : item[id].bonus[1][i];
-                        mana(&player, x);
-                        printf("%s recuperou %d de MP!\n\n", player.nome, x);
+                        d = (int)x;
+                        if(d < 0) d = 0; // Evita valores negativos
+                        mana(&player, d);
+                        printf("%s recuperou %d de MP!\n\n", player.nome, d);
                         *check = 1; // Marca que o item foi consumido
                     }
                     else
@@ -2243,8 +2248,10 @@ void consumivel(int id, int *check)
                     if(player.hp < player.hpMax)
                     {
                         x = (player.hpMax * item[id].bonus[1][i] / 100);
-                        cura(&player, x);
-                        printf("%s recuperou %d de HP!\n\n", player.nome, x);
+                        d = (int)x;
+                        if(d < 0) d = 0;
+                        cura(&player, d);
+                        printf("%s recuperou %d de HP!\n\n", player.nome, d);
                         *check = 1; // Marca que o item foi consumido
                     }
                     else
@@ -2256,8 +2263,9 @@ void consumivel(int id, int *check)
                     if(player.mp < player.manaMax)
                     {
                         x = (player.manaMax * item[id].bonus[1][i] / 100);
-                        mana(&player, x);
-                        printf("%s recuperou %d de MP!\n\n", player.nome, x);
+                        mana(&player, d);
+                        if (d < 0) d = 0;
+                        printf("%s recuperou %d de MP!\n\n", player.nome, d);
                         *check = 1; // Marca que o item foi consumido
                     }
                     else printf("MP ja esta cheio.\n\n");
