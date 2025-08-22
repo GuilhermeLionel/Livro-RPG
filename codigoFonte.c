@@ -227,11 +227,13 @@ int bossesF(int sala) {
 }
 
 void calculaPontuacao(DADOS *player, RANKING jogador, int sala) {
-    int bossesQuant = 0, XPTotal;
+    int bossesQuant = 0;
+    double XPTotal;
     strcpy(jogador.nome, player->nome);
     jogador.level = player->level;
     bossesQuant = bossesF(sala);
-    XPTotal = 100 * (((int) pow(1.5, player->level - 1)) - 1) + player->exp;
+    XPTotal = 100 * ((player->level - 1)*(player->level - 1) - 1) + player->exp;
+    XPTotal = (int) XPTotal;
     // cálculo final: 
     jogador.pontuacao = 0.0018 * XPTotal + 1.75 * sumItens(player) + bossesQuant + 20*sala;
     printf("\nPontuacao final: %d\n", jogador.pontuacao); 
@@ -342,7 +344,7 @@ void hpPlayer()
     int barsize = 30;
     int i;
     int x = 80, y = 11;
-    char txt[41];
+    char txt[60];
     moveCursor(x, y);
     printf("%c", 218);
     sprintf(txt, "%s  ", player.nome);
@@ -840,7 +842,7 @@ void hpInimigo(DADOS inimigo, int modo, int num)
     int x, y;
     x = (num - 1) * 30 + 5 * num;
     y = (num - 1) * 2;
-    char txt[41];
+    char txt[60];
     int i;
     moveCursor(x, y);
     if(modo == 1) sprintf(txt, "%d - %s", num, inimigo.nome);
@@ -1360,27 +1362,24 @@ else
         textoTela("Deseja parar e descansar?\n", 200);
         printf("[1] Sim [0] Nao\n\n");
         checkInput(&escolha, 0, 1);
-        switch(escolha)
+        if(escolha == 1)
         {
-            case 1:
-                limparTerminal();
-                textoTela("Voce decide parar para descansar . . .\n", 400);
-                float a = numAle(26) + 4.0;
-                int b = a / 100.0 * (float) player.hpMax, c = a;
-                cura(&player, b);
-                sprintf(txt, "Voce recuperou %d%% de HP\n", c);
-                textoTela(txt, 200);
-                printf("(Pressione [ENTER] para continuar...)\n");
-                limparBuffer();
-            case 0:
-                limparTerminal();
-                textoTela("Voce segue o seu caminho . . .\n\n", 400);
-                sala++;
-                printf("(Pressione [ENTER] para continuar...)\n");
-                limparBuffer();
-                tomadaDecisao();
-                break;
+            limparTerminal();
+            textoTela("Voce decide parar para descansar . . .\n", 400);
+            float a = numAle(26) + 4.0;
+            int b = a / 100.0 * (float) player.hpMax, c = a;
+            cura(&player, b);
+            sprintf(txt, "Voce recuperou %d%% de HP\n", c);
+            textoTela(txt, 200);
+            printf("(Pressione [ENTER] para continuar...)\n");
+            limparBuffer();
         }
+        limparTerminal();
+        textoTela("Voce segue o seu caminho . . .\n\n", 400);
+        sala++;
+        printf("(Pressione [ENTER] para continuar...)\n");
+        limparBuffer();
+        tomadaDecisao();
     }
     else if(sala % 10 == 9)
     {
@@ -1391,51 +1390,48 @@ else
         checkInput(&escolha, 0, 1);
 
         limparTerminal();
-        switch(escolha)
+        if(escolha == 1)
         {
-            case 1:
-                textoTela("O mesmo vendedor do inicio . . .\n", 200);
-                if(sala < 60) textoTela("Voce se pergunta como ele chegou aqui\n\n", 200);
-                else textoTela("Voce ja aceitou que ele e onipresente\n\n", 300);
+            textoTela("O mesmo vendedor do inicio . . .\n", 200);
+            if(sala < 60) textoTela("Voce se pergunta como ele chegou aqui\n\n", 200);
+            else textoTela("Voce ja aceitou que ele e onipresente\n\n", 300);
+            printf("(Pressione [ENTER] para continuar...)\n");
+            limparBuffer();
+            loja();
+            limparBuffer();
+            textoTela("O vendedor te diz boa sorte antes de ir . . .\n", 300);
+            if(sala < 10) textoTela("Voce se pergunta o porque . . .\n\n", 400);
+            else if(sala < 20) textoTela("Agora voce sabe o porque . . .\n\n", 200);
+            else if(sala < 60) textoTela("Pelo menos, voce sabe o que esta por vir\n\n", 300);
+            else if(sala < 90) textoTela("E bom saber que alguem torce por voce\n\n", 200);
+            else
+            {
+                textoTela("Voce sente um peso na voz dele . . .\n", 300);
+                textoTela("Ao mesmo tempo voce sente um peso no seu peito\n", 300);
+                cross_platform_sleep(500);
+                textoTela("Essa vez e diferente . . .\n\n", 500);
                 printf("(Pressione [ENTER] para continuar...)\n");
                 limparBuffer();
-                loja();
-                limparBuffer();
-                textoTela("O vendedor te diz boa sorte antes de ir . . .\n", 300);
-                if(sala < 10) textoTela("Voce se pergunta o porque . . .\n\n", 400);
-                else if(sala < 20) textoTela("Agora voce sabe o porque . . .\n\n", 200);
-                else if(sala < 60) textoTela("Pelo menos, voce sabe o que esta por vir\n\n", 300);
-                else if(sala < 90) textoTela("E bom saber que alguem torce por voce\n\n", 200);
-                else
-                {
-                    textoTela("Voce sente um peso na voz dele . . .\n", 300);
-                    textoTela("Ao mesmo tempo voce sente um peso no seu peito\n", 300);
-                    cross_platform_sleep(500);
-                    textoTela("Essa vez e diferente . . .\n\n", 500);
-                    printf("(Pressione [ENTER] para continuar...)\n");
-                    limparBuffer();
-                    limparTerminal();
-                    textoTela(". . .\n", 500);
-                    cross_platform_sleep(500);
-                    textoTela("Voce se lembra depois de muito tempo . . .\n", 500);
-                    cross_platform_sleep(500);
-                    textoTela("Do que e sentir medo . . .\n", 400);
-                    cross_platform_sleep(500);
-                    textoTela("Nao\n", 200);
-                    cross_platform_sleep(1000);
-                    textoTela("Voce nao sabe o que esta por vir\n\n", 600);
-                }
-                printf("(Pressione [ENTER] para continuar...)\n");
-                limparBuffer();
-            case 0:
                 limparTerminal();
-                textoTela("Voce segue o seu caminho . . .\n\n", 400);
-                sala++;
-                printf("(Pressione [ENTER] para continuar...)\n");
-                limparBuffer();
-                tomadaDecisao();
-                break;
+                textoTela(". . .\n", 500);
+                cross_platform_sleep(500);
+                textoTela("Voce se lembra depois de muito tempo . . .\n", 500);
+                cross_platform_sleep(500);
+                textoTela("Do que e sentir medo . . .\n", 400);
+                cross_platform_sleep(500);
+                textoTela("Nao\n", 200);
+                cross_platform_sleep(1000);
+                textoTela("Voce nao sabe o que esta por vir\n\n", 600);
+            }
+            printf("(Pressione [ENTER] para continuar...)\n");
+            limparBuffer();
         }
+        limparTerminal();
+        textoTela("Voce segue o seu caminho . . .\n\n", 400);
+        sala++;
+        printf("(Pressione [ENTER] para continuar...)\n");
+        limparBuffer();
+        tomadaDecisao();
     }
     else if(sala % 10 == 0)
     {
@@ -1460,7 +1456,7 @@ else
         int caso, a[3];
         caso = salaAleatoria();
         DADOS inimigo[caso];
-        switch(caso)
+        if(caso > 3 || caso < 1) switch(caso)
         {
             case 0:
                 textoTela("Voce se encontra em uma sala vazia. . .\n", 200);
@@ -1468,31 +1464,6 @@ else
 
                 printf("(Pressione [ENTER] para continuar...)\n");
                 limparBuffer();
-                break;
-            case 3:
-                a[2] = dificuldadeAleatoria();
-            case 2:
-                a[1] = dificuldadeAleatoria();
-            case 1:
-                a[0] = dificuldadeAleatoria();
-                for(int i = 0; i < caso; i++) 
-                {
-                    inimigoAleatorio(&inimigo[i], a[i]);
-                }
-                if(caso > 1)
-                {
-                    sprintf(txt, "Voce encontrou %d inimigos!\n", caso);
-                    textoTela(txt, 200);
-                }
-                else
-                {
-                    textoTela("Voce encontrou um inimigo!\n", 200);
-                }
-                textoTela("Prepare-se para a batalha!\n\n", 200);
-                printf("(Pressione [ENTER] para continuar...)\n");
-                limparBuffer();
-                
-                batalharInimigo(inimigo, caso);
                 break;
             case 4:
                 textoTela("Voce encontrou um bau . . .\n", 300);
@@ -1550,6 +1521,30 @@ else
                 printf("Aviso de Bug\n");
                 limparBuffer();
                 break;
+        }
+        else
+        {
+            if(caso > 2) a[2] = dificuldadeAleatoria();
+            if(caso > 1) a[1] = dificuldadeAleatoria();
+            a[0] = dificuldadeAleatoria();
+            for(int i = 0; i < caso; i++) 
+            {
+                inimigoAleatorio(&inimigo[i], a[i]);
+            }
+            if(caso > 1)
+            {
+                sprintf(txt, "Voce encontrou %d inimigos!\n", caso);
+                textoTela(txt, 200);
+            }
+            else
+            {
+                textoTela("Voce encontrou um inimigo!\n", 200);
+            }
+            textoTela("Prepare-se para a batalha!\n\n", 200);
+            printf("(Pressione [ENTER] para continuar...)\n");
+            limparBuffer();
+            
+            batalharInimigo(inimigo, caso);
         }
         sala++;
         tomadaDecisao();
@@ -2519,7 +2514,7 @@ int digitos(int n)
 void verInventario(int modo)
 {
     limparTerminal();
-    char txt[50];
+    char txt[70];
     int i, j = 0, k;
     int largura = 30;
     int espaco, escolha, escolha2, qtd, erro = 0;
@@ -2753,20 +2748,20 @@ int espacoInv(int id)
 {
     int i, stack = 1, semId = 0; // Variavel a define se o item é stackavel ou nao, com 0 para nao e 1 para sim
     if((item[id].tipo >= 0 && item[id].tipo <= 3) || item[id].tipo == 8) stack = 0; // Se o item for do tipo Vazio, Arma, Armadura ou Reliquia, a variavel a recebe 1, caso contrario recebe 0
-    switch(stack)
+    if(stack == 1) // Se o item for stackavel, procura o id do item no inventario
     {
-        case 1: // Se o item for stackavel, procura o id do item no inventario
-            for(i = 0; player.inventario[0][i] != id; i++) 
+        for(i = 0; player.inventario[0][i] != id; i++) 
+        {
+            if(i == 19) 
             {
-                if(i == 19) 
-                {
-                    semId = 1;
-                    break;
-                }
+                semId = 1;
+                break;
             }
-            if(!semId) break; // Se o id estiver presente, não precisa procurar por espaço vazio
-        case 0: // Se o item não for stackavel ou é stackavel, mas nao esta presente no inventario, procura o primeiro espaço vazio no inventário
-            for(i = 0; player.inventario[0][i] != 0; i++) if(i == 19) break;
+        }
+    }
+    if(semId == 1 || stack == 0)// Se o item não for stackavel ou é stackavel, mas nao esta presente no inventario, procura o primeiro espaço vazio no inventário
+    {
+        for(i = 0; player.inventario[0][i] != 0; i++) if(i == 19) break;
     }
     if(i <= 19) return i; // Retorna o índice do primeiro espaço com o id desejado no inventário
     else return -1; // Se não encontrar retorna -1
@@ -3570,6 +3565,8 @@ void telaInicial(){
             break;
         case '6':
             hack = 1;
+            telaInicial();
+            break;
         default:
             cabecaTela("Resposta invalida. Digite novamente.");
             cross_platform_sleep(1500);
